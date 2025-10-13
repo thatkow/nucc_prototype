@@ -187,15 +187,18 @@ loadEvents()
       const card = document.createElement('article');
       card.className = [
         'bg-white rounded-lg shadow-lg p-5 border border-gray-200',
-        'hover:shadow-2xl hover:scale-[1.02] transition-all cursor-pointer'
+        'hover:shadow-2xl hover:scale-[1.01] transition-all cursor-pointer'
       ].join(' ');
 
       const header = document.createElement('div');
-      header.className = 'flex items-center justify-between mb-2';
+      header.className = 'flex flex-wrap items-start justify-between gap-2 mb-3';
 
       const title = document.createElement('h3');
       title.className = 'text-2xl font-semibold text-gray-900';
       title.textContent = event.title || 'Untitled event';
+
+      const actionWrap = document.createElement('div');
+      actionWrap.className = 'flex items-center gap-2';
 
       const status = document.createElement('span');
       status.className = `px-2 py-1 text-xs font-semibold rounded-full ${event.status === 'CONFIRMED'
@@ -203,30 +206,76 @@ loadEvents()
         : 'bg-yellow-100 text-yellow-800'}`;
       status.textContent = event.status || 'TBC';
 
-      header.append(title, status);
+      const toggleButton = document.createElement('button');
+      toggleButton.type = 'button';
+      toggleButton.className = 'text-sm font-semibold text-yellow-600 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-white rounded px-2 py-1';
+      toggleButton.textContent = 'Show details';
+      toggleButton.setAttribute('aria-expanded', 'false');
+
+      actionWrap.append(status, toggleButton);
+      header.append(title, actionWrap);
       card.appendChild(header);
 
-      if (event.organizer) {
-        card.appendChild(makeMetaRow('Organizer', event.organizer));
-      }
-      card.appendChild(makeMetaRow('Start', formatDate(event.start)));
-      card.appendChild(makeMetaRow('End', formatDate(event.end)));
-      card.appendChild(makeMetaRow('Duration', formatDuration(event.start, event.end)));
-
+      const summary = document.createElement('div');
+      summary.className = 'space-y-1';
+      summary.appendChild(makeMetaRow('Start', formatDate(event.start)));
+      summary.appendChild(makeMetaRow('Duration', formatDuration(event.start, event.end)));
       if (event.location) {
-        card.appendChild(makeMetaRow('Location', event.location));
+        summary.appendChild(makeMetaRow('Location', event.location));
+      }
+      card.appendChild(summary);
+
+      const details = document.createElement('div');
+      details.className = 'mt-3 pt-3 border-t border-gray-200 space-y-2 hidden';
+
+      details.appendChild(makeMetaRow('End', formatDate(event.end)));
+      if (event.organizer) {
+        details.appendChild(makeMetaRow('Organizer', event.organizer));
       }
 
       if (event.description) {
         const description = document.createElement('p');
-        description.className = 'text-sm text-gray-600 mt-2 whitespace-pre-line line-clamp-6';
+        description.className = 'text-sm text-gray-700 whitespace-pre-line';
         description.textContent = event.description;
-        card.appendChild(description);
+        details.appendChild(description);
       }
 
       if (event.url) {
-        card.addEventListener('click', () => window.open(event.url, '_blank', 'noopener'));
+        const link = document.createElement('a');
+        link.href = event.url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.className = 'inline-flex items-center text-sm font-semibold text-yellow-600 hover:text-yellow-700';
+        link.textContent = 'View full details ↗';
+        details.appendChild(link);
       }
+
+      card.appendChild(details);
+
+      let expanded = false;
+      const setExpanded = value => {
+        expanded = value;
+        if (expanded) {
+          details.classList.remove('hidden');
+          toggleButton.textContent = 'Hide details';
+        } else {
+          details.classList.add('hidden');
+          toggleButton.textContent = 'Show details';
+        }
+        toggleButton.setAttribute('aria-expanded', String(expanded));
+      };
+
+      toggleButton.addEventListener('click', event => {
+        event.stopPropagation();
+        setExpanded(!expanded);
+      });
+
+      card.addEventListener('click', event => {
+        if (event.target.closest('a, button')) {
+          return;
+        }
+        setExpanded(!expanded);
+      });
 
       return card;
     };
