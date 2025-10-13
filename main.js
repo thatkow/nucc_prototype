@@ -313,15 +313,6 @@ const buildFocusContent = event => {
     focusContent.appendChild(description);
   }
 
-  if (event.url) {
-    const link = document.createElement('a');
-    link.href = event.url;
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.className = 'inline-flex items-center text-base font-semibold text-yellow-600 hover:text-yellow-700';
-    link.textContent = 'Go to Event';
-    focusContent.appendChild(link);
-  }
 };
 
 const openEventFocus = (eventData, invoker) => {
