@@ -64,10 +64,26 @@ document.querySelectorAll('.zoomable').forEach(img => {
 });
 lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; lightImg.src = ''; });
 
-
 // ======== Fetch Upcoming & Past Trips ========
-fetch('http://localhost:3000/api/events')
-  .then(r => r.json())
+const appConfig = window.appConfig || {};
+const environment = (appConfig.environment || '').toLowerCase();
+const eventsApiUrl = appConfig.eventsApiUrl || 'http://localhost:3000/api/events';
+const useMockEvents = environment === 'dev' && !!appConfig.mockEvents;
+
+const loadEvents = () => {
+  if (useMockEvents) {
+    return Promise.resolve(appConfig.mockEvents);
+  }
+
+  return fetch(eventsApiUrl).then(response => {
+    if (!response.ok) {
+      throw new Error(`Events request failed with status ${response.status}`);
+    }
+    return response.json();
+  });
+};
+
+loadEvents()
   .then(data => {
     const upcomingContainer = document.getElementById('upcoming-events');
     const pastContainer = document.getElementById('past-events');
