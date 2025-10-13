@@ -276,7 +276,7 @@ loadEvents()
         link.target = '_blank';
         link.rel = 'noopener';
         link.className = 'inline-flex items-center text-sm font-semibold text-yellow-600 hover:text-yellow-700';
-        link.textContent = 'View full details ↗';
+        link.textContent = 'Go to Event';
         details.appendChild(link);
       }
 
