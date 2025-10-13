@@ -1,57 +1,109 @@
 // ======== Gradient scroll based on viewport midpoint ========
-const sections = document.querySelectorAll("section[data-bg]");
+const sections = Array.from(document.querySelectorAll('section[data-bg]'));
 const body = document.body;
 
 const hexToRgb = hex => {
-  const n = parseInt(hex.replace("#", ""), 16);
+  const n = parseInt(hex.replace('#', ''), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 };
-const interpolateColor = (a, b, t) =>
-  a.map((v, i) => Math.round(v + t * (b[i] - v)));
-const rgbToCss = r => `rgb(${r[0]}, ${r[1]}, ${r[2]})`;
 
-window.addEventListener("scroll", () => {
+const interpolateColor = (a, b, t) => a.map((v, i) => Math.round(v + t * (b[i] - v)));
+const rgbToCss = rgb => `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+
+const colorCache = new WeakMap();
+const getSectionColors = section => {
+  if (!colorCache.has(section)) {
+    const styles = getComputedStyle(section);
+    colorCache.set(section, {
+      start: hexToRgb(styles.getPropertyValue('--bg-start').trim()),
+      end: hexToRgb(styles.getPropertyValue('--bg-end').trim())
+    });
+  }
+  return colorCache.get(section);
+};
+
+let gradientScheduled = false;
+const updateGradient = () => {
+  gradientScheduled = false;
+  if (!sections.length) return;
+
   const scrollMid = window.scrollY + window.innerHeight / 2;
 
-  let current = sections[0];
-  let next = sections[0];
-
+  let currentIndex = 0;
   for (let i = 0; i < sections.length; i++) {
-    const top = sections[i].offsetTop;
-    const bottom = top + sections[i].offsetHeight;
-    if (scrollMid >= top && scrollMid < bottom) {
-      current = sections[i];
-      next = sections[i + 1] || sections[i];
+    if (scrollMid >= sections[i].offsetTop) {
+      currentIndex = i;
+    } else {
       break;
     }
   }
 
-  const start = current.offsetTop + current.offsetHeight / 2;
-  const end = next.offsetTop + next.offsetHeight / 2;
+  const current = sections[currentIndex];
+  const next = sections[currentIndex + 1] || current;
 
-  let rawT = (scrollMid - start) / (end - start);
-  let t = Math.min(Math.max((rawT - 0.6) / 0.25, 0), 1);
-  t = t * t * (3 - 2 * t);
+  const currentCenter = current.offsetTop + current.offsetHeight / 2;
+  const nextCenter = next.offsetTop + next.offsetHeight / 2;
 
-  const cs = hexToRgb(getComputedStyle(current).getPropertyValue("--bg-start").trim());
-  const ce = hexToRgb(getComputedStyle(current).getPropertyValue("--bg-end").trim());
-  const ns = hexToRgb(getComputedStyle(next).getPropertyValue("--bg-start").trim());
-  const ne = hexToRgb(getComputedStyle(next).getPropertyValue("--bg-end").trim());
+  let t = next === current ? 0 : (scrollMid - currentCenter) / (nextCenter - currentCenter);
+  t = Math.min(Math.max(t, 0), 1);
+  t = t * t * (3 - 2 * t); // smoothstep easing
 
-  const sBlend = interpolateColor(cs, ns, t);
-  const eBlend = interpolateColor(ce, ne, t);
+  const currentColors = getSectionColors(current);
+  const nextColors = getSectionColors(next);
 
-  body.style.background = `linear-gradient(to bottom, ${rgbToCss(sBlend)}, ${rgbToCss(eBlend)})`;
-});
+  const startBlend = interpolateColor(currentColors.start, nextColors.start, t);
+  const endBlend = interpolateColor(currentColors.end, nextColors.end, t);
+
+  body.style.backgroundImage = `linear-gradient(to bottom, ${rgbToCss(startBlend)}, ${rgbToCss(endBlend)})`;
+};
+
+const scheduleGradientUpdate = () => {
+  if (!gradientScheduled) {
+    gradientScheduled = true;
+    requestAnimationFrame(updateGradient);
+  }
+};
+
+window.addEventListener('scroll', scheduleGradientUpdate, { passive: true });
+window.addEventListener('resize', scheduleGradientUpdate);
+scheduleGradientUpdate();
 
 // ======== Video autoplay ========
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.play(); e.target.classList.add('playing'); }
-    else { e.target.pause(); e.target.classList.remove('playing'); }
+const ensurePlayback = video => {
+  const attemptPlay = () => {
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+  };
+
+  if (video.readyState >= 2) {
+    attemptPlay();
+  } else {
+    video.addEventListener('loadeddata', attemptPlay, { once: true });
+  }
+};
+
+const videoObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    const video = entry.target;
+    if (entry.isIntersecting) {
+      video.muted = true;
+      ensurePlayback(video);
+      video.classList.add('playing');
+    } else {
+      video.pause();
+      video.classList.remove('playing');
+    }
   });
-}, { threshold: 0.4 });
-document.querySelectorAll('.autoplay-video').forEach(v => observer.observe(v));
+}, { threshold: 0.35 });
+
+document.querySelectorAll('.autoplay-video').forEach(video => {
+  videoObserver.observe(video);
+  if (video.autoplay && video.closest('section')?.getBoundingClientRect().top < window.innerHeight) {
+    ensurePlayback(video);
+  }
+});
 
 // ======== Image lightbox ========
 const lightbox = document.getElementById('lightbox');
@@ -62,7 +114,10 @@ document.querySelectorAll('.zoomable').forEach(img => {
     lightbox.style.display = 'flex';
   });
 });
-lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; lightImg.src = ''; });
+lightbox.addEventListener('click', () => {
+  lightbox.style.display = 'none';
+  lightImg.src = '';
+});
 
 // ======== Fetch Upcoming & Past Trips ========
 const appConfig = window.appConfig || {};
@@ -90,77 +145,116 @@ loadEvents()
 
     const events = data.events || [];
     if (!events.length) {
-      upcomingContainer.innerHTML = '<p>No events found.</p>';
-      pastContainer.innerHTML = '';
+      upcomingContainer.textContent = 'No events found.';
+      pastContainer.textContent = '';
       return;
     }
 
     const now = new Date();
 
-    const formatDate = d => new Date(d).toLocaleString('en-AU', {
+    const formatDate = dateValue => new Date(dateValue).toLocaleString('en-AU', {
       weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
     });
 
     const formatDuration = (start, end) => {
       const ms = new Date(end) - new Date(start);
-      const mins = Math.floor(ms / 60000);
+      const mins = Math.max(Math.round(ms / 60000), 0);
       const hrs = Math.floor(mins / 60);
       const days = Math.floor(hrs / 24);
-      if (days >= 1) return `${days} day${days > 1 ? 's' : ''}${hrs % 24 ? `, ${hrs % 24} hr` : ''}`;
-      if (hrs >= 1) return `${hrs} hr${hrs > 1 ? 's' : ''}${mins % 60 ? `, ${mins % 60} min` : ''}`;
+
+      if (days >= 1) {
+        const remainder = hrs % 24;
+        return `${days} day${days > 1 ? 's' : ''}${remainder ? `, ${remainder} hr${remainder > 1 ? 's' : ''}` : ''}`;
+      }
+      if (hrs >= 1) {
+        const remainder = mins % 60;
+        return `${hrs} hr${hrs > 1 ? 's' : ''}${remainder ? `, ${remainder} min` : ''}`;
+      }
       return `${mins} min`;
     };
 
-    const makeCard = ev => {
-      const startStr = formatDate(ev.start);
-      const endStr = formatDate(ev.end);
-      const duration = formatDuration(ev.start, ev.end);
-      const desc = ev.description ? ev.description.replace(/\\n/g, '\n').replace(/\\\\/g, '\\') : '';
+    const makeMetaRow = (label, value, className = 'text-sm text-gray-700 mb-1') => {
+      const p = document.createElement('p');
+      p.className = className;
+      const strong = document.createElement('span');
+      strong.className = 'font-semibold';
+      strong.textContent = `${label}: `;
+      p.append(strong, document.createTextNode(value));
+      return p;
+    };
 
-      const card = document.createElement('div');
-      card.className = `
-        bg-white rounded-lg shadow-lg p-5 border border-gray-200 hover:shadow-2xl
-        hover:scale-[1.02] transition-all cursor-pointer
-      `;
-      card.innerHTML = `
-        <div class="flex items-center justify-between mb-2">
-          <h3 class="text-2xl font-semibold text-gray-900">${ev.title}</h3>
-          <span class="px-2 py-1 text-xs font-semibold rounded-full ${ev.status === 'CONFIRMED'
-            ? 'bg-green-100 text-green-800'
-            : 'bg-red-100 text-red-800'}">${ev.status}</span>
-        </div>
-        ${ev.organizer ? `<p class="text-sm text-gray-700 mb-1"><strong>Organizer:</strong> ${ev.organizer}</p>` : ''}
-        <p class="text-sm text-gray-700 mb-1"><strong>Start:</strong> ${startStr}</p>
-        <p class="text-sm text-gray-700 mb-1"><strong>End:</strong> ${endStr}</p>
-        <p class="text-sm text-gray-700 mb-2"><strong>Duration:</strong> ${duration}</p>
-        ${ev.location ? `<p class="text-sm text-gray-700 mb-2"><strong>Location:</strong> ${ev.location}</p>` : ''}
-        ${desc ? `<p class="text-sm text-gray-600 mt-2 whitespace-pre-line line-clamp-6">${desc}</p>` : ''}
-      `;
-      if (ev.url) card.addEventListener('click', () => window.open(ev.url, '_blank'));
+    const makeCard = event => {
+      const card = document.createElement('article');
+      card.className = [
+        'bg-white rounded-lg shadow-lg p-5 border border-gray-200',
+        'hover:shadow-2xl hover:scale-[1.02] transition-all cursor-pointer'
+      ].join(' ');
+
+      const header = document.createElement('div');
+      header.className = 'flex items-center justify-between mb-2';
+
+      const title = document.createElement('h3');
+      title.className = 'text-2xl font-semibold text-gray-900';
+      title.textContent = event.title || 'Untitled event';
+
+      const status = document.createElement('span');
+      status.className = `px-2 py-1 text-xs font-semibold rounded-full ${event.status === 'CONFIRMED'
+        ? 'bg-green-100 text-green-800'
+        : 'bg-yellow-100 text-yellow-800'}`;
+      status.textContent = event.status || 'TBC';
+
+      header.append(title, status);
+      card.appendChild(header);
+
+      if (event.organizer) {
+        card.appendChild(makeMetaRow('Organizer', event.organizer));
+      }
+      card.appendChild(makeMetaRow('Start', formatDate(event.start)));
+      card.appendChild(makeMetaRow('End', formatDate(event.end)));
+      card.appendChild(makeMetaRow('Duration', formatDuration(event.start, event.end)));
+
+      if (event.location) {
+        card.appendChild(makeMetaRow('Location', event.location));
+      }
+
+      if (event.description) {
+        const description = document.createElement('p');
+        description.className = 'text-sm text-gray-600 mt-2 whitespace-pre-line line-clamp-6';
+        description.textContent = event.description;
+        card.appendChild(description);
+      }
+
+      if (event.url) {
+        card.addEventListener('click', () => window.open(event.url, '_blank', 'noopener'));
+      }
+
       return card;
     };
 
-    // Sort newest first
-    const upcoming = events.filter(e => new Date(e.end) >= now)
-                           .sort((a,b) => new Date(a.start) - new Date(b.start));
-    const past = events.filter(e => new Date(e.end) < now)
-                       .sort((a,b) => new Date(b.start) - new Date(a.start));
+    const upcoming = events
+      .filter(event => new Date(event.end) >= now)
+      .sort((a, b) => new Date(a.start) - new Date(b.start));
+
+    const past = events
+      .filter(event => new Date(event.end) < now)
+      .sort((a, b) => new Date(b.start) - new Date(a.start));
+
+    upcomingContainer.textContent = '';
+    pastContainer.textContent = '';
 
     if (!upcoming.length) {
-      upcomingContainer.innerHTML = '<p>No upcoming trips.</p>';
+      upcomingContainer.textContent = 'No upcoming trips.';
     } else {
-      upcoming.forEach(e => upcomingContainer.appendChild(makeCard(e)));
+      upcoming.forEach(event => upcomingContainer.appendChild(makeCard(event)));
     }
 
     if (!past.length) {
-      pastContainer.innerHTML = '<p>No past trips.</p>';
+      pastContainer.textContent = 'No past trips.';
     } else {
-      past.forEach(e => pastContainer.appendChild(makeCard(e)));
+      past.forEach(event => pastContainer.appendChild(makeCard(event)));
     }
   })
-  .catch(err => {
-    console.error('Failed to load events:', err);
-    document.getElementById('upcoming-events').innerHTML =
-      '<p>Unable to load events at this time.</p>';
+  .catch(error => {
+    console.error('Failed to load events:', error);
+    document.getElementById('upcoming-events').textContent = 'Unable to load events at this time.';
   });
-

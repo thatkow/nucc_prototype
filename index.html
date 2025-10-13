@@ -9,19 +9,18 @@
   <style>
     body {
       scroll-behavior: smooth;
-      background: linear-gradient(to bottom, #000, #111);
-      background-attachment: fixed;
-      transition: background 1s ease-in-out;
+      background-image: linear-gradient(to bottom, #000, #111);
+      transition: background-image 0.8s ease-in-out;
     }
 
     /* Section gradients */
-    section[data-bg="hero"]     { --bg-start: #000000; --bg-end: #111111; }
-    section[data-bg="caving"]   { --bg-start: #000000; --bg-end: #1a1a1a; }
-    section[data-bg="canyoning"]{ --bg-start: #0F5E9C; --bg-end: #1E90FF; }
-    section[data-bg="outdoors"] { --bg-start: #065f46; --bg-end: #10b981; }
-    section[data-bg="training"] { --bg-start: #f8fafc; --bg-end: #fef3c7; }
-    section[data-bg="events"]   { --bg-start: #fff7cc; --bg-end: #fff1a6; }
-    section[data-bg="join"]     { --bg-start: #facc15; --bg-end: #fef08a; }
+    section[data-bg="hero"]      { --bg-start: #000000; --bg-end: #111111; }
+    section[data-bg="caving"]    { --bg-start: #000000; --bg-end: #1a1a1a; }
+    section[data-bg="canyoning"] { --bg-start: #0F5E9C; --bg-end: #1E90FF; }
+    section[data-bg="outdoors"]  { --bg-start: #065f46; --bg-end: #10b981; }
+    section[data-bg="training"]  { --bg-start: #f8fafc; --bg-end: #fef3c7; }
+    section[data-bg="events"]    { --bg-start: #fff7cc; --bg-end: #fff1a6; }
+    section[data-bg="join"]      { --bg-start: #facc15; --bg-end: #fef08a; }
 
     video { transition: opacity 0.6s ease-in-out; opacity: 0.25; }
     video.playing { opacity: 1; }
@@ -36,7 +35,7 @@
       font-weight: 600;
       padding: 0.5rem 1rem;
       border-radius: 9999px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       z-index: 50;
       margin-right: 2rem;
       transition: transform 0.2s;
@@ -48,8 +47,10 @@
 
     #lightbox {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: none;
       justify-content: center;
       align-items: center;
@@ -61,7 +62,7 @@
       max-width: 90%;
       max-height: 90%;
       border-radius: 12px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.2);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
     }
   </style>
 </head>
@@ -74,7 +75,7 @@
     </video>
     <div class="relative z-10 text-center px-6">
       <h1 class="text-5xl md:text-6xl font-bold mb-4">National University Caving Club</h1>
-      <p class="text-xl md:text-2xl mb-8">Caving Â· Canyoning Â· Outdoors Â· Training</p>
+      <p class="text-xl md:text-2xl mb-8">Caving · Canyoning · Outdoors · Training</p>
       <div class="space-x-4">
         <a href="#join" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition">Join Us</a>
         <a href="#caving" class="border border-white text-white py-2 px-6 rounded hover:bg-white hover:text-black transition">Explore</a>
@@ -92,29 +93,29 @@
       </p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
         <!-- 20 caving images -->
-        <img src="images/caving/IMG_0318.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/IMG_0325.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/IMG_1432.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241013_012316349.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241013_020527445.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241013_021059051.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241013_032228590.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241013_032945007.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241206_220805220.MP~2.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241206_221557516.MP.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241206_223021079.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241206_223338198.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241206_235246636.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241207_000415603.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241207_045105622.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241207_045338331.MP.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241207_045452988.MP.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20241207_051113815.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20250601_033407612.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/caving/PXL_20250601_034242272.MP~2.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
+        <img src="images/caving/IMG_0318.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caving expedition">
+        <img src="images/caving/IMG_0325.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caver exploring">
+        <img src="images/caving/IMG_1432.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caving formations">
+        <img src="images/caving/PXL_20241013_012316349.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caving crew">
+        <img src="images/caving/PXL_20241013_020527445.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Underground passage">
+        <img src="images/caving/PXL_20241013_021059051.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caver with rope">
+        <img src="images/caving/PXL_20241013_032228590.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cave chamber">
+        <img src="images/caving/PXL_20241013_032945007.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cave formations">
+        <img src="images/caving/PXL_20241206_220805220.MP~2.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cave descent">
+        <img src="images/caving/PXL_20241206_221557516.MP.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caver at rest">
+        <img src="images/caving/PXL_20241206_223021079.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cavers in formation">
+        <img src="images/caving/PXL_20241206_223338198.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caving teamwork">
+        <img src="images/caving/PXL_20241206_235246636.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cave navigation">
+        <img src="images/caving/PXL_20241207_000415603.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caver squeezing through">
+        <img src="images/caving/PXL_20241207_045105622.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Subterranean exploration">
+        <img src="images/caving/PXL_20241207_045338331.MP.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caver with light">
+        <img src="images/caving/PXL_20241207_045452988.MP.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caver descending">
+        <img src="images/caving/PXL_20241207_051113815.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Caving adventure">
+        <img src="images/caving/PXL_20250601_033407612.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cavers underground">
+        <img src="images/caving/PXL_20250601_034242272.MP~2.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Cave formations close-up">
       </div>
     </div>
-    <a href="#canyoning" class="next-btn">Next: Canyoning â†“</a>
+    <a href="#canyoning" class="next-btn">Next: Canyoning ↓</a>
   </section>
 
   <!-- Canyoning -->
@@ -125,21 +126,21 @@
         Slide, abseil, and jump through stunning sandstone gorges in the Blue Mountains and beyond.
         Canyoning blends rope skills, swimming, and teamwork in spectacular natural settings.
       </p>
-      <video muted autoplay loop playsinline class="w-full rounded-lg shadow-lg mb-10 autoplay-video">
+      <video muted loop playsinline class="w-full rounded-lg shadow-lg mb-10 autoplay-video">
         <source src="videos/canyoning/canyoning.mp4" type="video/mp4">
       </video>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-        <img src="images/canyoning/514345041_24758818293786190_988311623821113243_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/558819996_24758817820452904_6120743376722461391_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/558890892_24758817810452905_7656795502336543323_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/559187378_24758818053786214_7641623047651104666_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/IMG_3038.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/IMG_3067.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/IMG_3092.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
-        <img src="images/canyoning/IMG_3099.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable">
+        <img src="images/canyoning/514345041_24758818293786190_988311623821113243_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyoning waterfall">
+        <img src="images/canyoning/558819996_24758817820452904_6120743376722461391_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Rope work in canyon">
+        <img src="images/canyoning/558890892_24758817810452905_7656795502336543323_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyoning team">
+        <img src="images/canyoning/559187378_24758818053786214_7641623047651104666_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyoner abseiling">
+        <img src="images/canyoning/IMG_3038.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon pool">
+        <img src="images/canyoning/IMG_3067.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon rappel">
+        <img src="images/canyoning/IMG_3092.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon teamwork">
+        <img src="images/canyoning/IMG_3099.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon exit">
       </div>
     </div>
-    <a href="#outdoors" class="next-btn">Next: Outdoors â†“</a>
+    <a href="#outdoors" class="next-btn">Next: Outdoors ↓</a>
   </section>
 
   <!-- Outdoors -->
@@ -150,21 +151,21 @@
         Beyond caves and canyons, NUCC members enjoy hiking, camping, and exploring the wild.
       </p>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <video autoplay muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
+        <video muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
           <source src="videos/outdoors/IMG_0360.mp4" type="video/mp4">
         </video>
-        <video autoplay muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
+        <video muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
           <source src="videos/outdoors/IMG_0362.mp4" type="video/mp4">
         </video>
-        <video autoplay muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
+        <video muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
           <source src="videos/outdoors/IMG_0365.mp4" type="video/mp4">
         </video>
-        <video autoplay muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
+        <video muted loop playsinline class="rounded-lg shadow-lg autoplay-video">
           <source src="videos/outdoors/IMG_0388.mp4" type="video/mp4">
         </video>
       </div>
     </div>
-    <a href="#training" class="next-btn">Next: Training â†“</a>
+    <a href="#training" class="next-btn">Next: Training ↓</a>
   </section>
 
   <!-- Training -->
@@ -178,53 +179,44 @@
         <source src="videos/training/srt.mp4" type="video/mp4">
       </video>
     </div>
-    <a href="#events" class="next-btn">Next: Events â†“</a>
+    <a href="#events" class="next-btn">Next: Events ↓</a>
   </section>
 
-<!-- Events -->
-<section id="events" class="py-20 bg-gray-100 text-center relative">
-  <div class="max-w-6xl mx-auto px-4">
-    <h2 class="text-3xl font-bold mb-6">Trips & Events</h2>
+  <!-- Events -->
+  <section id="events" data-bg="events" class="py-20 text-center relative text-gray-900">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-6">Trips &amp; Events</h2>
 
-    <!-- Upcoming Trips -->
-    <section class="mb-16 text-left">
-      <h3 class="text-2xl font-semibold mb-4 text-gray-900">Upcoming Trips</h3>
-      <div id="upcoming-events"
-           class="space-y-6 max-w-4xl mx-auto"></div>
-    </section>
+      <!-- Upcoming Trips -->
+      <div class="mb-16 text-left">
+        <h3 class="text-2xl font-semibold mb-4">Upcoming Trips</h3>
+        <div id="upcoming-events" class="space-y-6 max-w-4xl mx-auto"></div>
+      </div>
 
-    <!-- Past Trips -->
-    <section class="text-left">
-      <h3 class="text-2xl font-semibold mb-4 text-gray-900">Past Trips</h3>
-      <div id="past-events"
-           class="space-y-6 max-w-4xl mx-auto"></div>
-    </section>
-  </div>
+      <!-- Past Trips -->
+      <div class="text-left">
+        <h3 class="text-2xl font-semibold mb-4">Past Trips</h3>
+        <div id="past-events" class="space-y-6 max-w-4xl mx-auto"></div>
+      </div>
+    </div>
+    <a href="#join" class="next-btn">Next: Join ↓</a>
+  </section>
 
-  <a href="#join" class="next-btn">Next: Join â†“</a>
-</section>
-
-
-   <!-- Join -->
+  <!-- Join -->
   <section id="join" data-bg="join" class="py-20 text-center text-black">
     <h2 class="text-3xl font-bold mb-4">Join the Club</h2>
-    <p class="text-lg mb-6">No experience needed â€” we provide training, gear, and adventure!</p>
+    <p class="text-lg mb-6">No experience needed — we provide training, gear, and adventure!</p>
     <a href="https://www.facebook.com/groups/65963976973" target="_blank"
        class="bg-black text-yellow-400 py-3 px-6 rounded-lg hover:bg-gray-800 transition">Join via Facebook</a>
   </section>
 
   <footer class="bg-gray-900 text-gray-400 py-8 text-center">
-    <p>Â© 2025 National University Caving Club</p>
+    <p>© 2025 National University Caving Club</p>
   </footer>
 
   <div id="lightbox"><img src="" alt="zoomed"></div>
 
-
-
   <script src="config.js"></script>
   <script src="main.js"></script>
-  
-   </body>
+</body>
 </html>
-
-
