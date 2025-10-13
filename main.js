@@ -155,6 +155,47 @@ const environment = (appConfig.environment || '').toLowerCase();
 const eventsApiUrl = appConfig.eventsApiUrl || 'http://localhost:3000/api/events';
 const useMockEvents = environment === 'dev' && !!appConfig.mockEvents;
 
+const sparseGridRegistry = [];
+
+const applySparseGridCentering = () => {
+  const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+
+  sparseGridRegistry.forEach(({ container, count }) => {
+    if (!container) return;
+
+    if (isLargeScreen && count > 0 && count < 3) {
+      const styles = getComputedStyle(container);
+      const gap = parseFloat(styles.columnGap) || 24;
+      const baseMaxWidth = parseFloat(styles.maxWidth) || 1024;
+      const cardWidth = 340;
+      const maxContainerWidth = Math.min(cardWidth * count + gap * (count - 1), baseMaxWidth);
+
+      container.style.maxWidth = `${maxContainerWidth}px`;
+      container.style.justifyContent = 'center';
+      container.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
+    } else {
+      container.style.maxWidth = '';
+      container.style.justifyContent = '';
+      container.style.gridTemplateColumns = '';
+    }
+  });
+};
+
+const registerSparseGrid = (container, count) => {
+  if (!container) return;
+
+  const existing = sparseGridRegistry.find(entry => entry.container === container);
+  if (existing) {
+    existing.count = count;
+  } else {
+    sparseGridRegistry.push({ container, count });
+  }
+
+  applySparseGridCentering();
+};
+
+window.addEventListener('resize', applySparseGridCentering);
+
 const loadEvents = () => {
   if (useMockEvents) {
     return Promise.resolve(appConfig.mockEvents);
@@ -326,12 +367,14 @@ loadEvents()
     } else {
       upcoming.forEach(event => upcomingContainer.appendChild(makeCard(event)));
     }
+    registerSparseGrid(upcomingContainer, upcoming.length);
 
     if (!past.length) {
       pastContainer.textContent = 'No past trips.';
     } else {
       past.forEach(event => pastContainer.appendChild(makeCard(event)));
     }
+    registerSparseGrid(pastContainer, past.length);
   })
   .catch(error => {
     console.error('Failed to load events:', error);
