@@ -157,6 +157,186 @@ const useMockEvents = environment === 'dev' && !!appConfig.mockEvents;
 
 const sparseGridRegistry = [];
 
+const focusBackdrop = document.getElementById('event-focus-backdrop');
+const focusContent = focusBackdrop ? document.getElementById('event-focus-content') : null;
+const focusCloseButton = focusBackdrop ? focusBackdrop.querySelector('[data-focus-close]') : null;
+const focusDismissLayer = focusBackdrop ? focusBackdrop.querySelector('[data-focus-dismiss]') : null;
+const focusCard = focusBackdrop ? document.getElementById('event-focus-card') : null;
+
+let focusReturnTarget = null;
+
+const isFocusActive = () => focusBackdrop && !focusBackdrop.classList.contains('hidden');
+
+const closeEventFocus = () => {
+  if (!isFocusActive()) return;
+
+  focusBackdrop.classList.add('hidden');
+  focusBackdrop.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('overflow-hidden');
+
+  if (focusReturnTarget && typeof focusReturnTarget.focus === 'function') {
+    if (document.contains(focusReturnTarget)) {
+      focusReturnTarget.focus();
+    }
+  }
+  focusReturnTarget = null;
+};
+
+const formatDate = dateValue => {
+  if (!dateValue) return 'TBC';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'TBC';
+  return date.toLocaleString('en-AU', {
+    weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+  });
+};
+
+const formatDuration = (start, end) => {
+  const startDate = start ? new Date(start) : null;
+  const endDate = end ? new Date(end) : null;
+  if (!startDate || !endDate || Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return 'TBC';
+  }
+  const ms = endDate - startDate;
+  const mins = Math.max(Math.round(ms / 60000), 0);
+  const hrs = Math.floor(mins / 60);
+  const days = Math.floor(hrs / 24);
+
+  if (days >= 1) {
+    const remainder = hrs % 24;
+    return `${days} day${days > 1 ? 's' : ''}${remainder ? `, ${remainder} hr${remainder > 1 ? 's' : ''}` : ''}`;
+  }
+  if (hrs >= 1) {
+    const remainder = mins % 60;
+    return `${hrs} hr${hrs > 1 ? 's' : ''}${remainder ? `, ${remainder} min` : ''}`;
+  }
+  return `${mins} min`;
+};
+
+const makeMetaRow = (label, value, className = 'text-sm text-gray-700 mb-1') => {
+  const p = document.createElement('p');
+  p.className = className;
+  const strong = document.createElement('span');
+  strong.className = 'font-semibold';
+  strong.textContent = `${label}: `;
+  p.append(strong, document.createTextNode(value));
+  return p;
+};
+
+const buildFocusContent = event => {
+  if (!focusContent) return;
+
+  focusContent.innerHTML = '';
+
+  const header = document.createElement('div');
+  header.className = 'flex flex-wrap items-start justify-between gap-4';
+
+  const titleWrap = document.createElement('div');
+  titleWrap.className = 'space-y-2';
+
+  const title = document.createElement('h2');
+  title.className = 'text-3xl font-bold text-gray-900';
+  title.id = 'event-focus-title';
+  title.textContent = event.title || 'Untitled event';
+
+  const subline = document.createElement('p');
+  subline.className = 'text-sm text-gray-600';
+  const startLabel = formatDate(event.start);
+  const durationLabel = formatDuration(event.start, event.end);
+  const sublineParts = [];
+  if (startLabel && startLabel !== 'TBC') {
+    sublineParts.push(startLabel);
+  }
+  if (durationLabel && durationLabel !== 'TBC') {
+    sublineParts.push(durationLabel);
+  }
+  subline.textContent = sublineParts.length ? sublineParts.join(' · ') : 'Details coming soon';
+
+  titleWrap.append(title, subline);
+  header.appendChild(titleWrap);
+
+  const status = document.createElement('span');
+  status.className = `px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full ${event.status === 'CONFIRMED'
+    ? 'bg-green-100 text-green-800'
+    : 'bg-yellow-100 text-yellow-800'}`;
+  status.textContent = event.status || 'TBC';
+  header.appendChild(status);
+
+  focusContent.appendChild(header);
+
+  const metaGrid = document.createElement('div');
+  metaGrid.className = 'grid gap-3 sm:grid-cols-2';
+  metaGrid.appendChild(makeMetaRow('Start', formatDate(event.start), 'text-base text-gray-700'));
+  metaGrid.appendChild(makeMetaRow('End', formatDate(event.end), 'text-base text-gray-700'));
+  metaGrid.appendChild(makeMetaRow('Duration', formatDuration(event.start, event.end), 'text-base text-gray-700'));
+  if (event.location) {
+    metaGrid.appendChild(makeMetaRow('Location', event.location, 'text-base text-gray-700'));
+  }
+  if (event.organizer) {
+    metaGrid.appendChild(makeMetaRow('Organizer', event.organizer, 'text-base text-gray-700'));
+  }
+  focusContent.appendChild(metaGrid);
+
+  if (event.description) {
+    const description = document.createElement('p');
+    description.className = 'whitespace-pre-line text-base leading-relaxed text-gray-700';
+    description.textContent = event.description;
+    focusContent.appendChild(description);
+  }
+
+  if (event.url) {
+    const link = document.createElement('a');
+    link.href = event.url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.className = 'inline-flex items-center text-base font-semibold text-yellow-600 hover:text-yellow-700';
+    link.textContent = 'Go to Event';
+    focusContent.appendChild(link);
+  }
+};
+
+const openEventFocus = (eventData, invoker) => {
+  if (!focusBackdrop || !focusContent || !focusCard) return;
+
+  focusReturnTarget = invoker && typeof invoker.focus === 'function' ? invoker : document.activeElement;
+
+  buildFocusContent(eventData);
+
+  focusCard.scrollTop = 0;
+  focusBackdrop.classList.remove('hidden');
+  focusBackdrop.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('overflow-hidden');
+
+  if (typeof focusCard.focus === 'function') {
+    focusCard.focus({ preventScroll: true });
+  } else if (focusCloseButton) {
+    focusCloseButton.focus();
+  }
+};
+
+if (focusCloseButton) {
+  focusCloseButton.addEventListener('click', () => closeEventFocus());
+}
+
+if (focusDismissLayer) {
+  focusDismissLayer.addEventListener('click', () => closeEventFocus());
+}
+
+if (focusBackdrop) {
+  focusBackdrop.addEventListener('click', event => {
+    if (!focusCard) return;
+    if (!focusCard.contains(event.target)) {
+      closeEventFocus();
+    }
+  });
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && isFocusActive()) {
+    closeEventFocus();
+  }
+});
+
 const applySparseGridCentering = () => {
   const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
 
@@ -223,43 +403,15 @@ loadEvents()
 
     const now = new Date();
 
-    const formatDate = dateValue => new Date(dateValue).toLocaleString('en-AU', {
-      weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-    });
-
-    const formatDuration = (start, end) => {
-      const ms = new Date(end) - new Date(start);
-      const mins = Math.max(Math.round(ms / 60000), 0);
-      const hrs = Math.floor(mins / 60);
-      const days = Math.floor(hrs / 24);
-
-      if (days >= 1) {
-        const remainder = hrs % 24;
-        return `${days} day${days > 1 ? 's' : ''}${remainder ? `, ${remainder} hr${remainder > 1 ? 's' : ''}` : ''}`;
-      }
-      if (hrs >= 1) {
-        const remainder = mins % 60;
-        return `${hrs} hr${hrs > 1 ? 's' : ''}${remainder ? `, ${remainder} min` : ''}`;
-      }
-      return `${mins} min`;
-    };
-
-    const makeMetaRow = (label, value, className = 'text-sm text-gray-700 mb-1') => {
-      const p = document.createElement('p');
-      p.className = className;
-      const strong = document.createElement('span');
-      strong.className = 'font-semibold';
-      strong.textContent = `${label}: `;
-      p.append(strong, document.createTextNode(value));
-      return p;
-    };
-
     const makeCard = event => {
       const card = document.createElement('article');
       card.className = [
         'bg-white rounded-lg shadow-lg p-5 border border-gray-200',
-        'hover:shadow-2xl hover:scale-[1.01] transition-all cursor-pointer'
+        'hover:shadow-2xl hover:scale-[1.01] transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-500'
       ].join(' ');
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `View details for ${event.title || 'event'}`);
 
       const header = document.createElement('div');
       header.className = 'flex flex-wrap items-start justify-between gap-2 mb-3';
@@ -280,8 +432,7 @@ loadEvents()
       const toggleButton = document.createElement('button');
       toggleButton.type = 'button';
       toggleButton.className = 'text-sm font-semibold text-yellow-600 hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-white rounded px-2 py-1';
-      toggleButton.textContent = 'Show details';
-      toggleButton.setAttribute('aria-expanded', 'false');
+      toggleButton.textContent = 'View details';
 
       actionWrap.append(status, toggleButton);
       header.append(title, actionWrap);
@@ -296,56 +447,25 @@ loadEvents()
       }
       card.appendChild(summary);
 
-      const details = document.createElement('div');
-      details.className = 'mt-3 pt-3 border-t border-gray-200 space-y-2 hidden';
+      const triggerOpen = invoker => openEventFocus(event, invoker);
 
-      details.appendChild(makeMetaRow('End', formatDate(event.end)));
-      if (event.organizer) {
-        details.appendChild(makeMetaRow('Organizer', event.organizer));
-      }
-
-      if (event.description) {
-        const description = document.createElement('p');
-        description.className = 'text-sm text-gray-700 whitespace-pre-line';
-        description.textContent = event.description;
-        details.appendChild(description);
-      }
-
-      if (event.url) {
-        const link = document.createElement('a');
-        link.href = event.url;
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.className = 'inline-flex items-center text-sm font-semibold text-yellow-600 hover:text-yellow-700';
-        link.textContent = 'Go to Event';
-        details.appendChild(link);
-      }
-
-      card.appendChild(details);
-
-      let expanded = false;
-      const setExpanded = value => {
-        expanded = value;
-        if (expanded) {
-          details.classList.remove('hidden');
-          toggleButton.textContent = 'Hide details';
-        } else {
-          details.classList.add('hidden');
-          toggleButton.textContent = 'Show details';
-        }
-        toggleButton.setAttribute('aria-expanded', String(expanded));
-      };
-
-      toggleButton.addEventListener('click', event => {
-        event.stopPropagation();
-        setExpanded(!expanded);
+      toggleButton.addEventListener('click', domEvent => {
+        domEvent.stopPropagation();
+        triggerOpen(toggleButton);
       });
 
-      card.addEventListener('click', event => {
-        if (event.target.closest('a, button')) {
+      card.addEventListener('click', domEvent => {
+        if (domEvent.target.closest('button')) {
           return;
         }
-        setExpanded(!expanded);
+        triggerOpen(card);
+      });
+
+      card.addEventListener('keydown', domEvent => {
+        if (domEvent.key === 'Enter' || domEvent.key === ' ') {
+          domEvent.preventDefault();
+          triggerOpen(card);
+        }
       });
 
       return card;
