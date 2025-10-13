@@ -70,6 +70,9 @@ scheduleGradientUpdate();
 
 // ======== Video autoplay ========
 const ensurePlayback = video => {
+  if (video.dataset.autoplaying === 'true') return;
+  video.dataset.autoplaying = 'true';
+
   const attemptPlay = () => {
     const playPromise = video.play();
     if (playPromise && typeof playPromise.catch === 'function') {
@@ -81,28 +84,55 @@ const ensurePlayback = video => {
     attemptPlay();
   } else {
     video.addEventListener('loadeddata', attemptPlay, { once: true });
+    if (typeof video.load === 'function') {
+      video.load();
+    }
   }
+};
+
+const resetAutoplayFlag = video => {
+  delete video.dataset.autoplaying;
+};
+
+const primeVideo = video => {
+  video.muted = true;
+  video.defaultMuted = true;
+  video.setAttribute('muted', '');
+  video.playsInline = true;
+  video.setAttribute('playsinline', '');
+  if (!video.preload || video.preload === 'metadata') {
+    video.preload = 'auto';
+  }
+};
+
+const isInViewport = element => {
+  const rect = element.getBoundingClientRect();
+  return rect.bottom > 0 && rect.top < window.innerHeight;
 };
 
 const videoObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     const video = entry.target;
     if (entry.isIntersecting) {
-      video.muted = true;
       ensurePlayback(video);
       video.classList.add('playing');
     } else {
       video.pause();
+      resetAutoplayFlag(video);
       video.classList.remove('playing');
     }
   });
-}, { threshold: 0.35 });
+}, { threshold: 0.2 });
 
 document.querySelectorAll('.autoplay-video').forEach(video => {
+  primeVideo(video);
   videoObserver.observe(video);
-  if (video.autoplay && video.closest('section')?.getBoundingClientRect().top < window.innerHeight) {
+
+  if (isInViewport(video)) {
     ensurePlayback(video);
   }
+
+  video.addEventListener('pointerdown', () => ensurePlayback(video), { once: true });
 });
 
 // ======== Image lightbox ========
