@@ -255,12 +255,41 @@ const buildFocusContent = event => {
   titleWrap.append(title, subline);
   header.appendChild(titleWrap);
 
+  const headerActions = document.createElement('div');
+  headerActions.className = 'flex items-center gap-3';
+
   const status = document.createElement('span');
   status.className = `px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full ${event.status === 'CONFIRMED'
     ? 'bg-green-100 text-green-800'
     : 'bg-yellow-100 text-yellow-800'}`;
   status.textContent = event.status || 'TBC';
-  header.appendChild(status);
+  headerActions.appendChild(status);
+
+  if (event.url) {
+    const actionLink = document.createElement('a');
+    actionLink.href = event.url;
+    actionLink.target = '_blank';
+    actionLink.rel = 'noopener';
+    actionLink.className = 'inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white';
+    actionLink.setAttribute('aria-label', 'Go to Event (opens in new tab)');
+
+    const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.classList.add('h-4', 'w-4', 'fill-current');
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987H7.898V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.463h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.891h-2.33v6.987C18.343 21.128 22 16.991 22 12z');
+    icon.appendChild(path);
+
+    const label = document.createElement('span');
+    label.textContent = 'Go to Event';
+
+    actionLink.append(icon, label);
+    headerActions.appendChild(actionLink);
+  }
+
+  header.appendChild(headerActions);
 
   focusContent.appendChild(header);
 
