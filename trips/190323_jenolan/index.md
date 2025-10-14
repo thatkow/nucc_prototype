@@ -1,0 +1,25 @@
+---
+title: "Jenolan Jaunt"
+date: 2019-03-22
+end: 2019-03-24
+# fee: $45
+author: "lbailey"
+# event: "https://www.facebook.com/events/2671572786217557/"
+highlight: true
+participants: "Christopher Bradley, Lachlan Bailey, Bill Lamb, Whitley Rosenberg, Andy Waddell, Maxx Fioriti, Shannon Horan, Daniel Sun, Ellie Bishop, Sophia Cain, Eliza Lane, and Amber Jones"
+---
+[Jenolan](/locations/jenolan) has long been one of NUCC’s favourite caving locations, as it has a wonderful range of varied caves with plenty to see in them. Plus, it has the added bonus of a caver’s cottage with all sorts of useful bits and pieces, like a microwave for the two-minute noodles. Sadly, for many years we’d been unable to visit Jenolan due to a lack of members familiar enough with the caves. So after successfully becoming re-acquainted with Jenolan over 2018, we were all keen to have a trip there for our new 2019 members, and 13 of us all piled into cars for the trip up there. We got to the fantastic cottage at 9pm-ish, a cottage that is only sullied by the fact that someone unknown to NUCC has removed the old NUCC poster from the loungeroom. Plans are afoot to replace it…[^1] Most everyone got to bed at a reasonable time, except for a certain idiot Trip Leader and foolish canyoner, who stayed up to 1:30am talking about how it would be awesome for NUCC to go canyoning sometime.
+
+Saturday dawned overcast but not rainy- perfect weather for caving! After many cups of tea, the more recalcitrant cavers were brought into line, and we split into two groups for the day’s caving. This was at the late hour of 10am, which rather astounded the SUSS[^2] cavers who turned up later in the day to cart dive tanks into Slug Lake. Rather than the expected sleepy uni students, they found a deserted cottage. One group made a beeline to Aladdin Cave, and the other wandered off towards Mammoth Cave. This was slightly complicated by the fact that the guides had only given us one key, and both caves required it to open them. Chris was kindly volunteered by Lachie to shuttle the key between the caves and be bait for the cloud of leeches around the entrance to Mammoth. 
+
+In Mammoth, the group forged onwards, and into Railway Tunnel. Here, the morning’s caffeinated start made its sudden revenge, and one member of the intrepid party had to return to the surface for a short break. We wanted to visit Ice Pick Lake via Snakes Gut, but thought better of going through Unsurveyed Connection as there was a fair bit of loose rock around. Instead of going down Hole in the Wall, we took the path of least resistance, and rocketed down Railway Tunnel and around to Hell Hole. And so it was through (or past for the more intelligent members of the party) Hell Hole,, and the group enjoyed stomping along the passageway past the World of Mud to Ice Pick Lake. Here lunch was had, and unfortunate bananas laughed at, before a leisurely exit from Mammoth (well, leisurely for everyone except those poor cavers who needed to pee) and trek up to the cottage. Alas, no one could be persuaded to swim in Ice Pick Lake.
+
+The Aladdin group apparently had a good time, and also visited Rho Hole. Seeing as they all successfully returned to the cottage, it appears that no-one amongst them was talked into entering the Kennedy Trap. Having been thoroughly traumatised by the abundance of pretty stuff in Aladdin, they all retired to the tourist precinct, thoughtfully not telling the other group where they were going. Still once they returned a relaxed evening got underway, with some disappointed SUSS divers trickling in (Lower River, and thus Slug Lake, was cloudy, which meant no diving). Despite NUCC’s usual poor culinary capabilities, no one managed to ruin their dinner this evening, and some people actually prepared real food, rather than the standard 2-minute noodles.
+
+Sunday was a nice relaxed day of caving- the dispirited SUSSlings couldn’t even bring themselves to go caving, and the two NUCC groups went to Hennings Cave and Lower River in Mammoth Cave. The Hennings group had been planning to visit Wiburds Cave further up the valley, but gave up part way under heavy onslaught of leeches. Golden Grove was visited, but it was quite sad to see that there appears to have been some damage to the formation there. The Mammothers turned out to be less cowards than the group at Ice Pick Lake the day before, and apparently some members of the party went for a (voluntary) swim. Brrrrr…
+
+The trip home from Canberra was good, with everyone stopping at a bakery in Goulburn for coffee and pies. Most of the party seemed to have enjoyed their stay in Jenolan, and hopefully everyone is looking forward to the next NUCC trip there on the 22/23rd June[^3].  Maybe we can introduce them all to some of the more special delights of Jenolan then, like Mammoth Squeeze or Pirates Delight…
+
+[^1]: A new one was finally put up in July during the SUSS week-long trip
+[^2]: Sydney Uni Sleeping Society,* as every caver in New South Wales well knows
+[^3]: Spoiler alert: three people went
