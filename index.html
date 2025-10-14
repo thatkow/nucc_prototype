@@ -45,6 +45,42 @@
       transform: translateY(-2px);
     }
 
+    .canyoning-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .canyoning-tile {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      overflow: hidden;
+    }
+
+    .canyoning-tile > .canyoning-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .canyoning-video {
+      grid-column: span 2;
+    }
+
+    @media (min-width: 768px) {
+      .canyoning-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .canyoning-video {
+        grid-column: 2 / span 2;
+        grid-row: 2 / span 2;
+      }
+    }
+
     #lightbox {
       position: fixed;
       top: 0;
@@ -127,18 +163,48 @@
         Slide, abseil, and jump through stunning sandstone gorges in the Blue Mountains and beyond.
         Canyoning blends rope skills, swimming, and teamwork in spectacular natural settings.
       </p>
-      <video muted loop playsinline class="w-full rounded-lg shadow-lg mb-10 autoplay-video">
-        <source src="videos/canyoning/canyoning.mp4" type="video/mp4">
-      </video>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-        <img src="images/canyoning/514345041_24758818293786190_988311623821113243_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyoning waterfall">
-        <img src="images/canyoning/558819996_24758817820452904_6120743376722461391_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Rope work in canyon">
-        <img src="images/canyoning/558890892_24758817810452905_7656795502336543323_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyoning team">
-        <img src="images/canyoning/559187378_24758818053786214_7641623047651104666_n.jpg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyoner abseiling">
-        <img src="images/canyoning/IMG_3038.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon pool">
-        <img src="images/canyoning/IMG_3067.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon rappel">
-        <img src="images/canyoning/IMG_3092.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon teamwork">
-        <img src="images/canyoning/IMG_3099.jpeg" class="rounded-lg shadow hover:scale-105 transition-transform zoomable" alt="Canyon exit">
+      <div class="canyoning-grid mb-10">
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/485796010_3830965473880596_8970088514777046564_n.jpg" class="canyoning-media zoomable" alt="Canyon swimmer approaching waterfall">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/485838217_3830965110547299_5777480230274287474_n.jpg" class="canyoning-media zoomable" alt="Group preparing for canyon rappel">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/485858925_3830965517213925_8947390691159676878_n.jpg" class="canyoning-media zoomable" alt="Canyoner descending narrow slot">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/486519060_3830965540547256_1742233198917776590_n.jpg" class="canyoning-media zoomable" alt="Canyon team celebrating in pool">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/514345041_24758818293786190_988311623821113243_n.jpg" class="canyoning-media zoomable" alt="Canyoning waterfall drop">
+        </div>
+        <div class="canyoning-tile canyoning-video rounded-lg shadow-lg">
+          <video muted loop playsinline class="canyoning-media autoplay-video" aria-label="Canyoning highlights video">
+            <source src="videos/canyoning/canyoning.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/558819996_24758817820452904_6120743376722461391_n.jpg" class="canyoning-media zoomable" alt="Rope work in canyon">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/558890892_24758817810452905_7656795502336543323_n.jpg" class="canyoning-media zoomable" alt="Canyoning team smiling at base of falls">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/559187378_24758818053786214_7641623047651104666_n.jpg" class="canyoning-media zoomable" alt="Canyoner abseiling beside waterfall">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/IMG_3038.jpeg" class="canyoning-media zoomable" alt="Canyon pool with emerald water">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/IMG_3067.jpeg" class="canyoning-media zoomable" alt="Canyoner lowering into pool">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/IMG_3092.jpeg" class="canyoning-media zoomable" alt="Canyon teamwork on slippery ledge">
+        </div>
+        <div class="canyoning-tile rounded-lg shadow hover:scale-105 transition-transform">
+          <img src="images/canyoning/IMG_3099.jpeg" class="canyoning-media zoomable" alt="Exiting canyon through sunlit slot">
+        </div>
       </div>
     </div>
     <a href="#outdoors" class="next-btn">Next: Outdoors ↓</a>
