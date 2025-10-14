@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NUCC Trips Archive</title>
+  <title>NUCC Events Archive</title>
   <link rel="icon" href="favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -302,7 +302,7 @@
 <body>
   <header>
     <div class="inner">
-      <h1>NUCC Trips Archive</h1>
+      <h1>NUCC Events Archive</h1>
       <p>Explore two decades of caving, canyoning, and outdoor adventures. Click an event tile to reveal photos, reports, and links.</p>
     </div>
   </header>
@@ -596,7 +596,7 @@
 
     async function initialise() {
       try {
-        const response = await fetch('events/events-data.json');
+        const response = await fetch('./events/events-data.json');
         if (!response.ok) {
           throw new Error('Unable to load events data');
         }
