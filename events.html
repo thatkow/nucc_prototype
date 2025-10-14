@@ -209,6 +209,30 @@
       margin: 0.6rem 0;
     }
 
+    .event-body .event-section-heading {
+      margin-top: 1.4rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .event-body .event-media {
+      margin: 1.25rem 0;
+    }
+
+    .event-body img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .event-body .event-media img {
+      display: block;
+      width: 100%;
+    }
+
     .event-body h2,
     .event-body h3,
     .event-body h4 {
@@ -227,7 +251,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      margin-top: 0.75rem;
+      margin: 0.75rem 0 1rem;
     }
 
     .event-actions a {
@@ -319,8 +343,6 @@
       </div>
     </div>
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const eventsData = [
   {
@@ -3172,25 +3194,109 @@
       return `events/${slug}/${href}`;
     }
 
-    function renderMarkdown(event) {
-      const container = document.createElement('div');
-      container.innerHTML = marked.parse(event.body || '');
-
-      container.querySelectorAll('img').forEach((img) => {
-        const src = img.getAttribute('src');
-        if (src) {
-          img.setAttribute('src', resolveAsset(event.slug, src));
+    function appendTextWithBreaks(target, text) {
+      const segments = text.split('\n');
+      segments.forEach((segment, index) => {
+        if (segment) {
+          target.appendChild(document.createTextNode(segment));
+        }
+        if (index < segments.length - 1) {
+          target.appendChild(document.createElement('br'));
         }
       });
+    }
 
-      container.querySelectorAll('a').forEach((anchor) => {
-        const href = anchor.getAttribute('href');
-        if (href) {
-          anchor.setAttribute('href', resolveAsset(event.slug, href));
+    function appendInlineElements(target, text, event) {
+      const pattern = /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|__([^_]+)__|_([^_]+)_/g;
+      let lastIndex = 0;
+      let match;
+
+      while ((match = pattern.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          appendTextWithBreaks(target, text.slice(lastIndex, match.index));
         }
+
+        if (match[1] !== undefined) {
+          const img = document.createElement('img');
+          img.src = resolveAsset(event.slug, match[2].trim());
+          img.alt = match[1].trim();
+          target.appendChild(img);
+        } else if (match[3] !== undefined) {
+          const link = document.createElement('a');
+          link.href = resolveAsset(event.slug, match[4].trim());
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = match[3];
+          target.appendChild(link);
+        } else if (match[5] !== undefined) {
+          const strong = document.createElement('strong');
+          appendInlineElements(strong, match[5], event);
+          target.appendChild(strong);
+        } else if (match[6] !== undefined) {
+          const emphasis = document.createElement('em');
+          appendInlineElements(emphasis, match[6], event);
+          target.appendChild(emphasis);
+        } else if (match[7] !== undefined) {
+          const strong = document.createElement('strong');
+          appendInlineElements(strong, match[7], event);
+          target.appendChild(strong);
+        } else if (match[8] !== undefined) {
+          const emphasis = document.createElement('em');
+          appendInlineElements(emphasis, match[8], event);
+          target.appendChild(emphasis);
+        }
+
+        lastIndex = pattern.lastIndex;
+      }
+
+      if (lastIndex < text.length) {
+        appendTextWithBreaks(target, text.slice(lastIndex));
+      }
+    }
+
+    function renderEventBody(event) {
+      const fragment = document.createDocumentFragment();
+      const content = event.body || '';
+
+      if (!content.trim()) {
+        return fragment;
+      }
+
+      const blocks = content.split(/\n{2,}/);
+      blocks.forEach((block) => {
+        const trimmed = block.trim();
+        if (!trimmed) {
+          return;
+        }
+
+        const headingMatch = /^(#{1,6})\s+(.*)$/.exec(trimmed);
+        if (headingMatch) {
+          const level = Math.min(4, headingMatch[1].length + 1);
+          const heading = document.createElement(`h${level}`);
+          heading.className = 'event-section-heading';
+          heading.textContent = headingMatch[2].trim();
+          fragment.appendChild(heading);
+          return;
+        }
+
+        const imageMatch = /^!\[([^\]]*)\]\(([^)]+)\)$/.exec(trimmed);
+        if (imageMatch) {
+          const figure = document.createElement('figure');
+          figure.className = 'event-media';
+          const img = document.createElement('img');
+          img.src = resolveAsset(event.slug, imageMatch[2].trim());
+          img.alt = imageMatch[1].trim();
+          figure.appendChild(img);
+          fragment.appendChild(figure);
+          return;
+        }
+
+        const paragraph = document.createElement('p');
+        appendInlineElements(paragraph, trimmed, event);
+        fragment.appendChild(paragraph);
       });
 
-      return container.innerHTML;
+      return fragment;
     }
 
     function deriveTemporalInfo(event) {
@@ -3282,7 +3388,6 @@
 
       const body = document.createElement('div');
       body.className = 'event-body';
-      body.innerHTML = renderMarkdown(event);
 
       if (event.event) {
         const actions = document.createElement('div');
@@ -3298,7 +3403,12 @@
           Event page
         `;
         actions.appendChild(link);
-        body.prepend(actions);
+        body.appendChild(actions);
+      }
+
+      const bodyContent = renderEventBody(event);
+      if (bodyContent.childNodes.length) {
+        body.appendChild(bodyContent);
       }
 
       card.appendChild(body);
