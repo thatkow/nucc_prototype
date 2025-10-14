@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Trips Archive</title>
+  <link rel="icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #05070a;
+      --card-bg: rgba(15, 23, 42, 0.65);
+      --card-border: rgba(148, 163, 184, 0.25);
+      --accent: #facc15;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #000 100%);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    header .inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    header h1 {
+      font-size: clamp(1.5rem, 2.5vw + 1rem, 2.5rem);
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .timeline-layout {
+      display: grid;
+      grid-template-columns: minmax(80px, 120px) minmax(0, 1fr) minmax(80px, 120px);
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .indicator {
+      position: sticky;
+      top: 6.5rem;
+      align-self: start;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.8rem;
+      opacity: 0.9;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .indicator span.value {
+      font-size: clamp(1.6rem, 2vw + 1rem, 2.4rem);
+      font-weight: 700;
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--text);
+    }
+
+    .indicator[data-active="false"] {
+      opacity: 0.3;
+      transform: translateY(10px);
+    }
+
+    .events-column {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .month-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .month-group-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0.75;
+      padding-left: 0.5rem;
+    }
+
+    .month-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .event-card {
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      padding: 1.4rem 1.4rem 1.1rem;
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .event-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(250, 204, 21, 0.12), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .event-card.open,
+    .event-card:hover {
+      border-color: rgba(250, 204, 21, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px -24px rgba(250, 204, 21, 0.65);
+    }
+
+    .event-card.open::before,
+    .event-card:hover::before {
+      opacity: 1;
+    }
+
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .event-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .event-date {
+      font-size: 0.95rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .event-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .event-body {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .event-card.open .event-body {
+      display: block;
+    }
+
+    .event-body p {
+      margin: 0.6rem 0;
+    }
+
+    .event-body h2,
+    .event-body h3,
+    .event-body h4 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+      font-size: 1.05rem;
+      color: #f8fafc;
+    }
+
+    .event-body a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .event-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .event-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 9999px;
+      background: rgba(250, 204, 21, 0.12);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .event-actions a:hover {
+      background: rgba(250, 204, 21, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .facebook-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    @media (max-width: 960px) {
+      .timeline-layout {
+        grid-template-columns: minmax(60px, 80px) minmax(0, 1fr) minmax(60px, 80px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header .inner {
+        padding: 1rem;
+      }
+
+      .timeline-layout {
+        display: block;
+      }
+
+      .indicator {
+        position: static;
+        margin-bottom: 1.5rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .indicator span.value {
+        font-size: 1.6rem;
+      }
+
+      .events-column {
+        gap: 2rem;
+      }
+
+      .month-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 540px) {
+      .month-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <h1>NUCC Trips Archive</h1>
+      <p>Explore two decades of caving, canyoning, and outdoor adventures. Click an event tile to reveal photos, reports, and links.</p>
+    </div>
+  </header>
+  <main>
+    <div class="timeline-layout">
+      <div class="indicator" id="month-indicator" data-active="false">
+        <span class="label">Month</span>
+        <span class="value">&mdash;</span>
+      </div>
+      <div class="events-column" id="events-column" aria-live="polite"></div>
+      <div class="indicator" id="year-indicator" data-active="false">
+        <span class="label">Year</span>
+        <span class="value">&mdash;</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    const monthIndicator = document.getElementById('month-indicator');
+    const yearIndicator = document.getElementById('year-indicator');
+    const eventsColumn = document.getElementById('events-column');
+
+    const MONTH_FORMATTER = new Intl.DateTimeFormat(undefined, { month: 'long' });
+    const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+
+    function resolveAsset(slug, href) {
+      if (!href) return href;
+      if (/^(?:[a-z]+:|#|\/)/i.test(href)) {
+        return href;
+      }
+      return `events/${slug}/${href}`;
+    }
+
+    function renderMarkdown(event) {
+      const renderer = new marked.Renderer();
+      const originalImage = renderer.image.bind(renderer);
+      const originalLink = renderer.link.bind(renderer);
+
+      renderer.image = (href, title, text) => {
+        const resolved = resolveAsset(event.slug, href || '');
+        return originalImage(resolved, title, text);
+      };
+
+      renderer.link = (href, title, text) => {
+        const resolved = resolveAsset(event.slug, href || '');
+        return originalLink(resolved, title, text);
+      };
+
+      return marked.parse(event.body || '', { renderer });
+    }
+
+    function deriveTemporalInfo(event) {
+      const dateString = event.dateISO || event.date;
+      let month = event.month;
+      let year = typeof event.year === 'number' ? String(event.year) : event.year;
+
+      if ((!month || !year) && dateString) {
+        const parsed = new Date(dateString);
+        if (!Number.isNaN(parsed)) {
+          month = MONTH_FORMATTER.format(parsed);
+          year = String(parsed.getFullYear());
+        }
+      }
+
+      if (!month) {
+        month = 'Unknown';
+      }
+      if (!year) {
+        year = 'Unknown';
+      }
+
+      return { month, year };
+    }
+
+    function getEventTimestamp(event) {
+      const dateString = event.dateISO || event.date;
+      if (dateString) {
+        const parsed = Date.parse(dateString);
+        if (!Number.isNaN(parsed)) {
+          return parsed;
+        }
+      }
+
+      const { year } = deriveTemporalInfo(event);
+      const numericYear = Number(year);
+      if (!Number.isNaN(numericYear)) {
+        return new Date(numericYear, 0, 1).getTime();
+      }
+
+      return Number.NEGATIVE_INFINITY;
+    }
+
+    function createEventCard(event, index) {
+      const card = document.createElement('article');
+      card.className = 'event-card';
+      card.dataset.index = index;
+      const temporal = deriveTemporalInfo(event);
+      card.dataset.month = temporal.month || '';
+      card.dataset.year = temporal.year || '';
+      card.dataset.slug = event.slug || '';
+
+      const header = document.createElement('div');
+      header.className = 'event-header';
+      const title = document.createElement('h2');
+      title.className = 'event-title';
+      title.textContent = event.title;
+      const date = document.createElement('div');
+      date.className = 'event-date';
+
+      let displayDate = event.date;
+      if (event.dateISO) {
+        const dateObj = new Date(event.dateISO);
+        if (!Number.isNaN(dateObj)) {
+          displayDate = DATE_FORMATTER.format(dateObj);
+        }
+      }
+      date.textContent = displayDate || 'Date TBC';
+
+      header.appendChild(title);
+      header.appendChild(date);
+      card.appendChild(header);
+
+      if (event.author || event.summary) {
+        const meta = document.createElement('div');
+        meta.className = 'event-meta';
+        if (event.author) {
+          const author = document.createElement('span');
+          author.textContent = `Lead: ${event.author}`;
+          meta.appendChild(author);
+        }
+        if (event.summary) {
+          const summary = document.createElement('span');
+          summary.textContent = event.summary;
+          meta.appendChild(summary);
+        }
+        card.appendChild(meta);
+      }
+
+      const body = document.createElement('div');
+      body.className = 'event-body';
+      body.innerHTML = renderMarkdown(event);
+
+      if (event.event) {
+        const actions = document.createElement('div');
+        actions.className = 'event-actions';
+        const link = document.createElement('a');
+        link.href = event.event;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.innerHTML = `
+          <svg class="facebook-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M22 12.07C22 6.58 17.52 2.1 12.03 2.1S2.06 6.58 2.06 12.07c0 4.98 3.66 9.1 8.44 9.86v-6.98H7.9v-2.88h2.6V9.74c0-2.57 1.53-3.99 3.87-3.99 1.12 0 2.3.2 2.3.2v2.53h-1.3c-1.28 0-1.68.79-1.68 1.6v1.92h2.86l-.46 2.88h-2.4v6.98c4.78-.76 8.44-4.88 8.44-9.86Z"/>
+          </svg>
+          Event page
+        `;
+        actions.appendChild(link);
+        body.prepend(actions);
+      }
+
+      card.appendChild(body);
+
+      card.addEventListener('click', () => {
+        const isOpen = card.classList.toggle('open');
+        card.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      card.addEventListener('keydown', (eventObj) => {
+        if (eventObj.key === 'Enter' || eventObj.key === ' ') {
+          eventObj.preventDefault();
+          card.click();
+        }
+      });
+
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-expanded', 'false');
+
+      return card;
+    }
+
+    function updateIndicators(activeElement) {
+      if (!activeElement) {
+        monthIndicator.dataset.active = 'false';
+        yearIndicator.dataset.active = 'false';
+        monthIndicator.querySelector('.value').textContent = '—';
+        yearIndicator.querySelector('.value').textContent = '—';
+        return;
+      }
+      const month = activeElement.dataset.month || '';
+      const year = activeElement.dataset.year || '';
+      monthIndicator.dataset.active = month ? 'true' : 'false';
+      yearIndicator.dataset.active = year ? 'true' : 'false';
+      monthIndicator.querySelector('.value').textContent = month || '—';
+      yearIndicator.querySelector('.value').textContent = year || '—';
+    }
+
+    function setupObservers() {
+      const groups = Array.from(eventsColumn.querySelectorAll('.month-group'));
+      if (!groups.length) {
+        updateIndicators(null);
+        return;
+      }
+
+      const indexLookup = new Map();
+      groups.forEach((group) => {
+        indexLookup.set(Number(group.dataset.index), group);
+      });
+
+      const visible = new Map();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const idx = Number(entry.target.dataset.index);
+          if (entry.isIntersecting) {
+            visible.set(idx, entry.intersectionRatio);
+          } else {
+            visible.delete(idx);
+          }
+        });
+        if (!visible.size) {
+          updateIndicators(null);
+          return;
+        }
+        const sorted = Array.from(visible.entries()).sort((a, b) => {
+          if (b[1] !== a[1]) {
+            return b[1] - a[1];
+          }
+          return a[0] - b[0];
+        });
+        const [bestIndex] = sorted[0];
+        const activeGroup = indexLookup.get(bestIndex);
+        if (activeGroup) {
+          updateIndicators(activeGroup);
+        }
+      }, {
+        root: null,
+        threshold: [0.05, 0.25, 0.5, 0.75]
+      });
+
+      groups.forEach((group) => observer.observe(group));
+
+      updateIndicators(groups[0]);
+    }
+
+    function groupEventsByMonth(events) {
+      const groups = [];
+      const lookup = new Map();
+
+      events.forEach((event) => {
+        const { month, year } = deriveTemporalInfo(event);
+        const key = `${year}::${month}`;
+        if (!lookup.has(key)) {
+          const group = { month, year, events: [] };
+          lookup.set(key, group);
+          groups.push(group);
+        }
+        lookup.get(key).events.push(event);
+      });
+
+      return groups;
+    }
+
+    function createMonthGroup(group, groupIndex, startingCardIndex) {
+      let cardIndex = startingCardIndex;
+
+      const container = document.createElement('section');
+      container.className = 'month-group';
+      container.dataset.index = String(groupIndex);
+      container.dataset.month = group.month;
+      container.dataset.year = group.year;
+
+      const label = document.createElement('div');
+      label.className = 'month-group-label';
+      label.textContent = `${group.month} ${group.year}`;
+      container.appendChild(label);
+
+      const grid = document.createElement('div');
+      grid.className = 'month-grid';
+
+      group.events.forEach((event) => {
+        const card = createEventCard(event, cardIndex);
+        grid.appendChild(card);
+        cardIndex += 1;
+      });
+
+      container.appendChild(grid);
+
+      return { element: container, nextIndex: cardIndex };
+    }
+
+    async function initialise() {
+      try {
+        const response = await fetch('events/events-data.json');
+        if (!response.ok) {
+          throw new Error('Unable to load events data');
+        }
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format');
+        }
+        const sortedEvents = data.slice().sort((a, b) => getEventTimestamp(b) - getEventTimestamp(a));
+        const monthGroups = groupEventsByMonth(sortedEvents);
+
+        let nextCardIndex = 0;
+        monthGroups.forEach((group, groupIndex) => {
+          const { element, nextIndex } = createMonthGroup(group, groupIndex, nextCardIndex);
+          nextCardIndex = nextIndex;
+          eventsColumn.appendChild(element);
+        });
+        setupObservers();
+      } catch (error) {
+        const errorMessage = document.createElement('p');
+        errorMessage.textContent = 'Unable to load events right now. Please try again later.';
+        eventsColumn.appendChild(errorMessage);
+        console.error(error);
+      }
+    }
+
+    initialise();
+  </script>
+</body>
+</html>
