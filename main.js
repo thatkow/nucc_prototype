@@ -396,6 +396,31 @@ const registerSparseGrid = (container, count) => {
 
 window.addEventListener('resize', applySparseGridCentering);
 
+// ======== Smooth in-page anchor scrolling ========
+const anchorLinks = Array.from(
+  document.querySelectorAll('a[href^="#"]')
+).filter(link => {
+  const href = link.getAttribute('href');
+  return href && href.length > 1 && !link.hasAttribute('data-scroll-ignore');
+});
+
+anchorLinks.forEach(link => {
+  const targetId = link.getAttribute('href').slice(1);
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (history.pushState) {
+      history.pushState(null, '', `#${targetId}`);
+    } else {
+      window.location.hash = targetId;
+    }
+  });
+});
+
 const loadEvents = () => {
   if (useMockEvents) {
     return Promise.resolve(appConfig.mockEvents);
