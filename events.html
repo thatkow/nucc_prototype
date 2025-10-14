@@ -3173,21 +3173,24 @@
     }
 
     function renderMarkdown(event) {
-      const renderer = new marked.Renderer();
-      const originalImage = renderer.image.bind(renderer);
-      const originalLink = renderer.link.bind(renderer);
+      const container = document.createElement('div');
+      container.innerHTML = marked.parse(event.body || '');
 
-      renderer.image = (href, title, text) => {
-        const resolved = resolveAsset(event.slug, href || '');
-        return originalImage(resolved, title, text);
-      };
+      container.querySelectorAll('img').forEach((img) => {
+        const src = img.getAttribute('src');
+        if (src) {
+          img.setAttribute('src', resolveAsset(event.slug, src));
+        }
+      });
 
-      renderer.link = (href, title, text) => {
-        const resolved = resolveAsset(event.slug, href || '');
-        return originalLink(resolved, title, text);
-      };
+      container.querySelectorAll('a').forEach((anchor) => {
+        const href = anchor.getAttribute('href');
+        if (href) {
+          anchor.setAttribute('href', resolveAsset(event.slug, href));
+        }
+      });
 
-      return marked.parse(event.body || '', { renderer });
+      return container.innerHTML;
     }
 
     function deriveTemporalInfo(event) {
