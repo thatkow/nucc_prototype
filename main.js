@@ -286,8 +286,17 @@ anchorLinks.forEach(link => {
   };
 
   const createTripCard = event => {
-    const card = document.createElement('article');
+    const card = event.link
+      ? document.createElement('a')
+      : document.createElement('article');
     card.className = 'trip-card';
+
+    if (event.link) {
+      card.href = event.link;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.setAttribute('aria-label', `Open event link for ${event.title || 'event'}`);
+    }
 
     const title = document.createElement('h3');
     title.className = 'trip-title';
@@ -307,52 +316,19 @@ anchorLinks.forEach(link => {
       elements.push(loc);
     }
 
-    let descriptionElement = null;
-    let toggleChip = null;
-
-    if (event.description) {
-      toggleChip = document.createElement('span');
-      toggleChip.className = 'trip-toggle';
-      toggleChip.textContent = 'Details';
-
-      descriptionElement = document.createElement('p');
-      descriptionElement.className = 'trip-desc';
-      descriptionElement.textContent = event.description.trim();
+    if (event.link) {
+      const linkNote = document.createElement('span');
+      linkNote.className = 'trip-link-note';
+      const linkText = document.createElement('span');
+      linkText.textContent = 'Open event link';
+      const arrow = document.createElement('span');
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '↗';
+      linkNote.append(linkText, arrow);
+      elements.push(linkNote);
     }
 
     elements.forEach(el => card.appendChild(el));
-
-    if (toggleChip) {
-      card.appendChild(toggleChip);
-    }
-
-    if (descriptionElement) {
-      card.appendChild(descriptionElement);
-      card.setAttribute('role', 'button');
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-expanded', 'false');
-
-      const toggleExpansion = () => {
-        const expanded = !card.classList.contains('expanded');
-        card.classList.toggle('expanded', expanded);
-        card.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        toggleChip.textContent = expanded ? 'Hide details' : 'Details';
-      };
-
-      card.addEventListener('click', event => {
-        if (event.target instanceof HTMLElement && event.target.closest('a')) {
-          return;
-        }
-        toggleExpansion();
-      });
-
-      card.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          toggleExpansion();
-        }
-      });
-    }
 
     return card;
   };
@@ -363,12 +339,46 @@ anchorLinks.forEach(link => {
   });
   const INITIAL_MONTHS = 1;
 
-  const sanitizeEvent = event => ({
-    ...event,
-    title: (event.title || '').trim(),
-    location: (event.location || '').trim(),
-    description: (event.description || '').trim()
-  });
+  const extractEventLink = description => {
+    if (!description) {
+      return { description: '', link: '' };
+    }
+
+    const lines = description.split(/\r?\n/);
+    let link = '';
+    const keptLines = [];
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        return;
+      }
+
+      const match = trimmed.match(/^Event link:\s*(https?:\/\/\S+)/i);
+      if (match && !link) {
+        link = match[1];
+        return;
+      }
+
+      keptLines.push(trimmed);
+    });
+
+    return { description: keptLines.join('\n'), link };
+  };
+
+  const sanitizeEvent = event => {
+    const rawDescription = (event.description || '').replace(/\r/g, '').trim();
+    const { description, link } = extractEventLink(rawDescription);
+    const url = (event.url || '').trim();
+
+    return {
+      ...event,
+      title: (event.title || '').trim(),
+      location: (event.location || '').trim(),
+      description,
+      link: url || link
+    };
+  };
 
   const buildMonthGroups = events => {
     const groups = [];
