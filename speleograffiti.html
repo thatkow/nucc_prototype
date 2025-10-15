@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speleograffiti Magazine Archive</title>
+  <link rel="icon" href="favicon.ico" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: radial-gradient(circle at top, #111827 0%, #030712 60%, #000 100%);
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body class="text-gray-100">
+  <header class="bg-black/70">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <p class="uppercase tracking-widest text-xs text-yellow-400">National University Caving Club</p>
+        <h1 class="text-3xl font-bold text-yellow-200">Speleograffiti Magazine Archive</h1>
+        <p class="mt-2 max-w-2xl text-sm text-gray-300">
+          Browse past editions of Speleograffiti, the NUCC club magazine. Each cover tiles into an easy-to-scan grid and links directly to a downloadable PDF.
+        </p>
+      </div>
+      <a href="index.html" class="inline-flex items-center gap-2 rounded-full border border-yellow-300 bg-transparent px-4 py-2 text-sm font-semibold text-yellow-300 transition hover:bg-yellow-300 hover:text-black">
+        ← Back to Home
+      </a>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-6 py-12">
+    <section class="space-y-6">
+      <div class="flex items-center justify-between flex-wrap gap-4">
+        <h2 class="text-2xl font-semibold text-yellow-300">All Issues</h2>
+        <p class="text-sm text-gray-300">Newest releases appear first. Click any cover to download that edition.</p>
+      </div>
+      <div id="issues-grid" class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"></div>
+      <noscript>
+        <p class="rounded-xl border border-yellow-500/40 bg-black/60 p-4 text-sm text-yellow-100">
+          Enable JavaScript to load the magazine list, or browse the files directly in the <code>speleograffiti</code> folder.
+        </p>
+      </noscript>
+    </section>
+  </main>
+  <script type="module">
+    import { SPELEOGRAFFITI_ISSUES } from './speleograffiti-data.js';
+
+    const grid = document.getElementById('issues-grid');
+
+    if (!Array.isArray(SPELEOGRAFFITI_ISSUES) || SPELEOGRAFFITI_ISSUES.length === 0) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.className = 'rounded-xl border border-yellow-500/40 bg-black/60 p-4 text-sm text-yellow-100';
+      emptyMessage.textContent = 'No issues found. Please check back soon.';
+      grid.replaceWith(emptyMessage);
+    } else {
+      const fragment = document.createDocumentFragment();
+      SPELEOGRAFFITI_ISSUES.forEach((issue) => {
+        const link = document.createElement('a');
+        link.href = issue.pdf;
+        link.download = '';
+        link.className = 'group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/60 backdrop-blur transition hover:-translate-y-1 hover:border-yellow-400 hover:shadow-xl';
+
+        link.innerHTML = `
+          <img src="${issue.cover}" alt="${issue.title}" class="w-full object-cover aspect-[3/4] transition duration-300 group-hover:scale-105" loading="lazy">
+          <div class="p-4 text-center text-sm font-semibold text-yellow-100">${issue.title}</div>
+        `;
+
+        fragment.appendChild(link);
+      });
+      grid.appendChild(fragment);
+    }
+  </script>
+</body>
+</html>

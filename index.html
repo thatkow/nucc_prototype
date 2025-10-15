@@ -348,13 +348,42 @@
           </div>
         </article>
 
-        <div class="flex flex-col gap-4">
-          <a
-            href="https://nucc.caves.org.au/speleograffiti"
-            class="w-full rounded-xl border border-black/10 bg-black text-center text-lg font-semibold text-yellow-400 transition hover:-translate-y-0.5 hover:bg-gray-900 hover:text-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-yellow-200">
-            <span class="block px-6 py-3">Speleograffiti Magazine</span>
-          </a>
-        </div>
+        <article class="relative overflow-hidden rounded-3xl border border-yellow-300 bg-gray-900 text-gray-100 shadow-xl">
+          <div class="absolute -left-12 -top-16 h-48 w-48 rounded-full bg-yellow-300 opacity-20 blur-2xl"></div>
+          <div class="relative flex flex-col">
+            <a href="speleograffiti.html" class="block overflow-hidden">
+              <img
+                src="speleograffiti/latest.jpg"
+                alt="Latest Speleograffiti cover"
+                class="w-full object-cover aspect-[3/4]"
+                loading="lazy"
+              />
+            </a>
+            <div class="relative p-8 sm:p-10 space-y-4">
+              <h3 class="text-sm font-semibold uppercase tracking-widest text-yellow-400">Latest Speleograffiti</h3>
+              <p id="latest-issue-title" class="text-3xl font-bold text-yellow-200">Latest edition</p>
+              <p class="text-base text-gray-200">
+                Catch up on the newest issue of our club magazine packed with trip reports, underground stories, and caver lore.
+              </p>
+              <div class="flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="speleograffiti.html"
+                  class="inline-flex items-center justify-center rounded-xl bg-yellow-400 px-5 py-3 text-base font-semibold text-black shadow-lg transition hover:bg-yellow-300"
+                >
+                  Browse all issues
+                </a>
+                <a
+                  id="latest-issue-download"
+                  href="speleograffiti/Speleograffiti_2021b.pdf"
+                  download
+                  class="inline-flex items-center justify-center rounded-xl border border-yellow-400 px-5 py-3 text-base font-semibold text-yellow-300 transition hover:-translate-y-0.5 hover:border-yellow-200 hover:text-yellow-100"
+                >
+                  Download latest
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -365,6 +394,24 @@
 
   <div id="lightbox"><img src="" alt="zoomed"></div>
 
+  <script type="module">
+    import { SPELEOGRAFFITI_ISSUES } from './speleograffiti-data.js';
+
+    const latestIssue = Array.isArray(SPELEOGRAFFITI_ISSUES) ? SPELEOGRAFFITI_ISSUES[0] : null;
+
+    if (latestIssue) {
+      const titleEl = document.getElementById('latest-issue-title');
+      const downloadEl = document.getElementById('latest-issue-download');
+
+      if (titleEl) {
+        titleEl.textContent = latestIssue.title;
+      }
+
+      if (downloadEl) {
+        downloadEl.href = latestIssue.pdf;
+      }
+    }
+  </script>
   <script src="main.js"></script>
 </body>
 </html>
