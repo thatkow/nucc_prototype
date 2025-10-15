@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Trips & Events</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #000 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 3rem 1rem 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    header p {
+      margin: 0 auto;
+      max-width: 45rem;
+      font-size: 1.1rem;
+      color: #cbd5f5;
+    }
+
+    main {
+      width: min(1100px, 92vw);
+      margin: 0 auto 4rem;
+      display: grid;
+      gap: 2.5rem;
+    }
+
+    section {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 24px;
+      padding: 2.5rem clamp(1.5rem, 3vw, 3rem);
+      box-shadow: 0 32px 60px rgba(2, 6, 23, 0.45);
+    }
+
+    section h2 {
+      margin: 0 0 2rem;
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 700;
+    }
+
+    .event-list {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .event-card {
+      display: grid;
+      gap: 1.25rem;
+      padding: clamp(1.25rem, 2vw, 1.75rem);
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .event-card:hover,
+    .event-card:focus-within {
+      transform: translateY(-4px);
+      border-color: rgba(250, 204, 21, 0.6);
+      box-shadow: 0 22px 55px rgba(250, 204, 21, 0.12);
+    }
+
+    .event-card h3 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.2vw, 1.55rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .event-meta {
+      display: grid;
+      gap: 0.35rem;
+      color: #cbd5f5;
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+
+    .event-meta span {
+      display: block;
+    }
+
+    .event-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .event-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.1rem;
+      border-radius: 999px;
+      background: rgba(250, 204, 21, 0.14);
+      color: #facc15;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .event-actions a:hover,
+    .event-actions a:focus-visible {
+      background: rgba(250, 204, 21, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .status-tag {
+      align-self: start;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status-confirmed {
+      background: rgba(34, 197, 94, 0.18);
+      color: #86efac;
+    }
+
+    .status-tentative {
+      background: rgba(250, 204, 21, 0.18);
+      color: #fde68a;
+    }
+
+    .empty-message {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 1rem;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 2rem 1rem 3rem;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    @media (min-width: 720px) {
+      .event-card {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+      }
+
+      .event-content {
+        display: grid;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Trips &amp; Events</h1>
+    <p>Explore upcoming adventures and dive into highlights from recent NUCC trips. Dates are shown inline with each event so you can focus on the details without extra clutter.</p>
+  </header>
+  <main>
+    <section aria-labelledby="upcoming-heading">
+      <h2 id="upcoming-heading">Upcoming</h2>
+      <div id="upcoming-events" class="event-list" role="list"></div>
+    </section>
+    <section aria-labelledby="past-heading">
+      <h2 id="past-heading">Past</h2>
+      <div id="past-events" class="event-list" role="list"></div>
+    </section>
+  </main>
+  <footer>© <span id="footer-year"></span> National University Caving Club</footer>
+
+  <script src="config.js"></script>
+  <script>
+    const footerYearEl = document.getElementById('footer-year');
+    footerYearEl.textContent = new Date().getFullYear();
+
+    const config = window.appConfig || {};
+    const env = (config.environment || '').toLowerCase();
+    const eventsEndpoint = config.eventsApiUrl || '';
+    const useMock = env === 'dev' && config.mockEvents;
+
+    const fallbackText = message => {
+      const p = document.createElement('p');
+      p.className = 'empty-message';
+      p.textContent = message;
+      return p;
+    };
+
+    const formatDateRange = (startValue, endValue) => {
+      if (!startValue) return 'Details coming soon';
+      const start = new Date(startValue);
+      if (Number.isNaN(start.getTime())) return 'Details coming soon';
+
+      const formatter = new Intl.DateTimeFormat('en-AU', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'long',
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+
+      const startText = formatter.format(start);
+      if (!endValue) return startText;
+
+      const end = new Date(endValue);
+      if (Number.isNaN(end.getTime())) return startText;
+
+      const sameDay = start.toDateString() === end.toDateString();
+      const timeFormatter = new Intl.DateTimeFormat('en-AU', {
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+
+      if (sameDay) {
+        return `${startText} – ${timeFormatter.format(end)}`;
+      }
+
+      const endText = formatter.format(end);
+      return `${startText} → ${endText}`;
+    };
+
+    const createEventCard = event => {
+      const card = document.createElement('article');
+      card.className = 'event-card';
+      card.setAttribute('role', 'listitem');
+
+      const contentWrap = document.createElement('div');
+      contentWrap.className = 'event-content';
+
+      const title = document.createElement('h3');
+      title.textContent = event.title || 'Untitled event';
+
+      const meta = document.createElement('div');
+      meta.className = 'event-meta';
+
+      const dateSpan = document.createElement('span');
+      dateSpan.innerHTML = `<strong>Date:</strong> ${formatDateRange(event.start, event.end)}`;
+      meta.appendChild(dateSpan);
+
+      if (event.location) {
+        const locationSpan = document.createElement('span');
+        locationSpan.innerHTML = `<strong>Location:</strong> ${event.location}`;
+        meta.appendChild(locationSpan);
+      }
+
+      if (event.organizer) {
+        const organiserSpan = document.createElement('span');
+        organiserSpan.innerHTML = `<strong>Organiser:</strong> ${event.organizer}`;
+        meta.appendChild(organiserSpan);
+      }
+
+      if (event.description) {
+        const summary = document.createElement('span');
+        summary.innerHTML = `<strong>Overview:</strong> ${event.description.split('\n').filter(Boolean)[0]}`;
+        meta.appendChild(summary);
+      }
+
+      contentWrap.append(title, meta);
+      card.appendChild(contentWrap);
+
+      const status = document.createElement('span');
+      status.className = 'status-tag ' + (event.status === 'CONFIRMED' ? 'status-confirmed' : 'status-tentative');
+      status.textContent = event.status || 'TBC';
+      card.appendChild(status);
+
+      const actions = document.createElement('div');
+      actions.className = 'event-actions';
+
+      if (event.url) {
+        const link = document.createElement('a');
+        link.href = event.url;
+        link.target = '_blank';
+        link.rel = 'noreferrer';
+        link.textContent = 'View details';
+        actions.appendChild(link);
+      }
+
+      if (actions.children.length) {
+        card.appendChild(actions);
+      }
+
+      return card;
+    };
+
+    const renderEvents = (container, events, emptyMessage) => {
+      container.innerHTML = '';
+      if (!events.length) {
+        container.appendChild(fallbackText(emptyMessage));
+        return;
+      }
+
+      events.forEach(event => {
+        container.appendChild(createEventCard(event));
+      });
+    };
+
+    const loadEvents = () => {
+      if (useMock) {
+        return Promise.resolve(config.mockEvents);
+      }
+
+      if (!eventsEndpoint) {
+        return Promise.resolve({ events: [] });
+      }
+
+      return fetch(eventsEndpoint).then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to load events (${response.status})`);
+        }
+        return response.json();
+      });
+    };
+
+    loadEvents()
+      .then(data => {
+        const events = Array.isArray(data.events) ? data.events.slice() : [];
+        if (!events.length) {
+          renderEvents(document.getElementById('upcoming-events'), [], 'No upcoming events right now.');
+          renderEvents(document.getElementById('past-events'), [], 'Past events will appear here once available.');
+          return;
+        }
+
+        const now = Date.now();
+        const upcoming = events
+          .filter(event => {
+            const end = event.end ? Date.parse(event.end) : Number.NaN;
+            return Number.isNaN(end) ? Date.parse(event.start) >= now : end >= now;
+          })
+          .sort((a, b) => Date.parse(a.start || 0) - Date.parse(b.start || 0));
+
+        const past = events
+          .filter(event => {
+            const end = event.end ? Date.parse(event.end) : Number.NaN;
+            return Number.isNaN(end) ? Date.parse(event.start) < now : end < now;
+          })
+          .sort((a, b) => Date.parse(b.start || 0) - Date.parse(a.start || 0));
+
+        renderEvents(document.getElementById('upcoming-events'), upcoming, 'No upcoming events right now.');
+        renderEvents(document.getElementById('past-events'), past, 'Past events will appear here once available.');
+      })
+      .catch(error => {
+        console.error('Unable to load events', error);
+        renderEvents(document.getElementById('upcoming-events'), [], 'We could not load events at this time. Please try again later.');
+        renderEvents(document.getElementById('past-events'), [], '');
+      });
+  </script>
+</body>
+</html>
