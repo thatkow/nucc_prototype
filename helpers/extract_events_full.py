@@ -396,8 +396,6 @@ def write_markdown(event: EventRecord) -> None:
     image_reference = None
     if event.image_path and event.image_path.exists():
         image_reference = event.image_path.relative_to(SCRAPED_DIR).as_posix()
-    elif event.image_url:
-        image_reference = event.image_url
     if image_reference:
         lines.append(f"image: \"{escape_yaml(image_reference)}\"")
     if event.link:
@@ -486,6 +484,9 @@ def generate_outputs(events: list[EventRecord]) -> None:
         if event.image_url and event.image_path:
             if download_image(event.image_url, event.image_path):
                 print(f"⬇️  Saved image for {event.title} -> {event.image_path.relative_to(SCRAPED_DIR)}")
+            else:
+                event.image_path = None
+                print(f"⚠️  Image will not be embedded for {event.title} due to download failure.")
         write_markdown(event)
         if event.filename_base:
             print(f"📝 Wrote {event.filename_base}.md")
