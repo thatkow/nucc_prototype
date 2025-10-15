@@ -41,10 +41,21 @@ const updateGradient = () => {
   const current = sections[currentIndex];
   const next = sections[currentIndex + 1] || current;
 
-  const currentCenter = current.offsetTop + current.offsetHeight / 2;
-  const nextCenter = next.offsetTop + next.offsetHeight / 2;
+  const currentBottom = current.offsetTop + current.offsetHeight;
+  const nextTop = next.offsetTop;
 
-  let t = next === current ? 0 : (scrollMid - currentCenter) / (nextCenter - currentCenter);
+  let blendStart = currentBottom - window.innerHeight * 0.5;
+  let blendEnd = nextTop + window.innerHeight * 0.5;
+
+  if (blendEnd <= blendStart) {
+    const currentCenter = current.offsetTop + current.offsetHeight / 2;
+    const nextCenter = next.offsetTop + next.offsetHeight / 2;
+    blendStart = currentCenter;
+    blendEnd = nextCenter;
+  }
+
+  const blendRange = blendEnd - blendStart;
+  let t = next === current || blendRange === 0 ? 0 : (scrollMid - blendStart) / blendRange;
   t = Math.min(Math.max(t, 0), 1);
   t = t * t * (3 - 2 * t); // smoothstep easing
 
