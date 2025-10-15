@@ -19,8 +19,7 @@
     section[data-bg="canyoning"] { --bg-start: #0F5E9C; --bg-end: #1E90FF; }
     section[data-bg="outdoors"]  { --bg-start: #065f46; --bg-end: #10b981; }
     section[data-bg="training"]  { --bg-start: #f8fafc; --bg-end: #fef3c7; }
-    section[data-bg="events"]    { --bg-start: #fff7cc; --bg-end: #fff1a6; }
-    section[data-bg="join"]      { --bg-start: #facc15; --bg-end: #fef08a; }
+    section[data-bg="join"]      { --bg-start: #af8e0f; --bg-end: #b2a860; }
 
     video { transition: opacity 0.6s ease-in-out; opacity: 0.25; }
     video.playing { opacity: 1; }
@@ -83,7 +82,7 @@
       bottom: 2rem;
       float: right;
       right: 2rem;
-      background: #facc15;
+      background: #af8e0f;
       color: black;
       font-weight: 600;
       padding: 0.5rem 1rem;
@@ -94,7 +93,7 @@
       transition: transform 0.2s;
     }
     .next-btn:hover {
-      background: #eab308;
+      background: #a37d06;
       transform: translateY(-2px);
     }
 
@@ -168,7 +167,6 @@
       <div class="flex flex-wrap justify-center gap-4">
         <a href="#join" class="border border-white text-white py-2 px-6 rounded hover:bg-white hover:text-black transition">Join Us</a>
         <a href="#caving" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition explore-btn">Explore</a>
-        <a href="#upcoming" class="bg-white bg-opacity-10 border border-white text-white font-semibold py-2 px-6 rounded transition hover:bg-white hover:text-black">Upcoming Events</a>
       </div>
     </div>
   </section>
@@ -299,26 +297,6 @@
         <source src="videos/training/srt.mp4" type="video/mp4">
       </video>
     </div>
-    <a href="#events" class="next-btn">Next: Events ↓</a>
-  </section>
-
-  <!-- Events -->
-  <section id="events" data-bg="events" class="py-20 text-center relative text-gray-900">
-    <div class="max-w-6xl mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-6">Trips &amp; Events</h2>
-
-      <!-- Upcoming Trips -->
-      <div id="upcoming" class="mb-16">
-        <h3 class="text-2xl font-semibold mb-6 text-center">Upcoming</h3>
-        <div id="upcoming-events" class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"></div>
-      </div>
-
-      <!-- Past Trips -->
-      <div>
-        <h3 class="text-2xl font-semibold mb-6 text-center">Past</h3>
-        <div id="past-events" class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"></div>
-      </div>
-    </div>
     <a href="#join" class="next-btn">Next: Join ↓</a>
   </section>
 
@@ -362,7 +340,7 @@
             </ul>
             <div class="mt-8">
               <a
-                href="https://nucc.caves.org.au/join"
+                href="membership.html"
                 class="flex w-full items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 text-lg font-semibold text-black shadow-lg transition hover:bg-yellow-400">
                 Membership Info
               </a>
@@ -372,26 +350,9 @@
 
         <div class="flex flex-col gap-4">
           <a
-            href="https://nucc.caves.org.au/aboutnucc"
-            class="w-full rounded-xl border border-black/10 bg-black text-center text-lg font-semibold text-yellow-400 transition hover:-translate-y-0.5 hover:bg-gray-900 hover:text-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-yellow-200">
-            <span class="block px-6 py-3">About NUCC</span>
-          </a>
-          <a
-            href="https://nucc.caves.org.au/gallery"
-            class="w-full rounded-xl border border-black/10 bg-black text-center text-lg font-semibold text-yellow-400 transition hover:-translate-y-0.5 hover:bg-gray-900 hover:text-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-yellow-200">
-            <span class="block px-6 py-3">Photo Gallery</span>
-          </a>
-          <a
             href="https://nucc.caves.org.au/speleograffiti"
             class="w-full rounded-xl border border-black/10 bg-black text-center text-lg font-semibold text-yellow-400 transition hover:-translate-y-0.5 hover:bg-gray-900 hover:text-yellow-300 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-yellow-200">
             <span class="block px-6 py-3">Speleograffiti Magazine</span>
-          </a>
-          <a
-            href="https://www.facebook.com/groups/65963976973"
-            target="_blank"
-            rel="noreferrer"
-            class="w-full rounded-xl border border-black/10 bg-white text-center text-lg font-semibold text-black transition hover:-translate-y-0.5 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 focus:ring-offset-yellow-200">
-            <span class="block px-6 py-3">Join via Facebook</span>
           </a>
         </div>
       </div>
@@ -402,33 +363,8 @@
     <p>© 2025 National University Caving Club</p>
   </footer>
 
-  <div id="event-focus-backdrop" class="fixed inset-0 hidden z-50" aria-hidden="true">
-    <div class="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-sm" data-focus-dismiss></div>
-    <div class="relative z-10 flex items-center justify-center w-full h-full p-4 md:p-8">
-      <article
-        id="event-focus-card"
-        class="relative w-full max-w-3xl max-h-full overflow-y-auto rounded-2xl bg-white p-6 text-left text-gray-900 shadow-2xl"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="event-focus-title"
-        tabindex="-1"
-      >
-        <button
-          type="button"
-          class="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition hover:bg-gray-200 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          data-focus-close
-          aria-label="Close event details"
-        >
-          ✕
-        </button>
-        <div id="event-focus-content" class="space-y-4"></div>
-      </article>
-    </div>
-  </div>
-
   <div id="lightbox"><img src="" alt="zoomed"></div>
 
-  <script src="config.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
