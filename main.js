@@ -308,6 +308,14 @@ anchorLinks.forEach(link => {
 
     const elements = [title, when];
 
+    if (event.organizer) {
+      const org = document.createElement('p');
+      org.className = 'trip-org';
+      org.innerHTML = `<span aria-hidden="true">👤</span><span>${event.organizer}</span>`;
+      org.querySelectorAll('span')[1].textContent = event.organizer;
+      elements.push(org);
+    }
+
     if (event.location) {
       const loc = document.createElement('p');
       loc.className = 'trip-loc';
@@ -341,11 +349,12 @@ anchorLinks.forEach(link => {
 
   const extractEventLink = description => {
     if (!description) {
-      return { description: '', link: '' };
+      return { description: '', link: '', organizer: '' };
     }
 
     const lines = description.split(/\r?\n/);
     let link = '';
+    let organizer = '';
     const keptLines = [];
 
     lines.forEach(line => {
@@ -360,15 +369,21 @@ anchorLinks.forEach(link => {
         return;
       }
 
+      const organizerMatch = trimmed.match(/^Organizer:\s*(.+)$/i);
+      if (organizerMatch && !organizer) {
+        organizer = organizerMatch[1].trim();
+        return;
+      }
+
       keptLines.push(trimmed);
     });
 
-    return { description: keptLines.join('\n'), link };
+    return { description: keptLines.join('\n'), link, organizer };
   };
 
   const sanitizeEvent = event => {
     const rawDescription = (event.description || '').replace(/\r/g, '').trim();
-    const { description, link } = extractEventLink(rawDescription);
+    const { description, link, organizer } = extractEventLink(rawDescription);
     const url = (event.url || '').trim();
 
     return {
@@ -376,7 +391,8 @@ anchorLinks.forEach(link => {
       title: (event.title || '').trim(),
       location: (event.location || '').trim(),
       description,
-      link: url || link
+      link: url || link,
+      organizer
     };
   };
 
