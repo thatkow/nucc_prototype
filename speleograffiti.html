@@ -32,7 +32,7 @@
         <h2 class="text-2xl font-semibold text-yellow-300">All Issues</h2>
         <p class="text-sm text-gray-300">Click any cover to download that edition.</p>
       </div>
-      <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div id="issues-grid" class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <a href="speleograffiti/Speleograffiti_1964a.pdf" download class="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-black/60 backdrop-blur transition hover:-translate-y-1 hover:border-yellow-400 hover:shadow-xl">
           <img src="speleograffiti/Speleograffiti_1964a_icon.jpg" alt="Speleograffiti 1964a" class="w-full object-cover aspect-[3/4] transition duration-300 group-hover:scale-105">
           <div class="p-4 text-center text-sm font-semibold text-yellow-100">Speleograffiti 1964a</div>
@@ -323,5 +323,40 @@
   <footer class="bg-black/80">
     <div class="max-w-6xl mx-auto px-6 py-6 text-center text-xs text-gray-400">© 2025 National University Caving Club</div>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("issues-grid");
+      if (!grid) return;
+
+      const parseIssue = (element) => {
+        const label = element.textContent || "";
+        const match = label.match(/(\d{4})([a-z]?)/i);
+
+        if (!match) {
+          return { year: Number.NEGATIVE_INFINITY, suffix: Number.NEGATIVE_INFINITY };
+        }
+
+        const year = parseInt(match[1], 10);
+        const suffixChar = (match[2] || "").toLowerCase();
+        const suffixValue = suffixChar ? suffixChar.charCodeAt(0) - 96 : 0;
+
+        return { year, suffix: suffixValue };
+      };
+
+      const sortedItems = Array.from(grid.children).sort((a, b) => {
+        const issueA = parseIssue(a);
+        const issueB = parseIssue(b);
+
+        if (issueA.year !== issueB.year) {
+          return issueB.year - issueA.year;
+        }
+
+        return issueB.suffix - issueA.suffix;
+      });
+
+      sortedItems.forEach((item) => grid.appendChild(item));
+    });
+  </script>
 </body>
 </html>
