@@ -19,6 +19,7 @@
     section[data-bg="canyoning"] { --bg-start: #0F5E9C; --bg-end: #1E90FF; }
     section[data-bg="outdoors"]  { --bg-start: #065f46; --bg-end: #10b981; }
     section[data-bg="training"]  { --bg-start: #f8fafc; --bg-end: #fef3c7; }
+    section[data-bg="trips"]     { --bg-start: #af8e0f; --bg-end: #b2a860; }
     section[data-bg="join"]      { --bg-start: #af8e0f; --bg-end: #b2a860; }
 
     video { transition: opacity 0.6s ease-in-out; opacity: 0.25; }
@@ -152,6 +153,178 @@
       border-radius: 12px;
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
     }
+
+    #trip-months {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .trip-section {
+      text-align: left;
+    }
+
+    .trip-section + .trip-section {
+      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(63, 59, 35, 0.35);
+    }
+
+    .trip-section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem;
+      color: #2f2a12;
+    }
+
+    .trip-empty {
+      text-align: left;
+      color: #3f3b23;
+    }
+
+    .trips-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .trip-month {
+      text-align: left;
+    }
+
+    .trip-month + .trip-month {
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(63, 59, 35, 0.25);
+    }
+
+    .trip-month-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 1.25rem;
+      color: #3b2c07;
+      text-align: left;
+    }
+
+    .trip-load-more {
+      margin-top: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.5rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(88, 64, 6, 0.35);
+      color: #3b2c07;
+      background: rgba(253, 230, 138, 0.65);
+      font-weight: 600;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .trip-load-more:hover,
+    .trip-load-more:focus-visible {
+      background: rgba(217, 119, 6, 0.2);
+      border-color: rgba(146, 64, 14, 0.5);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .trip-load-more-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    @media (min-width: 640px) {
+      .trips-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .trips-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .trip-card {
+      display: block;
+      text-decoration: none;
+      color: #1f2937;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trip-card[href] {
+      cursor: pointer;
+    }
+
+    .trip-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      border: 1px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+
+    .trip-card:hover,
+    .trip-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(194, 120, 9, 0.55);
+      box-shadow: 0 20px 45px rgba(88, 64, 6, 0.25);
+    }
+
+    .trip-card:hover::after,
+    .trip-card:focus-visible::after {
+      border-color: rgba(194, 120, 9, 0.65);
+    }
+
+    .trip-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .trip-when {
+      margin-top: 0.35rem;
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+
+    .trip-org {
+      margin-top: 0.35rem;
+      color: #1f2937;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .trip-loc {
+      margin-top: 0.35rem;
+      color: #166534;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .trip-link-note {
+      margin-top: 0.75rem;
+      color: #1f2937;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
   </style>
 </head>
 <body class="text-gray-100">
@@ -166,17 +339,14 @@
       <p class="text-xl md:text-2xl mb-6">Caving · Canyoning · Outdoors · Training</p>
       <div class="max-w-3xl mx-auto text-lg md:text-xl text-gray-200 space-y-4 mb-10">
         <p>
-          NUCC is a volunteer-run club of outdoor enthusiasts from diverse ages and backgrounds based at <a href="https://www.anu.edu.au/" class="underline text-yellow-400 hover:text-yellow-300">ANU</a>.
+          NUCC is a volunteer-run club of outdoor enthusiasts from diverse ages and backgrounds based at <a href="https://www.google.com/search?q=ANU" class="underline text-yellow-400 hover:text-yellow-300">ANU</a>.
           We share a passion for adventure — from caving and canyoning to camping, bushwalking, and exploring the Australian wilderness.
-        </p>
-        <p>
-          Whether you're curious about your first trip underground or hungry for the next expedition, you'll find enthusiasm,
-          energy, and encouragement here.
         </p>
       </div>
       <div class="flex flex-wrap justify-center gap-4">
         <a href="#join" class="border border-white text-white py-2 px-6 rounded hover:bg-white hover:text-black transition">Join Us</a>
         <a href="#caving" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded transition explore-btn">Explore</a>
+        <a href="#trips" class="border border-white text-white py-2 px-6 rounded hover:bg-white hover:text-black transition">Trips</a>
       </div>
     </div>
   </section>
@@ -316,6 +486,35 @@
       <video muted loop playsinline class="w-full rounded-lg shadow-lg autoplay-video">
         <source src="videos/training/srt.mp4" type="video/mp4">
       </video>
+    </div>
+    <a href="#trips" class="next-btn">Next: Trips ↓</a>
+  </section>
+
+  <!-- Trips -->
+  <section id="trips" data-bg="trips" class="py-20 text-center relative text-black">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Trips</h2>
+        <p class="text-lg text-gray-800">See what's coming up and browse the latest NUCC adventures.</p>
+        <p class="text-sm text-gray-700 mt-4">For the most up-to-date trip announcements, please check our <a href="https://www.facebook.com/groups/65963976973" class="underline font-medium hover:text-gray-900">Facebook group</a>.</p>
+      </div>
+
+      <div class="trip-section">
+        <h3 class="trip-section-title">Upcoming trips</h3>
+        <div id="trip-upcoming" class="trips-grid"></div>
+        <p id="trip-upcoming-empty" class="trip-empty mt-6 text-gray-700 hidden">No upcoming trips are scheduled right now — check back soon.</p>
+      </div>
+
+      <div class="trip-section" aria-live="polite">
+        <h3 class="trip-section-title">Recent trips</h3>
+        <div id="trip-months"></div>
+        <p id="trip-empty" class="trip-empty mt-6 text-gray-700 hidden">No recent trips to show just yet — check back soon.</p>
+        <p id="trip-error" class="trip-empty mt-6 text-red-600 hidden">We couldn't load the trip history right now. Please try again later.</p>
+        <button id="trip-load-more" type="button" class="trip-load-more hidden">
+          <span class="trip-load-more-icon" aria-hidden="true">⟲</span>
+          <span>Show previous month</span>
+        </button>
+      </div>
     </div>
     <a href="#join" class="next-btn">Next: Join ↓</a>
   </section>
