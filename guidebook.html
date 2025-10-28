@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Knowledge Base</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100">
+  <header class="bg-slate-900 border-b border-slate-700">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <p class="uppercase tracking-[0.4em] text-xs text-slate-400">Resource Library</p>
+        <h1 class="text-4xl md:text-5xl font-semibold">NUCC Guidebook</h1>
+        <p class="mt-3 text-slate-300 max-w-xl">Structured knowledge for caving, canyoning, and expedition planning. Browse checklists, tutorials, and reference sheets.</p>
+      </div>
+      <form class="flex w-full md:w-auto">
+        <input type="search" placeholder="Search topics" class="flex-1 md:w-72 px-4 py-3 rounded-l-lg bg-slate-800 border border-slate-600 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400" />
+        <button class="px-5 py-3 bg-amber-400 text-slate-950 font-semibold rounded-r-lg">Search</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-[240px_1fr] gap-10">
+    <aside class="space-y-6">
+      <nav class="bg-slate-900/60 border border-slate-800 rounded-lg p-6 space-y-4 text-sm">
+        <p class="uppercase tracking-[0.35em] text-xs text-slate-500">Browse</p>
+        <a href="#gear" class="block text-slate-200 hover:text-amber-400 transition">Gear</a>
+        <a href="#training" class="block text-slate-200 hover:text-amber-400 transition">Training</a>
+        <a href="#safety" class="block text-slate-200 hover:text-amber-400 transition">Safety</a>
+        <a href="#planning" class="block text-slate-200 hover:text-amber-400 transition">Trip Planning</a>
+        <a href="#environment" class="block text-slate-200 hover:text-amber-400 transition">Conservation</a>
+      </nav>
+      <div class="bg-slate-900/60 border border-slate-800 rounded-lg p-6 text-sm space-y-3">
+        <h2 class="uppercase tracking-[0.35em] text-xs text-slate-500">Quick Links</h2>
+        <a href="#" class="block text-slate-300 hover:text-amber-400">Download Risk Assessment Template</a>
+        <a href="#" class="block text-slate-300 hover:text-amber-400">Gear Library Inventory</a>
+        <a href="#" class="block text-slate-300 hover:text-amber-400">Emergency Contacts Sheet</a>
+      </div>
+    </aside>
+
+    <main class="space-y-16">
+      <section id="gear" class="space-y-8">
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p class="uppercase tracking-[0.35em] text-xs text-slate-500">Core Topic</p>
+            <h2 class="text-3xl font-semibold">Gear</h2>
+          </div>
+          <a href="#" class="text-sm text-amber-400 font-semibold">All gear articles &rarr;</a>
+        </header>
+        <div class="grid md:grid-cols-3 gap-6">
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="flex items-center gap-3 text-amber-300">
+              <span class="text-2xl">🧗</span>
+              <h3 class="text-xl font-semibold text-slate-100">Vertical Systems</h3>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">Compare ascenders, descenders, and backups suitable for both dry and wet caves.</p>
+            <a href="#" class="text-sm text-amber-400 font-semibold">Read guide</a>
+          </article>
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="flex items-center gap-3 text-amber-300">
+              <span class="text-2xl">🪖</span>
+              <h3 class="text-xl font-semibold text-slate-100">Protection</h3>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">Helmet standards, lighting setups, and inspection schedules for helmets and harnesses.</p>
+            <a href="#" class="text-sm text-amber-400 font-semibold">Read guide</a>
+          </article>
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="flex items-center gap-3 text-amber-300">
+              <span class="text-2xl">🧴</span>
+              <h3 class="text-xl font-semibold text-slate-100">Care &amp; Maintenance</h3>
+            </div>
+            <p class="text-sm text-slate-300 leading-relaxed">Cleaning protocols that prevent cross-contamination between karst regions.</p>
+            <a href="#" class="text-sm text-amber-400 font-semibold">Read guide</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="training" class="space-y-8">
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p class="uppercase tracking-[0.35em] text-xs text-slate-500">Core Topic</p>
+            <h2 class="text-3xl font-semibold">Training</h2>
+          </div>
+          <a href="#" class="text-sm text-amber-400 font-semibold">Training curriculum &rarr;</a>
+        </header>
+        <div class="grid md:grid-cols-2 gap-6">
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6">
+            <h3 class="text-xl font-semibold">Progression Levels</h3>
+            <p class="mt-3 text-sm text-slate-300 leading-relaxed">From introductory caving nights to advanced canyoning descents. Each level includes prerequisites, skills checklists, and assessment rubrics.</p>
+            <ul class="mt-4 list-disc list-inside text-sm text-slate-400 space-y-1">
+              <li>Level 1 · Fundamentals</li>
+              <li>Level 2 · Vertical Rigging</li>
+              <li>Level 3 · Expedition Leadership</li>
+            </ul>
+          </article>
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6">
+            <h3 class="text-xl font-semibold">Workshops</h3>
+            <p class="mt-3 text-sm text-slate-300 leading-relaxed">Seasonal workshops include swift-water drills, medical simulations, and mapping labs.</p>
+            <a href="#" class="mt-4 inline-flex text-sm text-amber-400 font-semibold">Download calendar</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="safety" class="space-y-8">
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p class="uppercase tracking-[0.35em] text-xs text-slate-500">Core Topic</p>
+            <h2 class="text-3xl font-semibold">Safety</h2>
+          </div>
+          <a href="#" class="text-sm text-amber-400 font-semibold">Emergency procedures &rarr;</a>
+        </header>
+        <div class="grid md:grid-cols-3 gap-6 text-sm text-slate-300">
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-4">
+            <h3 class="text-lg font-semibold text-slate-100">Incident Protocol</h3>
+            <p>Step-by-step actions for underground emergencies, including call-out scripts.</p>
+          </article>
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-4">
+            <h3 class="text-lg font-semibold text-slate-100">Medical</h3>
+            <p>On-call doctors list, first-aid kits, and casualty packaging references.</p>
+          </article>
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-4">
+            <h3 class="text-lg font-semibold text-slate-100">Environment</h3>
+            <p>Biosecurity protocols for bat hibernacula and karst ecosystems.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="planning" class="space-y-8">
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p class="uppercase tracking-[0.35em] text-xs text-slate-500">Core Topic</p>
+            <h2 class="text-3xl font-semibold">Trip Planning</h2>
+          </div>
+          <a href="#" class="text-sm text-amber-400 font-semibold">See templates &rarr;</a>
+        </header>
+        <div class="grid md:grid-cols-2 gap-6 text-sm text-slate-300">
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-3">
+            <h3 class="text-xl font-semibold text-slate-100">Route Cards</h3>
+            <p>Editable route card examples for caves, canyons, and mountain approaches.</p>
+            <a href="#" class="inline-flex text-amber-400 font-semibold">Download bundle</a>
+          </article>
+          <article class="bg-slate-900/70 border border-slate-800 rounded-lg p-6 space-y-3">
+            <h3 class="text-xl font-semibold text-slate-100">Logistics Checklist</h3>
+            <p>Transport, permits, accommodation, and kit splits to confirm before departure.</p>
+            <a href="#" class="inline-flex text-amber-400 font-semibold">Open checklist</a>
+          </article>
+        </div>
+      </section>
+
+      <section id="environment" class="space-y-8">
+        <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p class="uppercase tracking-[0.35em] text-xs text-slate-500">Core Topic</p>
+            <h2 class="text-3xl font-semibold">Conservation</h2>
+          </div>
+          <a href="#" class="text-sm text-amber-400 font-semibold">Stewardship actions &rarr;</a>
+        </header>
+        <div class="bg-slate-900/70 border border-slate-800 rounded-lg p-8 space-y-4 text-sm text-slate-300">
+          <p>Understand how to minimize impact on limestone ecosystems with our cave etiquette charter, cleaning protocols, and research collaborations.</p>
+          <button class="px-5 py-3 bg-amber-400 text-slate-950 font-semibold rounded-md">Download charter</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="bg-slate-900 border-t border-slate-800 py-8 text-sm text-slate-400">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <p>&copy; 2025 National University Caving Club</p>
+      <p>Version 1.0 · Last updated March 2025</p>
+    </div>
+  </footer>
+</body>
+</html>

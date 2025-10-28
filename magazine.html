@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Expedition Journal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <header class="relative overflow-hidden">
+    <img src="images/hero-cave.jpg" alt="Cave entrance" class="w-full h-96 object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 to-black/40"></div>
+    <div class="absolute inset-0 flex flex-col justify-end p-12 text-white">
+      <p class="uppercase tracking-[0.4em] text-xs">Field Issue · Spring 2025</p>
+      <h1 class="text-5xl md:text-7xl font-serif mt-4">Expedition Journal</h1>
+      <p class="max-w-2xl mt-4 text-lg text-gray-200">Stories from the depths, captured by the National University Caving Club storytellers and image-makers.</p>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 md:px-10 py-16 space-y-24">
+    <section class="grid md:grid-cols-[2fr_1fr] gap-12 items-center">
+      <div>
+        <p class="uppercase text-xs tracking-[0.35em] text-gray-500">Feature Story</p>
+        <h2 class="text-4xl md:text-5xl font-serif mt-4">Charting the Cathedral Rift</h2>
+        <p class="mt-6 text-lg leading-relaxed text-gray-700">Three days underground in the Cathedral Rift system demanded patience and precision. Follow the team across the deep fault, through subterranean rivers, and into chambers never before illuminated.</p>
+        <a href="#" class="mt-8 inline-flex items-center px-6 py-3 bg-black text-white uppercase tracking-[0.25em] text-xs">Enter the Rift</a>
+      </div>
+      <div class="relative">
+        <img src="images/cathedral-rift.jpg" alt="Cathedral Rift" class="rounded-lg shadow-2xl w-full h-full object-cover" />
+        <div class="absolute -bottom-10 -left-8 bg-white shadow-lg p-6 max-w-xs">
+          <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Pull Quote</p>
+          <p class="mt-3 italic text-gray-700">“We measured time in rope lengths and temperature drops, not by sunlight.”</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-12">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <h2 class="text-3xl font-serif">Visual Stories</h2>
+        <a href="#" class="uppercase text-xs tracking-[0.2em] text-gray-600">Browse all features &rarr;</a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-10">
+        <article class="space-y-4">
+          <img src="images/canyoning-burst.jpg" alt="Canyoning" class="rounded-lg shadow-md h-64 w-full object-cover" />
+          <p class="uppercase text-xs tracking-[0.35em] text-gray-400">Canyoning</p>
+          <h3 class="text-2xl font-serif">Falls of the Luminous Gorge</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">A photographic dive into the cascade series guiding our latest whitewater descent training.</p>
+        </article>
+        <article class="space-y-4">
+          <img src="images/ropework.jpg" alt="Rope rigging" class="rounded-lg shadow-md h-64 w-full object-cover" />
+          <p class="uppercase text-xs tracking-[0.35em] text-gray-400">Training</p>
+          <h3 class="text-2xl font-serif">Vertical Ballet</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">Documenting the choreography behind efficient rigging rehearsals.</p>
+        </article>
+        <article class="space-y-4">
+          <img src="images/sump-dive.jpg" alt="Sump dive" class="rounded-lg shadow-md h-64 w-full object-cover" />
+          <p class="uppercase text-xs tracking-[0.35em] text-gray-400">Exploration</p>
+          <h3 class="text-2xl font-serif">The Sump Line</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">A photo essay from the first sump dives in the Peregrine system.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="order-2 md:order-1">
+        <img src="images/team-portrait.jpg" alt="Team portrait" class="rounded-lg shadow-xl object-cover h-96 w-full" />
+      </div>
+      <div class="order-1 md:order-2">
+        <p class="uppercase text-xs tracking-[0.35em] text-gray-500">Inside the Club</p>
+        <h2 class="text-4xl font-serif mt-4">Who tells our stories</h2>
+        <p class="mt-6 text-lg text-gray-700 leading-relaxed">Meet the photographers, surveyors, and scribes chronicling each descent. This rotating editorial collective collaborates with field teams to surface perspectives from every expedition.</p>
+        <ul class="mt-8 space-y-4 text-sm text-gray-600">
+          <li><span class="font-semibold">Editor:</span> Rafi Khan — Speleologist and long-form writer.</li>
+          <li><span class="font-semibold">Photo Director:</span> Lina Park — Cave lighting specialist.</li>
+          <li><span class="font-semibold">Cartography:</span> Devika Patel — Produces expedition maps and illustrations.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="bg-white shadow-xl p-12">
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="md:col-span-1">
+          <p class="uppercase text-xs tracking-[0.35em] text-gray-500">Departments</p>
+          <h2 class="text-3xl font-serif mt-4">In this issue</h2>
+        </div>
+        <div class="md:col-span-2 grid md:grid-cols-2 gap-10 text-sm text-gray-700 leading-relaxed">
+          <div class="space-y-2">
+            <h3 class="font-semibold text-lg text-gray-900">Field Sketches</h3>
+            <p>Annotated cross-sections and the hand-drawn observations that guided our rigging choices.</p>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-semibold text-lg text-gray-900">Soundscapes</h3>
+            <p>Audio diaries recorded while navigating the subterranean river, paired with ambient compositions.</p>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-semibold text-lg text-gray-900">Perspective</h3>
+            <p>An op-ed on balancing exploration ambition with conservation commitments.</p>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-semibold text-lg text-gray-900">Toolkit</h3>
+            <p>Gear spreads highlighting the canyoning kit added to the gear library.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-black text-gray-200 py-12">
+    <div class="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <p class="uppercase text-xs tracking-[0.35em]">Subscribe</p>
+        <p class="mt-2 text-sm text-gray-400 max-w-sm">Receive the Expedition Journal in your inbox each month.</p>
+      </div>
+      <form class="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+        <input type="email" placeholder="email@nucc.org" class="px-4 py-3 w-full md:w-72 border border-gray-700 bg-black text-gray-100 focus:outline-none focus:ring-2 focus:ring-white" />
+        <button class="px-6 py-3 bg-white text-black uppercase tracking-[0.3em] text-xs">Join</button>
+      </form>
+    </div>
+  </footer>
+</body>
+</html>

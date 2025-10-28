@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Expedition Showcase</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white">
+  <header class="py-20">
+    <div class="max-w-6xl mx-auto px-6 md:px-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <p class="uppercase tracking-[0.4em] text-xs text-gray-400">Portfolio</p>
+        <h1 class="text-5xl md:text-6xl font-semibold">Expedition Showcase</h1>
+        <p class="mt-4 text-gray-300 max-w-xl">A gallery of landmark trips, training highlights, and member photography. Filter by discipline to explore the underground visuals.</p>
+      </div>
+      <div class="flex gap-3 flex-wrap">
+        <button class="px-5 py-2 bg-white text-black rounded-full text-sm font-semibold">All</button>
+        <button class="px-5 py-2 border border-white/40 rounded-full text-sm text-white/80">Caving</button>
+        <button class="px-5 py-2 border border-white/40 rounded-full text-sm text-white/80">Canyoning</button>
+        <button class="px-5 py-2 border border-white/40 rounded-full text-sm text-white/80">Training</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 md:px-10 pb-24 space-y-16">
+    <section class="grid md:grid-cols-3 gap-6">
+      <figure class="relative group overflow-hidden rounded-2xl">
+        <img src="images/portfolio-crystal.jpg" alt="Crystal chamber" class="w-full h-72 object-cover transform group-hover:scale-105 transition" />
+        <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Caving</p>
+          <h2 class="text-2xl font-semibold">Crystal Dome Traverse</h2>
+          <p class="text-sm text-gray-200 mt-2">Subsurface photography by Lina Park</p>
+        </figcaption>
+      </figure>
+      <figure class="relative group overflow-hidden rounded-2xl">
+        <img src="images/portfolio-waterfall.jpg" alt="Waterfall rappel" class="w-full h-72 object-cover transform group-hover:scale-105 transition" />
+        <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Canyoning</p>
+          <h2 class="text-2xl font-semibold">Cascade Canyon Descent</h2>
+          <p class="text-sm text-gray-200 mt-2">Action shot by Pavel Ruiz</p>
+        </figcaption>
+      </figure>
+      <figure class="relative group overflow-hidden rounded-2xl">
+        <img src="images/portfolio-rigging.jpg" alt="Rigging practice" class="w-full h-72 object-cover transform group-hover:scale-105 transition" />
+        <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Training</p>
+          <h2 class="text-2xl font-semibold">Rigging Workshop</h2>
+          <p class="text-sm text-gray-200 mt-2">Vertical systems rehearsal at the quarry</p>
+        </figcaption>
+      </figure>
+      <figure class="relative group overflow-hidden rounded-2xl">
+        <img src="images/portfolio-moonmilk.jpg" alt="Moonmilk formations" class="w-full h-72 object-cover transform group-hover:scale-105 transition" />
+        <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Caving</p>
+          <h2 class="text-2xl font-semibold">Moonmilk Passage</h2>
+          <p class="text-sm text-gray-200 mt-2">Documented during the River Rift breakthrough</p>
+        </figcaption>
+      </figure>
+      <figure class="relative group overflow-hidden rounded-2xl">
+        <img src="images/portfolio-team.jpg" alt="Team group" class="w-full h-72 object-cover transform group-hover:scale-105 transition" />
+        <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Community</p>
+          <h2 class="text-2xl font-semibold">Expedition Team 24</h2>
+          <p class="text-sm text-gray-200 mt-2">Celebrating after a three-day survey push</p>
+        </figcaption>
+      </figure>
+      <figure class="relative group overflow-hidden rounded-2xl">
+        <img src="images/portfolio-sump.jpg" alt="Sump dive" class="w-full h-72 object-cover transform group-hover:scale-105 transition" />
+        <figcaption class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-6">
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Exploration</p>
+          <h2 class="text-2xl font-semibold">First Sump Dives</h2>
+          <p class="text-sm text-gray-200 mt-2">Dive team documenting submerged chambers</p>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="bg-white/5 border border-white/10 rounded-2xl p-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+        <div>
+          <p class="uppercase tracking-[0.3em] text-xs text-amber-300">Spotlight</p>
+          <h2 class="text-3xl font-semibold">Featured Expedition: Cathedral Rift</h2>
+          <p class="mt-4 text-sm text-gray-200 max-w-lg">A multi-day exploration combining survey, photography, and ecological monitoring. Navigate the experience through panoramic captures and annotated route overlays.</p>
+        </div>
+        <a href="#" class="px-5 py-3 bg-white text-black rounded-full text-sm font-semibold">View project</a>
+      </div>
+      <div class="mt-10 grid md:grid-cols-4 gap-6 text-sm text-gray-300">
+        <div>
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Photos</p>
+          <p class="text-2xl font-semibold text-white mt-2">160+</p>
+          <p class="mt-1">High-resolution stills available for members.</p>
+        </div>
+        <div>
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Map</p>
+          <p class="text-2xl font-semibold text-white mt-2">6 km</p>
+          <p class="mt-1">Survey coverage released in 2025 update.</p>
+        </div>
+        <div>
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Team</p>
+          <p class="text-2xl font-semibold text-white mt-2">18</p>
+          <p class="mt-1">Cavers, divers, photographers, and scientists.</p>
+        </div>
+        <div>
+          <p class="uppercase text-xs tracking-[0.3em] text-amber-300">Media</p>
+          <p class="text-2xl font-semibold text-white mt-2">8</p>
+          <p class="mt-1">360° scenes, short films, and interviews.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-black border-t border-white/10 py-8 text-sm text-gray-400 text-center">
+    <p>For licensing or submissions, email <a href="mailto:media@nucc.org" class="text-amber-300">media@nucc.org</a>.</p>
+  </footer>
+</body>
+</html>
