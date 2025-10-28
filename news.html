@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Dispatch — Club News</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #0b0d16;
+      color: #f8fafc;
+      font-family: 'Georgia', serif;
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .news-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 20px 40px -20px rgba(15, 23, 42, 0.8);
+    }
+    .section-label {
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="border-b border-blue-900/30 bg-slate-950/70 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="section-label">National University Caving Club</p>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-wide">The Speleo Dispatch</h1>
+        <p class="text-slate-300">Updates, trip reports, and community headlines</p>
+      </div>
+      <nav class="mt-4 sm:mt-0 text-sm uppercase tracking-widest text-blue-300 flex flex-wrap gap-4">
+        <a href="index.html" class="hover:text-white">Poster</a>
+        <a href="magazine.html" class="hover:text-white">Magazine</a>
+        <a href="guidebook.html" class="hover:text-white">Guidebook</a>
+        <a href="brochure.html" class="hover:text-white">Brochure</a>
+        <a href="timeline.html" class="hover:text-white">Timeline</a>
+        <a href="infographic.html" class="hover:text-white">Infographic</a>
+        <a href="portfolio.html" class="hover:text-white">Portfolio</a>
+        <a href="yearbook.html" class="hover:text-white">Yearbook</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 space-y-16">
+    <section class="news-grid">
+      <article class="news-card p-6 rounded-lg space-y-4">
+        <div class="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-blue-400">
+          <span>Trips</span>
+          <span class="w-1 h-1 rounded-full bg-blue-400"></span>
+          <time datetime="2024-02-10">Feb 10, 2024</time>
+        </div>
+        <h2 class="text-2xl font-bold">Glowworms &amp; Granite — Weekend in Waitomo</h2>
+        <p class="text-slate-300 leading-relaxed">
+          Our expedition team ventured beneath the Waitomo canopy to chart a newly accessible cavern. Highlights included
+          bioluminescent ceilings, a 30-meter abseil, and mapping of three previously undocumented chambers.
+        </p>
+        <a href="#" class="text-blue-300 uppercase tracking-widest text-xs">Read full report →</a>
+      </article>
+
+      <article class="news-card p-6 rounded-lg space-y-4">
+        <div class="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-emerald-400">
+          <span>Training</span>
+          <span class="w-1 h-1 rounded-full bg-emerald-400"></span>
+          <time datetime="2024-01-28">Jan 28, 2024</time>
+        </div>
+        <h2 class="text-2xl font-bold">Vertical Rescue Masterclass Announced</h2>
+        <p class="text-slate-300 leading-relaxed">
+          Sign-ups are now open for our two-day intensive focusing on safe rigging, haul systems, and emergency
+          communication. Alumni from the National Cave Rescue Commission will be leading the drills.
+        </p>
+        <a href="#" class="text-emerald-300 uppercase tracking-widest text-xs">Reserve a spot →</a>
+      </article>
+
+      <article class="news-card p-6 rounded-lg space-y-4">
+        <div class="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-amber-400">
+          <span>Announcements</span>
+          <span class="w-1 h-1 rounded-full bg-amber-400"></span>
+          <time datetime="2024-01-15">Jan 15, 2024</time>
+        </div>
+        <h2 class="text-2xl font-bold">New Gear Library Check-Out Policy</h2>
+        <p class="text-slate-300 leading-relaxed">
+          To streamline big weekend trips, the gear room now offers online reservations. Helmets, SRT kits, and radios can be
+          booked for up to four days with a refundable deposit.
+        </p>
+        <a href="#" class="text-amber-300 uppercase tracking-widest text-xs">View guidelines →</a>
+      </article>
+    </section>
+
+    <section>
+      <p class="section-label mb-4">From the Archive</p>
+      <div class="border-t border-blue-900/50 divide-y divide-blue-900/40">
+        <article class="py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-semibold">2023 Year-in-Review: 18 Trips, 7 New Members Certified</h3>
+            <p class="text-slate-400 text-sm mt-1">A look back at our busiest season yet.</p>
+          </div>
+          <div class="text-right text-slate-400 text-xs uppercase tracking-[0.3em]">Dec 31, 2023 · Archive</div>
+        </article>
+        <article class="py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-semibold">Conservation Spotlight: Karst Clean-Up Volunteers Needed</h3>
+            <p class="text-slate-400 text-sm mt-1">Join our partnership with Parks NZ to protect fragile formations.</p>
+          </div>
+          <div class="text-right text-slate-400 text-xs uppercase tracking-[0.3em]">Nov 12, 2023 · Archive</div>
+        </article>
+        <article class="py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-semibold">Photo Essay: Underground Rivers of the Paparoa Range</h3>
+            <p class="text-slate-400 text-sm mt-1">Captured by expedition photographer Isla Ngata.</p>
+          </div>
+          <div class="text-right text-slate-400 text-xs uppercase tracking-[0.3em]">Oct 7, 2023 · Trips</div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

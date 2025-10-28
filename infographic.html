@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Impact — By the Numbers</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Barlow', system-ui, sans-serif; }
+    .stat-card { background: rgba(15, 23, 42, 0.85); border-radius: 2rem; border: 1px solid rgba(148, 163, 184, 0.2); padding: 2.5rem; }
+    .stat-number { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; }
+    .ringed { position: relative; }
+    .ringed::before { content: ''; position: absolute; inset: -1.5rem; border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="max-w-6xl mx-auto px-6 py-16 flex flex-col gap-6">
+    <div class="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+      <a href="index.html" class="hover:text-white">Poster</a>
+      <a href="news.html" class="hover:text-white">News</a>
+      <a href="magazine.html" class="hover:text-white">Magazine</a>
+      <a href="guidebook.html" class="hover:text-white">Guidebook</a>
+      <a href="brochure.html" class="hover:text-white">Brochure</a>
+      <a href="timeline.html" class="hover:text-white">Timeline</a>
+      <a href="portfolio.html" class="hover:text-white">Portfolio</a>
+      <a href="yearbook.html" class="hover:text-white">Yearbook</a>
+    </div>
+    <p class="text-xs uppercase tracking-[0.5em] text-sky-300">2023-2024 Season Snapshot</p>
+    <h1 class="text-5xl font-bold tracking-tight">Impact in Motion</h1>
+    <p class="text-slate-300 max-w-2xl">A visual overview of our activities, achievements, and conservation wins.</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 pb-20 space-y-16">
+    <section class="grid md:grid-cols-3 gap-8">
+      <div class="stat-card ringed">
+        <p class="text-sm uppercase tracking-[0.4em] text-sky-300">Trips Led</p>
+        <p class="stat-number text-sky-200">42</p>
+        <p class="text-slate-400 text-sm">Weekend explorations, skill refreshers, and big expeditions logged in the club register.</p>
+      </div>
+      <div class="stat-card">
+        <p class="text-sm uppercase tracking-[0.4em] text-emerald-300">New Members Certified</p>
+        <p class="stat-number text-emerald-200">27</p>
+        <p class="text-slate-400 text-sm">Completed SRT competency and cave safety orientation.</p>
+      </div>
+      <div class="stat-card">
+        <p class="text-sm uppercase tracking-[0.4em] text-amber-300">Volunteer Hours</p>
+        <p class="stat-number text-amber-200">312</p>
+        <p class="text-slate-400 text-sm">Conservation, trail work, and education outreach with local schools.</p>
+      </div>
+    </section>
+
+    <section class="grid lg:grid-cols-2 gap-10 items-center">
+      <div class="stat-card space-y-4">
+        <p class="text-sm uppercase tracking-[0.4em] text-sky-300">Safety &amp; Preparedness</p>
+        <h2 class="text-3xl font-semibold">Zero Major Incidents</h2>
+        <p class="text-slate-300">9 mock rescues, 12 first-aid refreshers, and consistent call-out planning kept all teams
+          safe.</p>
+      </div>
+      <div class="space-y-6">
+        <div class="h-2 rounded-full bg-slate-800">
+          <div class="h-full w-4/5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-400"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+          <div>
+            <p class="text-sky-200 text-lg font-semibold">80%</p>
+            <p>Trips with Post-briefs</p>
+          </div>
+          <div>
+            <p class="text-sky-200 text-lg font-semibold">12</p>
+            <p>Training Nights</p>
+          </div>
+          <div>
+            <p class="text-sky-200 text-lg font-semibold">5</p>
+            <p>Rescue Drills</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid md:grid-cols-2 gap-8">
+      <div class="stat-card space-y-4">
+        <p class="text-sm uppercase tracking-[0.4em] text-emerald-300">Exploration Map</p>
+        <p class="text-slate-300 text-sm">Sites visited across Aotearoa — hover to explore.</p>
+        <div class="relative aspect-video rounded-2xl overflow-hidden border border-slate-700">
+          <img src="images/infographic-map.png" alt="Map of exploration sites" class="w-full h-full object-cover">
+        </div>
+      </div>
+      <div class="stat-card space-y-6">
+        <p class="text-sm uppercase tracking-[0.4em] text-fuchsia-300">Carbon Offset</p>
+        <h2 class="text-3xl font-semibold">1.2 Tonne Reduction</h2>
+        <p class="text-slate-300">Carpool initiatives, public transport partnerships, and reusable gear program.</p>
+        <div class="grid grid-cols-2 gap-4 text-sm text-slate-400">
+          <div>
+            <p class="text-xl font-semibold text-fuchsia-200">68%</p>
+            <p>Trips Carpooled</p>
+          </div>
+          <div>
+            <p class="text-xl font-semibold text-fuchsia-200">54</p>
+            <p>Gear Repairs Completed</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

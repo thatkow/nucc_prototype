@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Logbook — Expedition Timeline</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #030712; color: #e2e8f0; font-family: 'Source Sans Pro', system-ui, sans-serif; }
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, #38bdf8, #14b8a6);
+      transform: translateX(-50%);
+    }
+    @media (max-width: 768px) {
+      .timeline::before { left: 1rem; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="bg-slate-900/80 backdrop-blur">
+    <div class="max-w-5xl mx-auto px-6 py-10 flex flex-col gap-4">
+      <div class="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+        <a href="index.html" class="hover:text-white">Poster</a>
+        <a href="news.html" class="hover:text-white">News</a>
+        <a href="magazine.html" class="hover:text-white">Magazine</a>
+        <a href="guidebook.html" class="hover:text-white">Guidebook</a>
+        <a href="brochure.html" class="hover:text-white">Brochure</a>
+        <a href="infographic.html" class="hover:text-white">Infographic</a>
+        <a href="portfolio.html" class="hover:text-white">Portfolio</a>
+        <a href="yearbook.html" class="hover:text-white">Yearbook</a>
+      </div>
+      <h1 class="text-4xl font-bold tracking-tight">Logbook: Highlights from the Underground</h1>
+      <p class="text-slate-300 max-w-2xl">Scroll through the milestones that shaped our latest season — every rappel, discovery, and sunrise recap.</p>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-16">
+    <div class="timeline space-y-16">
+      <article class="relative md:flex md:items-center">
+        <div class="md:w-1/2 md:pr-12 md:text-right space-y-2">
+          <time datetime="2024-02-18" class="text-sm uppercase tracking-[0.3em] text-sky-300">Feb 18, 2024</time>
+          <h2 class="text-2xl font-semibold">Glowworm Chamber Survey</h2>
+          <p class="text-slate-400">Laser mapping illuminated the bioluminescent canopy while divers charted a submersed corridor.</p>
+        </div>
+        <div class="hidden md:flex w-0 md:w-16 justify-center">
+          <span class="w-6 h-6 rounded-full border-2 border-sky-400 bg-slate-900"></span>
+        </div>
+        <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0">
+          <img src="images/timeline-1.jpg" alt="Glowworm chamber" class="rounded-2xl shadow-xl border border-slate-800">
+        </div>
+      </article>
+
+      <article class="relative md:flex md:items-center md:flex-row-reverse">
+        <div class="md:w-1/2 md:pl-12 space-y-2">
+          <time datetime="2024-01-20" class="text-sm uppercase tracking-[0.3em] text-emerald-300">Jan 20, 2024</time>
+          <h2 class="text-2xl font-semibold">Vertical Rescue Simulation</h2>
+          <p class="text-slate-400">Leaders drilled a 3:1 haul system and patient packaging through a constricted chimney.</p>
+        </div>
+        <div class="hidden md:flex w-0 md:w-16 justify-center">
+          <span class="w-6 h-6 rounded-full border-2 border-emerald-400 bg-slate-900"></span>
+        </div>
+        <div class="md:w-1/2 md:pr-12 mt-6 md:mt-0 md:text-right">
+          <img src="images/timeline-2.jpg" alt="Rescue simulation" class="rounded-2xl shadow-xl border border-slate-800">
+        </div>
+      </article>
+
+      <article class="relative md:flex md:items-center">
+        <div class="md:w-1/2 md:pr-12 md:text-right space-y-2">
+          <time datetime="2023-12-09" class="text-sm uppercase tracking-[0.3em] text-amber-300">Dec 9, 2023</time>
+          <h2 class="text-2xl font-semibold">Canyon Traverse Expedition</h2>
+          <p class="text-slate-400">Two-day journey featuring 11 rappels, glacial-fed pools, and a dawn bivy under stalactites.</p>
+        </div>
+        <div class="hidden md:flex w-0 md:w-16 justify-center">
+          <span class="w-6 h-6 rounded-full border-2 border-amber-400 bg-slate-900"></span>
+        </div>
+        <div class="md:w-1/2 md:pl-12 mt-6 md:mt-0">
+          <img src="images/timeline-3.jpg" alt="Canyon traverse" class="rounded-2xl shadow-xl border border-slate-800">
+        </div>
+      </article>
+
+      <article class="relative md:flex md:items-center md:flex-row-reverse">
+        <div class="md:w-1/2 md:pl-12 space-y-2">
+          <time datetime="2023-11-02" class="text-sm uppercase tracking-[0.3em] text-fuchsia-300">Nov 2, 2023</time>
+          <h2 class="text-2xl font-semibold">Karst Conservation Day</h2>
+          <p class="text-slate-400">Volunteers removed debris from sinkholes and documented delicate calcite curtains.</p>
+        </div>
+        <div class="hidden md:flex w-0 md:w-16 justify-center">
+          <span class="w-6 h-6 rounded-full border-2 border-fuchsia-400 bg-slate-900"></span>
+        </div>
+        <div class="md:w-1/2 md:pr-12 mt-6 md:mt-0 md:text-right">
+          <img src="images/timeline-4.jpg" alt="Conservation volunteers" class="rounded-2xl shadow-xl border border-slate-800">
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

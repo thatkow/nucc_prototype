@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Yearbook — Faces of the Underground</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #111827; color: #f1f5f9; font-family: 'Nunito', system-ui, sans-serif; }
+    .people-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .profile-card { background: rgba(15, 23, 42, 0.85); border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(148, 163, 184, 0.2); text-align: center; box-shadow: 0 30px 40px -32px rgba(15, 23, 42, 1); }
+    .profile-card img { width: 96px; height: 96px; border-radius: 9999px; object-fit: cover; margin: 0 auto 1rem; border: 3px solid rgba(14, 165, 233, 0.6); }
+    .year-section { border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 2.5rem; margin-top: 2.5rem; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="max-w-6xl mx-auto px-6 py-14 flex flex-col gap-4">
+    <div class="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+      <a href="index.html" class="hover:text-white">Poster</a>
+      <a href="news.html" class="hover:text-white">News</a>
+      <a href="magazine.html" class="hover:text-white">Magazine</a>
+      <a href="guidebook.html" class="hover:text-white">Guidebook</a>
+      <a href="brochure.html" class="hover:text-white">Brochure</a>
+      <a href="timeline.html" class="hover:text-white">Timeline</a>
+      <a href="infographic.html" class="hover:text-white">Infographic</a>
+      <a href="portfolio.html" class="hover:text-white">Portfolio</a>
+    </div>
+    <p class="text-xs uppercase tracking-[0.4em] text-sky-300">Community Album</p>
+    <h1 class="text-4xl font-bold tracking-tight">Faces of the Underground</h1>
+    <p class="text-slate-300 max-w-2xl">Celebrate the people who make the club thrive — leaders, new members, and alumni alike.</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 pb-20 space-y-16">
+    <section class="space-y-6">
+      <h2 class="text-2xl font-semibold">Executive Team</h2>
+      <div class="people-grid">
+        <article class="profile-card">
+          <img src="images/yearbook-1.jpg" alt="Club president">
+          <h3 class="text-xl font-semibold">Jamie R.</h3>
+          <p class="text-slate-400 text-sm">President · Expedition Lead</p>
+          <p class="text-slate-500 text-sm mt-2">“Never pass a mystery passage — curiosity first.”</p>
+        </article>
+        <article class="profile-card">
+          <img src="images/yearbook-2.jpg" alt="Training officer">
+          <h3 class="text-xl font-semibold">Harper T.</h3>
+          <p class="text-slate-400 text-sm">Training Officer</p>
+          <p class="text-slate-500 text-sm mt-2">“Every knot tells a story; make yours hold.”</p>
+        </article>
+        <article class="profile-card">
+          <img src="images/yearbook-3.jpg" alt="Gear manager">
+          <h3 class="text-xl font-semibold">Morgan L.</h3>
+          <p class="text-slate-400 text-sm">Gear Manager</p>
+          <p class="text-slate-500 text-sm mt-2">“Double-check your rigging, then enjoy the view.”</p>
+        </article>
+        <article class="profile-card">
+          <img src="images/yearbook-4.jpg" alt="Events coordinator">
+          <h3 class="text-xl font-semibold">Isla N.</h3>
+          <p class="text-slate-400 text-sm">Events &amp; Community</p>
+          <p class="text-slate-500 text-sm mt-2">“Community keeps us steady when the rope swings.”</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="year-section space-y-6">
+      <h2 class="text-2xl font-semibold">Trip Leaders</h2>
+      <div class="people-grid">
+        <article class="profile-card">
+          <img src="images/yearbook-5.jpg" alt="Trip leader">
+          <h3 class="text-xl font-semibold">Aroha K.</h3>
+          <p class="text-slate-400 text-sm">Caving Lead · Survey Team</p>
+          <p class="text-slate-500 text-sm mt-2">“Survey lines are stories waiting to be told.”</p>
+        </article>
+        <article class="profile-card">
+          <img src="images/yearbook-6.jpg" alt="Trip leader">
+          <h3 class="text-xl font-semibold">Theo M.</h3>
+          <p class="text-slate-400 text-sm">Canyoning Lead</p>
+          <p class="text-slate-500 text-sm mt-2">“Trust the flow, but set the anchors right.”</p>
+        </article>
+        <article class="profile-card">
+          <img src="images/yearbook-7.jpg" alt="Trip leader">
+          <h3 class="text-xl font-semibold">Lina S.</h3>
+          <p class="text-slate-400 text-sm">Training Lead</p>
+          <p class="text-slate-500 text-sm mt-2">“Confidence comes from repetition in the dark.”</p>
+        </article>
+        <article class="profile-card">
+          <img src="images/yearbook-8.jpg" alt="Trip leader">
+          <h3 class="text-xl font-semibold">Riley P.</h3>
+          <p class="text-slate-400 text-sm">New Member Liaison</p>
+          <p class="text-slate-500 text-sm mt-2">“Ask questions, share snacks, enjoy the journey.”</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="year-section space-y-6">
+      <h2 class="text-2xl font-semibold">Trip Highlights</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <article class="bg-slate-900/70 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <p class="text-xs uppercase tracking-[0.3em] text-sky-300">2024</p>
+          <h3 class="text-xl font-semibold">Waitomo Glow Trek</h3>
+          <p class="text-slate-400 text-sm">26 members · 14km underground · 1 new chamber mapped</p>
+        </article>
+        <article class="bg-slate-900/70 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-300">2023</p>
+          <h3 class="text-xl font-semibold">Paparoa Canyon Residency</h3>
+          <p class="text-slate-400 text-sm">4-day canyon camp focused on advanced rigging and water safety.</p>
+        </article>
+        <article class="bg-slate-900/70 border border-slate-700 rounded-2xl p-6 space-y-3">
+          <p class="text-xs uppercase tracking-[0.3em] text-amber-300">2022</p>
+          <h3 class="text-xl font-semibold">Karst Conservation Sprint</h3>
+          <p class="text-slate-400 text-sm">Revegetation project and speleothem protection workshops.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

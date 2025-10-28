@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Field Guide</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 20px 30px -18px rgba(15, 23, 42, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 30px 50px -24px rgba(15, 23, 42, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="bg-slate-900 text-white py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.4em] text-sky-300">National University Caving Club</p>
+        <h1 class="text-4xl font-bold tracking-tight">Field Guide &amp; Knowledge Base</h1>
+        <p class="text-slate-300 max-w-2xl">
+          Quick reference on skills, safety, and planning — curated for members and trip leaders.
+        </p>
+      </div>
+      <nav class="text-xs uppercase tracking-[0.3em] text-slate-400 flex flex-wrap gap-4">
+        <a href="index.html" class="hover:text-white">Poster</a>
+        <a href="news.html" class="hover:text-white">News</a>
+        <a href="magazine.html" class="hover:text-white">Magazine</a>
+        <a href="brochure.html" class="hover:text-white">Brochure</a>
+        <a href="timeline.html" class="hover:text-white">Timeline</a>
+        <a href="infographic.html" class="hover:text-white">Infographic</a>
+        <a href="portfolio.html" class="hover:text-white">Portfolio</a>
+        <a href="yearbook.html" class="hover:text-white">Yearbook</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 space-y-12">
+    <aside class="bg-white border border-slate-200 rounded-2xl shadow p-6">
+      <h2 class="text-lg font-semibold mb-4">Browse Topics</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm text-slate-600">
+        <li><a href="#gear" class="hover:text-slate-900">Gear</a></li>
+        <li><a href="#training" class="hover:text-slate-900">Training</a></li>
+        <li><a href="#safety" class="hover:text-slate-900">Safety</a></li>
+        <li><a href="#planning" class="hover:text-slate-900">Trip Planning</a></li>
+        <li><a href="#conservation" class="hover:text-slate-900">Conservation</a></li>
+        <li><a href="#glossary" class="hover:text-slate-900">Glossary</a></li>
+      </ul>
+    </aside>
+
+    <section id="gear" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="text-xs uppercase tracking-[0.3em] text-slate-400">Section 01</span>
+        <h2 class="text-2xl font-bold">Gear Essentials</h2>
+      </div>
+      <div class="topic-grid">
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Vertical Kit</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Harness, cowstails, ascenders, descender, and how to pre-trip inspect each component.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Checklist →</a>
+        </article>
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Lighting Systems</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Primary and backup lighting recommendations, lumen comparisons, and battery management.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Compare setups →</a>
+        </article>
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Clothing Layers</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Base, insulation, and shell systems for wet vs dry caves — plus post-trip warmth tips.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">View guide →</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="training" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="text-xs uppercase tracking-[0.3em] text-slate-400">Section 02</span>
+        <h2 class="text-2xl font-bold">Skill Development</h2>
+      </div>
+      <div class="topic-grid">
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Single Rope Technique</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Step-by-step drills for ascending and descending with efficiency and redundancy.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Practice plan →</a>
+        </article>
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Navigation Underground</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Survey basics, marking etiquette, and translating sketch maps into real movement.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Start learning →</a>
+        </article>
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Emergency Scenarios</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Tabletop exercises for communication failure, injury response, and rapid extraction.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Run scenarios →</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="safety" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <span class="text-xs uppercase tracking-[0.3em] text-slate-400">Section 03</span>
+        <h2 class="text-2xl font-bold">Safety &amp; Risk Management</h2>
+      </div>
+      <div class="topic-grid">
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Call-Out Protocol</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Template for notifying emergency contacts before every trip.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Download form →</a>
+        </article>
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Environmental Hazards</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Flood awareness, rockfall mitigation, and hypothermia prevention checklists.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Stay prepared →</a>
+        </article>
+        <article class="card p-6 space-y-3">
+          <h3 class="text-xl font-semibold">Medical Response</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">First-aid kits tailored for caving plus training pathways for advanced responders.</p>
+          <a href="#" class="text-sky-500 text-xs uppercase tracking-[0.3em]">Review modules →</a>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

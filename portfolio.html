@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Showcase — Expedition Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #020617; color: #e2e8f0; font-family: 'Manrope', system-ui, sans-serif; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+    .card { position: relative; overflow: hidden; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.2); }
+    .card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .card:hover img { transform: scale(1.08); }
+    .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent 60%); opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; }
+    .card:hover .overlay { opacity: 1; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="max-w-6xl mx-auto px-6 py-14 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+    <div class="space-y-4">
+      <p class="text-xs uppercase tracking-[0.4em] text-sky-300">National University Caving Club</p>
+      <h1 class="text-4xl font-bold tracking-tight">Expedition Portfolio</h1>
+      <p class="text-slate-300 max-w-2xl">Browse a curated set of trips, training sessions, and canyon descents.</p>
+    </div>
+    <nav class="text-xs uppercase tracking-[0.3em] text-slate-400 flex flex-wrap gap-4">
+      <a href="index.html" class="hover:text-white">Poster</a>
+      <a href="news.html" class="hover:text-white">News</a>
+      <a href="magazine.html" class="hover:text-white">Magazine</a>
+      <a href="guidebook.html" class="hover:text-white">Guidebook</a>
+      <a href="brochure.html" class="hover:text-white">Brochure</a>
+      <a href="timeline.html" class="hover:text-white">Timeline</a>
+      <a href="infographic.html" class="hover:text-white">Infographic</a>
+      <a href="yearbook.html" class="hover:text-white">Yearbook</a>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 pb-20 space-y-12">
+    <div class="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+      <button class="px-4 py-2 rounded-full bg-slate-900 border border-slate-700 text-white">All</button>
+      <button class="px-4 py-2 rounded-full border border-slate-700 hover:bg-slate-800">Caving</button>
+      <button class="px-4 py-2 rounded-full border border-slate-700 hover:bg-slate-800">Canyoning</button>
+      <button class="px-4 py-2 rounded-full border border-slate-700 hover:bg-slate-800">Training</button>
+    </div>
+
+    <section class="gallery">
+      <article class="card">
+        <img src="images/portfolio-1.jpg" alt="Caver in illuminated chamber">
+        <div class="overlay">
+          <p class="text-xs uppercase tracking-[0.4em] text-sky-300">Caving</p>
+          <h2 class="text-xl font-semibold">Aurora Cavern Traverse</h2>
+          <p class="text-slate-300 text-sm">Glowworm canopy navigation and underwater siphon surveys.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/portfolio-2.jpg" alt="Canyoning waterfall descent">
+        <div class="overlay">
+          <p class="text-xs uppercase tracking-[0.4em] text-amber-300">Canyoning</p>
+          <h2 class="text-xl font-semibold">Cascade Ridge Descent</h2>
+          <p class="text-slate-300 text-sm">13 waterfalls, 2 natural slides, and ropework above alpine pools.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/portfolio-3.jpg" alt="Training rigging">
+        <div class="overlay">
+          <p class="text-xs uppercase tracking-[0.4em] text-emerald-300">Training</p>
+          <h2 class="text-xl font-semibold">Rigging Lab</h2>
+          <p class="text-slate-300 text-sm">Haul systems, re-belays, and traverse line workshops.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/portfolio-4.jpg" alt="Team photo in cave">
+        <div class="overlay">
+          <p class="text-xs uppercase tracking-[0.4em] text-sky-300">Caving</p>
+          <h2 class="text-xl font-semibold">Midnight Cathedral</h2>
+          <p class="text-slate-300 text-sm">Chamber acoustics study with visiting speleologists.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/portfolio-5.jpg" alt="Canyoning team">
+        <div class="overlay">
+          <p class="text-xs uppercase tracking-[0.4em] text-amber-300">Canyoning</p>
+          <h2 class="text-xl font-semibold">Moonlit Canyon</h2>
+          <p class="text-slate-300 text-sm">Night descent featuring headlamp light trails.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="images/portfolio-6.jpg" alt="Outdoor training">
+        <div class="overlay">
+          <p class="text-xs uppercase tracking-[0.4em] text-emerald-300">Training</p>
+          <h2 class="text-xl font-semibold">Rescue Ropes Course</h2>
+          <p class="text-slate-300 text-sm">Scenario-based learning with campus rescue partners.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

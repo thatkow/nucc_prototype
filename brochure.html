@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discover NUCC — Caving &amp; Canyoning</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #020617; color: #e2e8f0; font-family: 'Poppins', system-ui, sans-serif; }
+    .btn-primary { background: linear-gradient(135deg, #facc15, #f97316); color: #0f172a; }
+    .btn-primary:hover { filter: brightness(1.05); }
+    .section-light { background: #0f172a; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-emerald-900 opacity-80"></div>
+    <div class="max-w-6xl mx-auto px-6 py-24 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <p class="text-xs uppercase tracking-[0.4em] text-sky-300">National University Caving Club</p>
+        <h1 class="text-5xl font-bold leading-tight">Adventure Starts Below the Surface</h1>
+        <p class="text-slate-300 text-lg">Experience the thrill of caving, canyoning, and wild landscapes with expert guides and a welcoming crew.</p>
+        <div class="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em]">
+          <a href="#join" class="btn-primary px-6 py-3 rounded-full font-semibold">Join a Trip</a>
+          <a href="#highlights" class="border border-slate-600 px-6 py-3 rounded-full">Why NUCC</a>
+        </div>
+      </div>
+      <div class="bg-slate-900/70 border border-slate-700 rounded-3xl p-8 space-y-6">
+        <h2 class="text-xl font-semibold">Upcoming Experiences</h2>
+        <ul class="space-y-4 text-sm text-slate-300">
+          <li class="flex items-center justify-between"><span>Glowworm Cavern Orientation</span><span>Mar 12</span></li>
+          <li class="flex items-center justify-between"><span>Vertical Skills Weekend</span><span>Mar 23-24</span></li>
+          <li class="flex items-center justify-between"><span>Autumn Canyon Traverse</span><span>Apr 6</span></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <nav class="bg-slate-900 border-t border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex flex-wrap gap-6 text-xs uppercase tracking-[0.3em] text-slate-400">
+      <a href="index.html" class="hover:text-white">Poster</a>
+      <a href="news.html" class="hover:text-white">News</a>
+      <a href="magazine.html" class="hover:text-white">Magazine</a>
+      <a href="guidebook.html" class="hover:text-white">Guidebook</a>
+      <a href="timeline.html" class="hover:text-white">Timeline</a>
+      <a href="infographic.html" class="hover:text-white">Infographic</a>
+      <a href="portfolio.html" class="hover:text-white">Portfolio</a>
+      <a href="yearbook.html" class="hover:text-white">Yearbook</a>
+    </div>
+  </nav>
+
+  <main class="space-y-24">
+    <section id="highlights" class="section-light">
+      <div class="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-12">
+        <article class="space-y-4">
+          <h3 class="text-2xl font-semibold">Expert Mentorship</h3>
+          <p class="text-slate-400">Our instructors are nationally certified and ready to teach, from first rappel to advanced rigging.</p>
+        </article>
+        <article class="space-y-4">
+          <h3 class="text-2xl font-semibold">Inclusive Community</h3>
+          <p class="text-slate-400">Beginners and seasoned explorers alike find a home here — we provide gear, guidance, and camaraderie.</p>
+        </article>
+        <article class="space-y-4">
+          <h3 class="text-2xl font-semibold">Wild Destinations</h3>
+          <p class="text-slate-400">Experience glowworm grottos, alpine canyons, and sinkholes sculpted by millennia of water and limestone.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bg-gradient-to-br from-blue-900 via-slate-900 to-slate-950">
+      <div class="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6">
+          <p class="text-xs uppercase tracking-[0.4em] text-sky-300">Testimonials</p>
+          <h2 class="text-3xl font-bold">“I found my closest friends underground.”</h2>
+          <p class="text-slate-300">“NUCC made the outdoors accessible. I arrived on campus without gear or experience and now lead vertical trips.” — Elena P.</p>
+        </div>
+        <div class="bg-slate-950/70 border border-slate-800 rounded-3xl p-8 space-y-6">
+          <h3 class="text-lg font-semibold">Member Snapshot</h3>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="flex items-center justify-between"><span>Active Members</span><span>128</span></li>
+            <li class="flex items-center justify-between"><span>Trips Last Year</span><span>42</span></li>
+            <li class="flex items-center justify-between"><span>Certified Leaders</span><span>18</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="join" class="max-w-6xl mx-auto px-6 pb-20">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-10 grid md:grid-cols-2 gap-10">
+        <div class="space-y-4">
+          <p class="text-xs uppercase tracking-[0.4em] text-sky-300">Get Started</p>
+          <h2 class="text-3xl font-bold">Join the Crew</h2>
+          <p class="text-slate-300">Membership includes training nights, gear library access, and automatic alerts about upcoming trips.</p>
+        </div>
+        <form class="space-y-4">
+          <div>
+            <label class="text-xs uppercase tracking-[0.3em] text-slate-400">Name</label>
+            <input type="text" class="w-full mt-1 px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100" placeholder="Your name" />
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.3em] text-slate-400">Email</label>
+            <input type="email" class="w-full mt-1 px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100" placeholder="you@example.edu" />
+          </div>
+          <div>
+            <label class="text-xs uppercase tracking-[0.3em] text-slate-400">Adventure Interest</label>
+            <select class="w-full mt-1 px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-slate-100">
+              <option>Caving</option>
+              <option>Canyoning</option>
+              <option>Both</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary px-6 py-3 rounded-full font-semibold w-full">Send</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
