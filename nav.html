@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Layout Navigator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: radial-gradient(circle at top, #1e293b, #020617 55%);
+      color: #e2e8f0;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .layout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .layout-card {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 1.75rem;
+      box-shadow: 0 25px 45px -25px rgba(2, 6, 23, 0.85);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .layout-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 35px 60px -30px rgba(14, 165, 233, 0.4);
+    }
+    .layout-card a {
+      color: #38bdf8;
+    }
+    .layout-card a:hover {
+      color: #f8fafc;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="max-w-5xl mx-auto px-6 py-16 space-y-6 text-center">
+    <p class="text-xs uppercase tracking-[0.4em] text-sky-300">National University Caving Club</p>
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Explore Every NUCC Layout</h1>
+    <p class="text-slate-300 max-w-3xl mx-auto">Jump straight to the experience that suits your needs — each page pulls genuine copy from NUCC trip listings, membership guidance, and archival reports.</p>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 pb-20 space-y-16">
+    <section class="layout-grid">
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-amber-300">Poster</p>
+        <h2 class="text-2xl font-semibold">Welcome Flyer</h2>
+        <p class="text-sm text-slate-300">A scrollable hero experience that introduces NUCC's caving, canyoning, training, and membership highlights.</p>
+        <a href="index.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">View Poster →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-sky-300">News</p>
+        <h2 class="text-2xl font-semibold">Speleo Dispatch</h2>
+        <p class="text-sm text-slate-300">Headlines for Beginner Bungonia, the Lord of the Rings Marathon, and Movie Night lifted from our trip announcements.</p>
+        <a href="news.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">Read Updates →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-emerald-300">Magazine</p>
+        <h2 class="text-2xl font-semibold">Editorial Stories</h2>
+        <p class="text-sm text-slate-300">Hero spreads retelling the Jenolan-Kempsey big trip and Cooleman Plain weekend straight from archived narratives.</p>
+        <a href="magazine.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">Open Magazine →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-emerald-200">Guidebook</p>
+        <h2 class="text-2xl font-semibold">Field Guide</h2>
+        <p class="text-sm text-slate-300">Quick-reference cards outlining trip rhythm, membership fees, gear lists, and safety practices taken from NUCC resources.</p>
+        <a href="guidebook.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">Open Guide →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-fuchsia-300">Brochure</p>
+        <h2 class="text-2xl font-semibold">Landing Page</h2>
+        <p class="text-sm text-slate-300">Recruitment-focused flow combining membership steps, training invites, and recent listing snapshots.</p>
+        <a href="brochure.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">Tour Brochure →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-sky-200">Timeline</p>
+        <h2 class="text-2xl font-semibold">Logbook</h2>
+        <p class="text-sm text-slate-300">Chronological cards mapping the 2003 Jenolan-Kempsey expedition diary with supporting imagery.</p>
+        <a href="timeline.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">View Timeline →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-indigo-300">Infographic</p>
+        <h2 class="text-2xl font-semibold">Impact Snapshot</h2>
+        <p class="text-sm text-slate-300">Data-driven panels highlighting fortnightly trips, $10–$20 day costs, and annual membership fees from club briefings.</p>
+        <a href="infographic.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">See Metrics →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-amber-200">Portfolio</p>
+        <h2 class="text-2xl font-semibold">Showcase Gallery</h2>
+        <p class="text-sm text-slate-300">Hover galleries featuring Bungonia, Jenolan, and Newnes imagery paired with quotes from trip listings.</p>
+        <a href="portfolio.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">Browse Portfolio →</a>
+      </article>
+
+      <article class="layout-card space-y-3">
+        <p class="text-xs uppercase tracking-[0.4em] text-sky-100">Yearbook</p>
+        <h2 class="text-2xl font-semibold">Community Roll</h2>
+        <p class="text-sm text-slate-300">Profiles spotlight organisers like Lauren Jolliffe and Olaf Theden using quotes from archived trip write-ups.</p>
+        <a href="yearbook.html" class="inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em]">Meet the Team →</a>
+      </article>
+    </section>
+
+    <section class="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 space-y-4">
+      <h2 class="text-xl font-semibold">Need the originals?</h2>
+      <p class="text-sm text-slate-300">Membership details, trip listings, and long-form archives live in the <code>membership.html</code> page and the markdown files inside the <code>trips/</code> directory.</p>
+      <div class="flex flex-wrap gap-4 text-xs uppercase tracking-[0.3em] text-slate-400">
+        <a href="membership.html" class="hover:text-white">Membership Overview</a>
+        <a href="speleograffiti.html" class="hover:text-white">Speleograffiti Feature</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
