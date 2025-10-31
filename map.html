@@ -1,135 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NUCC Trip Map Prototype</title>
-  <link rel="icon" href="favicon.ico" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-sA+2lGgIJ2RFYz9t7VDaRaoTyIhiikPJ9ynCAt9eA+o="
-    crossorigin=""
-  />
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #111827;
-      color: #f9fafb;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+<html>
+  <head>
+    <title>NUCC Map Prototype</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    header {
-      padding: 1.5rem clamp(1.5rem, 4vw, 3.5rem);
-      background: radial-gradient(circle at 20% 20%, rgba(250, 204, 21, 0.15), transparent 55%);
-      border-bottom: 1px solid rgba(250, 204, 21, 0.2);
-    }
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-sA+2lGgIJ2RFYz9t7VDaRaoTyIhiikPJ9ynCAt9eA+o="
+      crossorigin=""
+    />
 
-    h1 {
-      margin: 0 0 0.4rem;
-      font-size: clamp(1.75rem, 4vw, 2.6rem);
-    }
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
 
-    p {
-      margin: 0;
-      max-width: 56ch;
-      line-height: 1.6;
-    }
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
 
-    #map {
-      flex: 1;
-      min-height: 460px;
-    }
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-o9N1j7kGStGkWdEoxzsxmEt4iWP7IjL8JwNskmE7ykA="
+      crossorigin=""
+    ></script>
+    <script>
+      const map = L.map('map').setView([51.505, -0.09], 13);
 
-    .leaflet-popup-content img {
-      border-radius: 0.5rem;
-      width: 100%;
-      display: block;
-      margin-top: 0.5rem;
-    }
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
 
-    footer {
-      padding: 1rem clamp(1.5rem, 4vw, 3.5rem);
-      font-size: 0.85rem;
-      color: rgba(249, 250, 251, 0.7);
-      border-top: 1px solid rgba(250, 204, 21, 0.15);
-      background: rgba(17, 24, 39, 0.9);
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <p style="letter-spacing: 0.3em; text-transform: uppercase; font-size: 0.75rem; color: rgba(250, 204, 21, 0.8);">National University Caving Club</p>
-    <h1>Canberra Region Trip Highlights</h1>
-    <p>
-      A Leaflet prototype built straight from the
-      <a href="https://leafletjs.com/examples/quick-start/" target="_blank" rel="noreferrer" style="color: #facc15;">quick start guide</a>
-      and centred on our favourite stomping grounds around Canberra.
-    </p>
-  </header>
+      const marker = L.marker([51.5, -0.09]).addTo(map);
 
-  <div id="map"></div>
+      const circle = L.circle([51.508, -0.11], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: 500
+      }).addTo(map);
 
-  <footer>
-    © <span id="year"></span> NUCC · Prototype for showcasing nearby caves and karst.
-  </footer>
+      const polygon = L.polygon([
+        [51.509, -0.08],
+        [51.503, -0.06],
+        [51.51, -0.047]
+      ]).addTo(map);
 
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o9N1j7kGStGkWdEoxzsxmEt4iWP7IjL8JwNskmE7ykA="
-    crossorigin=""
-  ></script>
-  <script>
-    const map = L.map('map').setView([-35.2809, 149.13], 11);
+      marker.bindPopup('<b>Hello world!</b><br>I am a popup.').openPopup();
+      circle.bindPopup('I am a circle.');
+      polygon.bindPopup('I am a polygon.');
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+      const popup = L.popup();
 
-    L.marker([-35.282, 149.128]).addTo(map)
-      .bindPopup(`
-        <strong>Canberra City Caving Meetups</strong><br />
-        Our weekly planning sessions before heading out to the nearby karst.<br />
-        <img src="images/caving/PXL_20241206_221557516.MP.jpg" alt="Caving meetup photo" />
-      `);
+      function onMapClick(e) {
+        popup
+          .setLatLng(e.latlng)
+          .setContent('You clicked the map at ' + e.latlng.toString())
+          .openOn(map);
+      }
 
-    L.circle([-35.321, 149.008], {
-      color: '#f59e0b',
-      fillColor: '#facc15',
-      fillOpacity: 0.25,
-      radius: 4000
-    }).addTo(map)
-      .bindPopup('Namadgi National Park – gateway to spectacular cave systems.');
-
-    L.polygon([
-      [-35.356, 149.15],
-      [-35.405, 149.084],
-      [-35.318, 148.974]
-    ], {
-      color: '#60a5fa',
-      weight: 2
-    }).addTo(map)
-      .bindPopup('Exploration area for extended expeditions.');
-
-    const popup = L.popup()
-      .setLatLng([-35.197, 149.098])
-      .setContent('Tap anywhere on the map to explore more spots around Canberra!')
-      .openOn(map);
-
-    function onMapClick(e) {
-      popup
-        .setLatLng(e.latlng)
-        .setContent(`You clicked the map at ${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`)
-        .openOn(map);
-    }
-
-    map.on('click', onMapClick);
-
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-</body>
+      map.on('click', onMapClick);
+    </script>
+  </body>
 </html>
