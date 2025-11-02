@@ -119,13 +119,13 @@ function buildCard(l,m,side){
   return c;
 }
 
-function addLoc(l,side){
-  const col=TYPE_COLORS[l.type];
-  const circle=L.circle(l.coords,{radius:6000,color:col.stroke,fillColor:col.fill,fillOpacity:0.5}).addTo(map);
-  const marker=L.marker(l.coords).addTo(map);
+function addLoc(l, side) {
+  const col = TYPE_COLORS[l.type];
+  // Removed the region circle
+  const marker = L.marker(l.coords).addTo(map);
 
   // Popup uses same image as card
-  const popup=`
+  const popup = `
     <div style="display:flex;flex-direction:column;align-items:center;gap:0.6rem;width:min(260px,70vw);text-align:center;background:#f9f9f9;padding:0.4rem;border-radius:10px;">
       <img src="${l.image}" alt="${l.name}" style="width:100%;height:130px;object-fit:cover;border-radius:8px;">
       <h3 style="margin:0.2rem 0;color:#000;">${l.name}</h3>
@@ -134,15 +134,21 @@ function addLoc(l,side){
   `;
   marker.bindPopup(popup);
 
-  const card=buildCard(l,marker,side);
+  const card = buildCard(l, marker, side);
   mapCols[side].append(card);
 
-  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
-  path.dataset.type=l.type;
+  // Connector setup
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.dataset.type = l.type;
   connectorLayer.append(path);
-  connectors.push({card,marker,path,side});
-  registry.set(card,{marker,path,side});
+  connectors.push({ card, marker, path, side });
+  registry.set(card, { marker, path, side });
+
+  // 🔹 Make marker click behave like card click
+  marker.on("click", () => toggleCard(card, l, marker));
 }
+
+
 
 leftGroup.forEach(l=>addLoc(l,"left"));
 rightGroup.forEach(l=>addLoc(l,"right"));
@@ -176,21 +182,57 @@ function reset(schedule=true){
   if(schedule)updateConnectors();
 }
 
-function updateConnectors(){
-  const frame=document.querySelector(".map-frame").getBoundingClientRect();
-  connectorLayer.setAttribute("viewBox",`0 0 ${frame.width} ${frame.height}`);
-  connectors.forEach(e=>{
-    if(!e.card.isConnected)return;
-    const p=map.latLngToContainerPoint(e.marker.getLatLng());
-    const r=e.card.getBoundingClientRect();
-    const x=e.side==="left"?r.right-frame.left:r.left-frame.left;
-    const y=r.top+r.height/2-frame.top;
-    const ex=e.side==="left"?x+40:x-40;
-    e.path.setAttribute("d",`M ${x} ${y} L ${ex} ${y} L ${p.x} ${p.y}`);
+function updateConnectors() {
+  const popupOpen = map._popup && map._popup.isOpen();
+
+  // Toggle visibility of each connector path
+  connectors.forEach(e => {
+    e.path.style.visibility = popupOpen ? "hidden" : "visible";
+  });
+
+  if (popupOpen) return; // skip drawing when popup open
+
+  const frame = document.querySelector(".map-frame").getBoundingClientRect();
+  connectorLayer.setAttribute("viewBox", `0 0 ${frame.width} ${frame.height}`);
+
+  connectors.forEach(e => {
+    if (!e.card.isConnected) return;
+    const p = map.latLngToContainerPoint(e.marker.getLatLng());
+    const r = e.card.getBoundingClientRect();
+    const x = e.side === "left" ? r.right - frame.left : r.left - frame.left;
+    const y = r.top + r.height / 2 - frame.top;
+    const ex = e.side === "left" ? x + 40 : x - 40;
+    e.path.setAttribute("d", `M ${x} ${y} L ${ex} ${y} L ${p.x} ${p.y}`);
   });
 }
 
-map.on("move zoom",updateConnectors);
+// --- Ensure connectors reappear instantly after popup closes ---
+map.on("popupclose", () => {
+  // small timeout ensures popup DOM is gone before redrawing
+  setTimeout(() => {
+    connectors.forEach(e => (e.path.style.visibility = "visible"));
+    updateConnectors();
+  }, 100);
+});
+
+
+
+
+// --- Connector update handling ---
+map.on("move zoom", updateConnectors);
+window.addEventListener("resize", updateConnectors);
+
+// 🔹 Hide lines immediately when map starts moving (panning or zooming)
+map.on("movestart zoomstart", () => {
+  connectors.forEach(e => (e.path.style.visibility = "hidden"));
+});
+
+// 🔹 Redraw and show lines once movement/zooming finishes
+map.on("moveend zoomend", () => {
+  connectors.forEach(e => (e.path.style.visibility = "visible"));
+  updateConnectors();
+});
+
 window.addEventListener("resize",updateConnectors);
 </script>
 </body>
