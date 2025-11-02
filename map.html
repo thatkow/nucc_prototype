@@ -79,7 +79,7 @@
       position: absolute;
       top: clamp(1.5rem, 6vh, 3.5rem);
       bottom: clamp(1.5rem, 6vh, 3.5rem);
-      width: min(340px, 28vw);
+      width: clamp(36rem, calc(3 * 18vw), 60rem);
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: repeat(3, minmax(0, 1fr));
@@ -88,6 +88,7 @@
       align-content: space-between;
       pointer-events: none;
       z-index: 410;
+      transition: width 260ms ease, left 260ms ease, right 260ms ease;
     }
 
     .card-column.left {
@@ -153,6 +154,7 @@
       font-size: clamp(1.05rem, 2.4vw, 1.35rem);
       font-weight: 700;
       letter-spacing: 0.03em;
+      overflow-wrap: anywhere;
     }
 
     .location-card p {
@@ -160,6 +162,7 @@
       color: rgba(255, 255, 255, 0.78);
       font-size: clamp(0.92rem, 2.2vw, 1rem);
       line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
     .location-card::after {
@@ -168,6 +171,50 @@
       inset: 0;
       border-radius: inherit;
       pointer-events: none;
+    }
+
+    .location-card.is-active {
+      border-color: rgba(0, 191, 255, 0.7);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
+    }
+
+    .location-card.is-hidden {
+      display: none;
+    }
+
+    .card-column.expanded {
+      width: 50%;
+      left: 0;
+      right: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      pointer-events: auto;
+    }
+
+    .card-column.right.expanded {
+      left: auto;
+      right: 0;
+    }
+
+    .card-column.expanded .location-card {
+      display: none;
+    }
+
+    .card-column.expanded .location-card.is-active {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      padding: clamp(1.5rem, 3vw, 2.4rem);
+      gap: clamp(1rem, 2.6vw, 1.6rem);
+      cursor: zoom-out;
+      overflow-y: auto;
+    }
+
+    .card-column.expanded .location-card.is-active img {
+      height: clamp(220px, 42vh, 360px);
     }
 
     .connector-layer {
@@ -186,6 +233,10 @@
       stroke-linejoin: round;
       opacity: 0.9;
       filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.65));
+    }
+
+    .connector-layer path.is-hidden {
+      opacity: 0;
     }
 
     .connector-layer path[data-type="canyon"] {
@@ -265,12 +316,12 @@
 
     @media (max-width: 1100px) {
       .card-column {
-        width: min(280px, 34vw);
+        width: clamp(24rem, calc(3 * 16vw), 48rem);
         gap: 1rem;
       }
 
       .location-card {
-        padding: 0.9rem;
+        padding: clamp(0.9rem, 2.6vw, 1.1rem);
       }
     }
 
@@ -308,6 +359,15 @@
 
       .card-column.right .location-type {
         justify-self: start;
+      }
+
+      .card-column.expanded {
+        width: auto;
+        position: static;
+      }
+
+      .card-column.expanded .location-card.is-active {
+        max-height: none;
       }
 
       .connector-layer {
@@ -516,6 +576,8 @@
     const mapFrame = document.querySelector('.map-frame');
 
     const connectors = [];
+    const cardRegistry = new Map();
+    let activeCardEntry = null;
     const featureGroup = L.featureGroup().addTo(map);
 
     const TYPE_COLORS = {
@@ -529,12 +591,87 @@
       }
     };
 
+    function clearActiveCard({ schedule = true } = {}) {
+      if (activeCardEntry && activeCardEntry.marker) {
+        activeCardEntry.marker.closePopup();
+      }
+      cardRegistry.forEach((_, cardNode) => {
+        cardNode.classList.remove('is-hidden', 'is-active');
+        cardNode.setAttribute('aria-expanded', 'false');
+      });
+      columns.left.classList.remove('expanded');
+      columns.right.classList.remove('expanded');
+      connectors.forEach(entry => {
+        entry.path.classList.remove('is-hidden');
+      });
+      activeCardEntry = null;
+      if (schedule) {
+        scheduleConnectorUpdate();
+      }
+    }
+
+    function toggleCardState(entry) {
+      if (!entry) {
+        return false;
+      }
+
+      if (activeCardEntry && activeCardEntry.card === entry.card) {
+        entry.marker.closePopup();
+        clearActiveCard();
+        return false;
+      }
+
+      clearActiveCard({ schedule: false });
+
+      activeCardEntry = entry;
+      entry.card.classList.add('is-active');
+      entry.card.setAttribute('aria-expanded', 'true');
+      columns[entry.side].classList.add('expanded');
+
+      cardRegistry.forEach((_, cardNode) => {
+        if (cardNode !== entry.card) {
+          cardNode.classList.add('is-hidden');
+          cardNode.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      connectors.forEach(conn => {
+        const shouldHide = conn.card !== entry.card;
+        conn.path.classList.toggle('is-hidden', shouldHide);
+        if (shouldHide) {
+          conn.path.setAttribute('d', '');
+        }
+      });
+
+      scheduleConnectorUpdate();
+      return true;
+    }
+
+    function selectCard(card) {
+      const entry = cardRegistry.get(card);
+      if (!entry) {
+        return;
+      }
+
+      const activated = toggleCardState(entry);
+      if (!activated) {
+        return;
+      }
+
+      const targetZoom = Math.max(map.getZoom(), 9);
+      map.flyTo(entry.location.coords, targetZoom, { duration: 0.65 });
+      setTimeout(() => {
+        entry.marker.openPopup();
+      }, 650);
+    }
+
     function buildCard(location, marker) {
       const card = document.createElement('article');
       card.className = 'location-card';
       card.setAttribute('tabindex', '0');
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `Focus map on ${location.name}`);
+      card.setAttribute('aria-expanded', 'false');
       card.style.gridRow = String(location.row);
       card.style.gridColumn = String(location.column);
       card.dataset.type = location.type;
@@ -556,19 +693,15 @@
       const description = document.createElement('p');
       description.textContent = location.description;
 
-      const focusLocation = () => {
-        const targetZoom = Math.max(map.getZoom(), 9);
-        map.flyTo(location.coords, targetZoom, { duration: 0.65 });
-        setTimeout(() => {
-          marker.openPopup();
-        }, 650);
+      const handleSelection = () => {
+        selectCard(card);
       };
 
-      card.addEventListener('click', focusLocation);
+      card.addEventListener('click', handleSelection);
       card.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          focusLocation();
+          handleSelection();
         }
       });
 
@@ -613,14 +746,18 @@
       path.dataset.type = location.type;
       connectorLayer.appendChild(path);
 
-      connectors.push({
+      const connectorEntry = {
         marker,
         card,
         path,
         side: location.side,
         column: location.column,
-        row: location.row
-      });
+        row: location.row,
+        location
+      };
+
+      connectors.push(connectorEntry);
+      cardRegistry.set(card, connectorEntry);
     }
 
     grouped.left.forEach(addLocation);
@@ -655,6 +792,15 @@
       connectorLayer.setAttribute('height', height);
 
       connectors.forEach(entry => {
+        if (
+          !entry.card.isConnected ||
+          entry.card.classList.contains('is-hidden') ||
+          entry.path.classList.contains('is-hidden')
+        ) {
+          entry.path.setAttribute('d', '');
+          return;
+        }
+
         const markerPoint = map.latLngToContainerPoint(entry.marker.getLatLng());
         if (!markerPoint) {
           entry.path.setAttribute('d', '');
@@ -704,6 +850,18 @@
     map.whenReady(scheduleConnectorUpdate);
     window.addEventListener('resize', scheduleConnectorUpdate);
     window.addEventListener('load', scheduleConnectorUpdate);
+
+    map.on('click', () => {
+      if (activeCardEntry) {
+        clearActiveCard();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && activeCardEntry) {
+        clearActiveCard();
+      }
+    });
   </script>
 </body>
 </html>
