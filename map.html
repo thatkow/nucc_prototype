@@ -617,26 +617,38 @@
         return;
       }
 
-      const targetZoom = Math.max(map.getZoom(), 9);
-      const locationLatLng = L.latLng(entry.location.coords);
-      let targetCenter = locationLatLng;
-
+      const locationLatLng = entry.marker.getLatLng();
       const isStacked = window.matchMedia('(max-width: 900px)').matches;
-      if (!isStacked) {
-        const mapSize = map.getSize();
-        const horizontalOffset = mapSize.x * 0.25;
-        const offsetPoint = entry.side === 'left' ? L.point(horizontalOffset, 0) : L.point(-horizontalOffset, 0);
-        const projectedLocation = map.project(locationLatLng, targetZoom);
-        const adjustedCenterPoint = projectedLocation.subtract(offsetPoint);
-        targetCenter = map.unproject(adjustedCenterPoint, targetZoom);
-      }
 
-      map.flyTo(targetCenter, targetZoom, { duration: 0.65 });
-      const handlePopup = () => {
-        entry.marker.openPopup();
-        map.off('moveend', handlePopup);
+      const flyToLocation = () => {
+        const targetZoom = Math.max(map.getZoom(), 9);
+        let targetCenter = locationLatLng;
+
+        if (!isStacked) {
+          const mapSize = map.getSize();
+          const horizontalOffset = mapSize.x * 0.32;
+          const offsetPoint = entry.side === 'left' ? L.point(horizontalOffset, 0) : L.point(-horizontalOffset, 0);
+          const projectedLocation = map.project(locationLatLng, targetZoom);
+          const adjustedCenterPoint = projectedLocation.subtract(offsetPoint);
+          targetCenter = map.unproject(adjustedCenterPoint, targetZoom);
+        }
+
+        map.stop();
+        map.flyTo(targetCenter, targetZoom, {
+          animate: true,
+          duration: 0.95,
+          easeLinearity: 0.25
+        });
+
+        map.once('moveend', () => {
+          entry.marker.openPopup();
+        });
       };
-      map.on('moveend', handlePopup);
+
+      map.invalidateSize({ debounceMoveend: true });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(flyToLocation);
+      });
     }
 
     function buildCard(location, marker) {
