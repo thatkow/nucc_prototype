@@ -79,7 +79,13 @@
       position: absolute;
       top: clamp(1.5rem, 6vh, 3.5rem);
       bottom: clamp(1.5rem, 6vh, 3.5rem);
-      width: min(320px, 27vw);
+      width: min(340px, 28vw);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: minmax(0, 1fr);
+      gap: clamp(1rem, 2.6vw, 1.6rem);
+      align-content: space-between;
       pointer-events: none;
       z-index: 410;
     }
@@ -95,28 +101,29 @@
     }
 
     .location-card {
-      position: absolute;
-      left: 0;
+      position: relative;
+      width: 100%;
+      height: 100%;
       pointer-events: auto;
       background: rgba(10, 12, 14, 0.88);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 18px;
       padding: clamp(0.85rem, 2.2vw, 1.25rem);
-      width: min(100%, 320px);
       box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
       display: grid;
       gap: 0.7rem;
+      align-content: start;
+      cursor: pointer;
+      outline: none;
       transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
     }
 
     .card-column.right .location-card {
-      left: auto;
-      right: 0;
       text-align: right;
     }
 
     .location-card:hover,
-    .location-card:focus-within {
+    .location-card:focus-visible {
       transform: translateY(-4px);
       border-color: rgba(255, 255, 255, 0.3);
       box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
@@ -155,34 +162,12 @@
       line-height: 1.5;
     }
 
-    .location-card button {
-      justify-self: start;
-      padding: 0.55rem 1rem;
-      border-radius: 999px;
-      border: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      background: rgba(240, 90, 30, 0.22);
-      color: #ffe5d4;
-      transition: background 160ms ease;
-    }
-
-    .card-column.right .location-card button {
-      justify-self: end;
-    }
-
-    .location-card button[data-type="canyon"] {
-      background: rgba(0, 140, 255, 0.22);
-      color: #d6ebff;
-    }
-
-    .location-card button:hover,
-    .location-card button:focus-visible {
-      background: rgba(255, 255, 255, 0.18);
-      outline: none;
+    .location-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
     }
 
     .connector-layer {
@@ -321,15 +306,7 @@
         text-align: left;
       }
 
-      .location-card {
-        position: static;
-      }
-
       .card-column.right .location-type {
-        justify-self: start;
-      }
-
-      .location-card button {
         justify-self: start;
       }
 
@@ -389,7 +366,7 @@
         type: 'cave',
         image: 'images/caving/IMG_0325.jpg',
         description:
-          '2019’s Jenolan Jaunt split teams between Mammoth, Aladdin and Hennings caves while sharing the beloved cavers’ cottage.'
+          "2019’s Jenolan Jaunt split teams between Mammoth, Aladdin and Hennings caves while sharing the beloved cavers’ cottage."
       },
       {
         name: 'Tuglow Caves',
@@ -397,63 +374,7 @@
         type: 'cave',
         image: 'images/caving/PXL_20241207_045338331.MP.jpg',
         description:
-          'Trip listings keep inviting NUCC members on dedicated Tuglow Caving weekends to tackle the classic stream passages.'
-      },
-      {
-        name: 'Yagby Caves',
-        coords: [-35.9, 148.9],
-        type: 'cave',
-        image: 'images/caving/PXL_20241013_020527445.jpg',
-        description:
-          'Snowy Yagby weekends mean trudging through drifts to reach East Deep Creek, Restoration Cave and other decorated chambers.'
-      },
-      {
-        name: 'Wyanbene Caves',
-        coords: [-35.8798, 149.986],
-        type: 'cave',
-        image: 'images/caving/PXL_20241013_032228590.jpg',
-        description:
-          'Streamway pushes at Wyanbene take teams through chill crawls to the Helictite Chamber and the towering Gunbarrel Aven.'
-      },
-      {
-        name: 'Cooleman Plains',
-        coords: [-35.56, 148.52],
-        type: 'cave',
-        image: 'images/caving/PXL_20241206_221557516.MP.jpg',
-        description:
-          'Cooleman Plains Easter camps link up with SUSS and ROC while surveying Black Range Cave and revisiting Cooleman Main.'
-      },
-      {
-        name: 'Wee Jasper',
-        coords: [-35.107, 148.689],
-        type: 'cave',
-        image: 'images/caving/PXL_20241207_000415603.jpg',
-        description:
-          'Dip Cave days at Wee Jasper tackle Series 4 and 5, Dismal Chamber and the crawl out the Rubbish Tip entrance.'
-      },
-      {
-        name: 'Buchan Caves',
-        coords: [-37.495, 148.168],
-        type: 'cave',
-        image: 'images/caving/PXL_20241206_223021079.jpg',
-        description:
-          'Club calendars continue to advertise Buchan Caving weekends for NUCC members looking for longer road trips.'
-      },
-      {
-        name: 'Bungonia Caves',
-        coords: [-34.776, 150.006],
-        type: 'cave',
-        image: 'images/caving/PXL_20241013_012316349.jpg',
-        description:
-          'Beginner Bungonia trips funnel new cavers through B4-5, squeezes near Root 19 and the Shoalhaven lookouts.'
-      },
-      {
-        name: 'Mount Fairy Karst',
-        coords: [-35.018, 149.583],
-        type: 'cave',
-        image: 'images/caving/PXL_20241206_223338198.jpg',
-        description:
-          'Mount Fairy missions revive NUCC’s surveying habit, squeezing past new finds while mapping the main cave system.'
+          'Trip listings keep inviting NUCC members on dedicated Tuglow caving weekends to tackle the classic stream passages.'
       },
       {
         name: 'Macquarie Pass Canyon',
@@ -464,24 +385,126 @@
           'Regular Macquarie Pass canyoning listings stay on the NUCC calendar for keen members chasing waterfalls.'
       },
       {
+        name: 'Bungonia Caves',
+        coords: [-34.776, 150.006],
+        type: 'cave',
+        image: 'images/caving/PXL_20241013_012316349.jpg',
+        description:
+          'Beginner Bungonia trips funnel new cavers through B4-5, squeezes near Root 19 and the Shoalhaven lookouts.'
+      },
+      {
         name: 'Jerrara Canyon',
         coords: [-34.79220931218591, 149.99944698033696],
         type: 'canyon',
         image: 'images/canyoning/IMG_3067.jpeg',
         description:
           'Jerrara Canyon outings remain a friendly beginner option with sunny creek sections and gentle abseils.'
+      },
+      {
+        name: 'Buchan Caves',
+        coords: [-37.495, 148.168],
+        type: 'cave',
+        image: 'images/caving/PXL_20241206_223021079.jpg',
+        description:
+          'Club calendars continue to advertise Buchan caving weekends for NUCC members looking for longer road trips.'
+      },
+      {
+        name: 'Mount Fairy Karst',
+        coords: [-35.018, 149.583],
+        type: 'cave',
+        image: 'images/caving/PXL_20241206_223338198.jpg',
+        description:
+          'Mount Fairy missions revive NUCC’s surveying habit, squeezing past new finds while mapping the main cave system.'
+      },
+      {
+        name: 'Wee Jasper',
+        coords: [-35.107, 148.689],
+        type: 'cave',
+        image: 'images/caving/PXL_20241207_000415603.jpg',
+        description:
+          'Dip Cave days at Wee Jasper tackle Series 4 and 5, Dismal Chamber and the crawl out the Rubbish Tip entrance.'
+      },
+      {
+        name: 'Cooleman Plains',
+        coords: [-35.56, 148.52],
+        type: 'cave',
+        image: 'images/caving/PXL_20241206_221557516.MP.jpg',
+        description:
+          'Cooleman Plains Easter camps link up with SUSS and ROC while surveying Black Range Cave and revisiting Cooleman Main.'
+      },
+      {
+        name: 'Wyanbene Caves',
+        coords: [-35.8798, 149.986],
+        type: 'cave',
+        image: 'images/caving/PXL_20241013_032228590.jpg',
+        description:
+          'Streamway pushes at Wyanbene take teams through chill crawls to the Helictite Chamber and the towering Gunbarrel Aven.'
+      },
+      {
+        name: 'Yagby Caves',
+        coords: [-35.9, 148.9],
+        type: 'cave',
+        image: 'images/caving/PXL_20241013_020527445.jpg',
+        description:
+          'Snowy Yagby weekends mean trudging through drifts to reach East Deep Creek, Restoration Cave and other decorated chambers.'
+      },
+      {
+        name: 'Bendethera Caves',
+        coords: [-36.032, 149.619],
+        type: 'cave',
+        image: 'images/caving/IMG_1432.jpg',
+        description:
+          'Bendethera excursions combine remote 4WD access with camping in the Deua valley and lengthy river cave explorations.'
       }
     ];
 
-    const SIDE_THRESHOLD = 149.6;
-    const locationData = rawLocations.map(location => ({
-      ...location,
-      side: location.coords[1] <= SIDE_THRESHOLD ? 'left' : 'right'
-    }));
+    const locationLookup = new Map(rawLocations.map(location => [location.name, location]));
+
+    const layoutPlan = {
+      left: [
+        'Mount Fairy Karst',
+        'Wee Jasper',
+        'Cooleman Plains',
+        'Wyanbene Caves',
+        'Yagby Caves',
+        'Bendethera Caves'
+      ],
+      right: [
+        'Jenolan Caves',
+        'Tuglow Caves',
+        'Macquarie Pass Canyon',
+        'Bungonia Caves',
+        'Jerrara Canyon',
+        'Buchan Caves'
+      ]
+    };
+
+    const locationData = [];
+
+    Object.entries(layoutPlan).forEach(([side, names]) => {
+      names.forEach((name, index) => {
+        const base = locationLookup.get(name);
+        if (!base) {
+          console.warn(`Missing location data for ${name}`);
+          return;
+        }
+
+        const row = Math.floor(index / 2) + 1;
+        const column = (index % 2) + 1;
+
+        locationData.push({
+          ...base,
+          side,
+          row,
+          column,
+          layoutIndex: index
+        });
+      });
+    });
 
     const grouped = {
-      left: locationData.filter(entry => entry.side === 'left').sort((a, b) => b.coords[0] - a.coords[0]),
-      right: locationData.filter(entry => entry.side === 'right').sort((a, b) => b.coords[0] - a.coords[0])
+      left: locationData.filter(entry => entry.side === 'left').sort((a, b) => a.layoutIndex - b.layoutIndex),
+      right: locationData.filter(entry => entry.side === 'right').sort((a, b) => a.layoutIndex - b.layoutIndex)
     };
 
     const columns = {
@@ -510,6 +533,14 @@
       const card = document.createElement('article');
       card.className = 'location-card';
       card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Focus map on ${location.name}`);
+      card.style.gridRow = String(location.row);
+      card.style.gridColumn = String(location.column);
+      card.dataset.type = location.type;
+      card.dataset.side = location.side;
+      card.dataset.row = String(location.row);
+      card.dataset.column = String(location.column);
 
       const image = document.createElement('img');
       image.src = location.image;
@@ -525,11 +556,6 @@
       const description = document.createElement('p');
       description.textContent = location.description;
 
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.dataset.type = location.type;
-      button.textContent = 'Focus on map';
-
       const focusLocation = () => {
         const targetZoom = Math.max(map.getZoom(), 9);
         map.flyTo(location.coords, targetZoom, { duration: 0.65 });
@@ -539,21 +565,16 @@
       };
 
       card.addEventListener('click', focusLocation);
-      card.addEventListener('keypress', event => {
+      card.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           focusLocation();
         }
       });
 
-      button.addEventListener('click', event => {
-        event.stopPropagation();
-        focusLocation();
-      });
-
       image.addEventListener('load', scheduleConnectorUpdate);
 
-      card.append(image, typeLabel, heading, description, button);
+      card.append(image, typeLabel, heading, description);
       return card;
     }
 
@@ -592,97 +613,23 @@
       path.dataset.type = location.type;
       connectorLayer.appendChild(path);
 
-      connectors.push({ marker, card, path, side: location.side });
+      connectors.push({
+        marker,
+        card,
+        path,
+        side: location.side,
+        column: location.column,
+        row: location.row
+      });
     }
 
     grouped.left.forEach(addLocation);
     grouped.right.forEach(addLocation);
 
-    map.fitBounds(featureGroup.getBounds().pad(0.25));
-    scheduleConnectorUpdate();
-
-    function positionColumn(side, items) {
-      const column = columns[side];
-      if (!column || !items.length) {
-        return;
-      }
-
-      const columnRect = column.getBoundingClientRect();
-      const totalHeight = items.reduce((sum, item) => sum + item.entry.card.offsetHeight, 0);
-      const availableHeight = columnRect.height;
-      const minimumGap = 12;
-      let gap = 28;
-
-      if (items.length > 1) {
-        const needed = totalHeight + gap * (items.length - 1);
-        if (needed > availableHeight) {
-          gap = Math.max(minimumGap, (availableHeight - totalHeight) / (items.length - 1));
-        } else {
-          gap += (availableHeight - needed) / (items.length - 1);
-        }
-      }
-
-      const topBound = columnRect.top;
-      const bottomBound = columnRect.bottom;
-
-      items.sort((a, b) => a.markerPoint.y - b.markerPoint.y);
-
-      const centers = [];
-      const halfHeights = items.map(item => item.entry.card.offsetHeight / 2);
-
-      items.forEach((item, index) => {
-        const half = halfHeights[index];
-        let center = item.markerPoint.y;
-        center = Math.max(center, topBound + half);
-        center = Math.min(center, bottomBound - half);
-        if (index > 0) {
-          const minCenter = centers[index - 1] + halfHeights[index - 1] + half + gap;
-          if (center < minCenter) {
-            center = minCenter;
-          }
-        }
-        centers[index] = center;
-      });
-
-      for (let i = centers.length - 1; i >= 0; i--) {
-        const half = halfHeights[i];
-        const maxCenter = bottomBound - half;
-        if (centers[i] > maxCenter) {
-          centers[i] = maxCenter;
-        }
-
-        if (i < centers.length - 1) {
-          const upperLimit = centers[i + 1] - halfHeights[i + 1] - half - gap;
-          if (centers[i] > upperLimit) {
-            centers[i] = upperLimit;
-          }
-        }
-
-        const minCenter = topBound + half;
-        if (centers[i] < minCenter) {
-          centers[i] = minCenter;
-        }
-      }
-
-      for (let i = 1; i < centers.length; i++) {
-        const half = halfHeights[i];
-        const minCenter = centers[i - 1] + halfHeights[i - 1] + half + gap;
-        if (centers[i] < minCenter) {
-          centers[i] = minCenter;
-        }
-        const maxCenter = bottomBound - half;
-        if (centers[i] > maxCenter) {
-          centers[i] = maxCenter;
-        }
-      }
-
-      items.forEach((item, index) => {
-        const half = halfHeights[index];
-        const center = Math.min(Math.max(centers[index], topBound + half), bottomBound - half);
-        const localTop = center - half - columnRect.top;
-        item.entry.card.style.top = `${localTop}px`;
-      });
+    if (featureGroup.getLayers().length > 0) {
+      map.fitBounds(featureGroup.getBounds().pad(0.25));
     }
+    scheduleConnectorUpdate();
 
     function updateConnectors() {
       if (!mapFrame.isConnected) {
@@ -695,7 +642,6 @@
         connectorLayer.setAttribute('height', 0);
         connectors.forEach(entry => {
           entry.path.setAttribute('d', '');
-          entry.card.style.removeProperty('top');
         });
         return;
       }
@@ -708,24 +654,10 @@
       connectorLayer.setAttribute('width', width);
       connectorLayer.setAttribute('height', height);
 
-      const markerPoints = new Map();
-      const columnItems = { left: [], right: [] };
-
       connectors.forEach(entry => {
         const markerPoint = map.latLngToContainerPoint(entry.marker.getLatLng());
         if (!markerPoint) {
-          return;
-        }
-        markerPoints.set(entry, markerPoint);
-        columnItems[entry.side].push({ entry, markerPoint });
-      });
-
-      positionColumn('left', columnItems.left);
-      positionColumn('right', columnItems.right);
-
-      connectors.forEach(entry => {
-        const markerPoint = markerPoints.get(entry);
-        if (!markerPoint) {
+          entry.path.setAttribute('d', '');
           return;
         }
 
@@ -733,11 +665,16 @@
         const cardX = entry.side === 'left'
           ? cardRect.right - frameRect.left
           : cardRect.left - frameRect.left;
-        const cardY = cardRect.top + cardRect.height / 2 - frameRect.top;
+        const verticalShift = entry.column === 1 ? -12 : 12;
+        const cardY = cardRect.top + cardRect.height / 2 - frameRect.top + verticalShift;
+
+        const elbowOffset = entry.side === 'left'
+          ? 40 + (2 - entry.column) * 18
+          : 40 + (entry.column - 1) * 18;
 
         const elbowX = entry.side === 'left'
-          ? Math.min(cardX + 40, width)
-          : Math.max(cardX - 40, 0);
+          ? Math.min(cardX + elbowOffset, width)
+          : Math.max(cardX - elbowOffset, 0);
 
         const approachX = entry.side === 'left'
           ? Math.max(markerPoint.x - 24, elbowX)
