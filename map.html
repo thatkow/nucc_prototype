@@ -23,54 +23,199 @@
       height: 100%;
       margin: 0;
       font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-      background: #0b0b0b;
+      background: radial-gradient(circle at top, #070809 0%, #020203 55%, #020203 100%);
       color: #f5f5f5;
     }
 
     body {
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     header {
-      padding: clamp(1rem, 3vw, 2rem);
+      padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 5vw, 4rem);
       text-align: center;
-      background: radial-gradient(circle at top, rgba(255, 215, 0, 0.25), rgba(0, 0, 0, 0.85));
+      background: linear-gradient(180deg, rgba(14, 18, 22, 0.85) 0%, rgba(7, 7, 7, 0.9) 100%);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(6px);
-      position: relative;
-      z-index: 10;
+      z-index: 5;
     }
 
     header h1 {
       margin: 0;
-      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      font-size: clamp(1.75rem, 3vw, 2.8rem);
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
     header p {
-      margin: 0.75rem auto 0;
-      max-width: min(60ch, 90vw);
+      margin: clamp(0.75rem, 2vw, 1.25rem) auto 0;
+      max-width: min(68ch, 90vw);
       font-size: clamp(0.95rem, 2.4vw, 1.1rem);
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.55;
+      color: rgba(245, 245, 245, 0.8);
+    }
+
+    main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      min-height: 0;
+    }
+
+    .map-frame {
+      position: relative;
+      flex: 1;
+      min-height: 0;
     }
 
     #map {
       width: 100%;
-      flex: 1;
+      height: 100%;
     }
 
-    .leaflet-container {
-      font-size: 0.95rem;
+    .card-column {
+      position: absolute;
+      top: clamp(1.5rem, 6vh, 3.5rem);
+      bottom: clamp(1.5rem, 6vh, 3.5rem);
+      width: min(320px, 27vw);
+      pointer-events: none;
+      z-index: 410;
+    }
+
+    .card-column.left {
+      left: clamp(1rem, 4vw, 3rem);
+      align-items: flex-start;
+    }
+
+    .card-column.right {
+      right: clamp(1rem, 4vw, 3rem);
+      align-items: flex-end;
+    }
+
+    .location-card {
+      position: absolute;
+      left: 0;
+      pointer-events: auto;
+      background: rgba(10, 12, 14, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: clamp(0.85rem, 2.2vw, 1.25rem);
+      width: min(100%, 320px);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      display: grid;
+      gap: 0.7rem;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .card-column.right .location-card {
+      left: auto;
+      right: 0;
+      text-align: right;
+    }
+
+    .location-card:hover,
+    .location-card:focus-within {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
+    }
+
+    .location-card img {
+      width: 100%;
+      height: clamp(120px, 22vh, 160px);
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .location-type {
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .card-column.right .location-type {
+      justify-self: end;
+    }
+
+    .location-card h3 {
+      margin: 0;
+      font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .location-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: clamp(0.92rem, 2.2vw, 1rem);
+      line-height: 1.5;
+    }
+
+    .location-card button {
+      justify-self: start;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: rgba(240, 90, 30, 0.22);
+      color: #ffe5d4;
+      transition: background 160ms ease;
+    }
+
+    .card-column.right .location-card button {
+      justify-self: end;
+    }
+
+    .location-card button[data-type="canyon"] {
+      background: rgba(0, 140, 255, 0.22);
+      color: #d6ebff;
+    }
+
+    .location-card button:hover,
+    .location-card button:focus-visible {
+      background: rgba(255, 255, 255, 0.18);
+      outline: none;
+    }
+
+    .connector-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 405;
+    }
+
+    .connector-layer path {
+      fill: none;
+      stroke-width: 2.4px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.65));
+    }
+
+    .connector-layer path[data-type="canyon"] {
+      stroke: rgba(0, 140, 255, 0.85);
+    }
+
+    .connector-layer path[data-type="cave"] {
+      stroke: rgba(240, 90, 30, 0.85);
     }
 
     .popup-content {
-      text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.55rem;
+      text-align: center;
       width: min(220px, 60vw);
     }
 
@@ -79,7 +224,14 @@
       height: 140px;
       object-fit: cover;
       border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .popup-type {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
     }
 
     .popup-title {
@@ -88,41 +240,35 @@
       font-weight: 700;
     }
 
-    .popup-type {
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
     .popup-desc {
       margin: 0;
       font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.85);
       line-height: 1.4;
+      color: rgba(255, 255, 255, 0.82);
     }
 
     .legend {
       position: absolute;
-      right: clamp(0.75rem, 2.5vw, 1.75rem);
-      bottom: clamp(0.75rem, 3vw, 2rem);
-      background: rgba(15, 15, 15, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 0.75rem 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: clamp(1rem, 5vh, 2.5rem);
       display: grid;
-      gap: 0.5rem;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 0.85rem;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(8px);
-      z-index: 400;
+      gap: 0.45rem;
+      padding: 0.85rem 1.2rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(10, 10, 12, 0.82);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.82rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      z-index: 420;
+      pointer-events: none;
     }
 
     .legend-row {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.55rem;
     }
 
     .legend-swatch {
@@ -132,18 +278,63 @@
       box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
     }
 
-    @media (max-width: 600px) {
-      header {
-        padding: 1.25rem 1rem;
+    @media (max-width: 1100px) {
+      .card-column {
+        width: min(280px, 34vw);
+        gap: 1rem;
       }
 
-      .popup-content {
-        width: min(200px, 70vw);
+      .location-card {
+        padding: 0.9rem;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        overflow: auto;
       }
 
-      .legend {
-        font-size: 0.75rem;
-        gap: 0.4rem;
+      main {
+        flex-direction: column;
+      }
+
+      .map-frame {
+        min-height: 70vh;
+      }
+
+      .card-column {
+        position: static;
+        width: auto;
+        padding: clamp(1.25rem, 4vw, 2rem) clamp(1.5rem, 5vw, 2.5rem) 0;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(1rem, 4vw, 1.5rem);
+        pointer-events: auto;
+      }
+
+      .card-column.right {
+        margin-top: -0.25rem;
+      }
+
+      .card-column.right .location-card,
+      .card-column.left .location-card {
+        text-align: left;
+      }
+
+      .location-card {
+        position: static;
+      }
+
+      .card-column.right .location-type {
+        justify-self: start;
+      }
+
+      .location-card button {
+        justify-self: start;
+      }
+
+      .connector-layer {
+        display: none;
       }
     }
   </style>
@@ -152,23 +343,29 @@
   <header>
     <h1>NUCC trip destinations</h1>
     <p>
-      Explore the caves and canyons that NUCC has visited in recent trip reports. Zoom in to find each site, then tap a marker
-      to see a highlight photo and a short note from the corresponding trip story.
+      Explore the caves and canyons that NUCC has visited across recent trip reports. The cascading cards highlight each
+      location—select one to fly across the map and preview photos and notes from those adventures.
     </p>
   </header>
 
-  <div id="map" role="region" aria-label="Interactive map of NUCC trip destinations"></div>
-
-  <div class="legend" aria-hidden="true">
-    <div class="legend-row">
-      <span class="legend-swatch" style="background: rgba(0, 140, 255, 0.7);"></span>
-      <span>Canyon destinations</span>
+  <main>
+    <div class="map-frame">
+      <div id="map" role="region" aria-label="Interactive map of NUCC trip destinations"></div>
+      <svg class="connector-layer" aria-hidden="true"></svg>
+      <section class="card-column left" aria-label="Western trip destinations"></section>
+      <section class="card-column right" aria-label="Eastern trip destinations"></section>
+      <div class="legend" aria-hidden="true">
+        <div class="legend-row">
+          <span class="legend-swatch" style="background: rgba(0, 140, 255, 0.7);"></span>
+          <span>Canyon destinations</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-swatch" style="background: rgba(240, 90, 30, 0.65);"></span>
+          <span>Cave systems</span>
+        </div>
+      </div>
     </div>
-    <div class="legend-row">
-      <span class="legend-swatch" style="background: rgba(240, 90, 30, 0.65);"></span>
-      <span>Cave systems</span>
-    </div>
-  </div>
+  </main>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script>
@@ -185,7 +382,7 @@
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    const locations = [
+    const rawLocations = [
       {
         name: 'Jenolan Caves',
         coords: [-33.8204, 150.0208],
@@ -200,7 +397,7 @@
         type: 'cave',
         image: 'images/caving/PXL_20241207_045338331.MP.jpg',
         description:
-          'Trip listings keep inviting NUCC members on dedicated Tuglow Caving weekends.'
+          'Trip listings keep inviting NUCC members on dedicated Tuglow Caving weekends to tackle the classic stream passages.'
       },
       {
         name: 'Yagby Caves',
@@ -232,7 +429,7 @@
         type: 'cave',
         image: 'images/caving/PXL_20241207_000415603.jpg',
         description:
-          'Dip Cave days at Wee Jasper tackle Series 4 and 5, Dismal Chamber and the classic crawl out the Rubbish Tip entrance.'
+          'Dip Cave days at Wee Jasper tackle Series 4 and 5, Dismal Chamber and the crawl out the Rubbish Tip entrance.'
       },
       {
         name: 'Buchan Caves',
@@ -240,7 +437,7 @@
         type: 'cave',
         image: 'images/caving/PXL_20241206_223021079.jpg',
         description:
-          'Club calendars continue to advertise Buchan Caving weekends for NUCC members.'
+          'Club calendars continue to advertise Buchan Caving weekends for NUCC members looking for longer road trips.'
       },
       {
         name: 'Bungonia Caves',
@@ -260,42 +457,113 @@
       },
       {
         name: 'Macquarie Pass Canyon',
-        coords: [-34.5634, 150.6591],
+        coords: [-34.56339850147471, 150.65913525198138],
         type: 'canyon',
         image: 'images/canyoning/IMG_3038.jpeg',
         description:
-          'Regular Macquarie Pass canyoning listings stay on the NUCC calendar for keen members.'
+          'Regular Macquarie Pass canyoning listings stay on the NUCC calendar for keen members chasing waterfalls.'
       },
       {
         name: 'Jerrara Canyon',
-        coords: [-34.7922, 149.9994],
+        coords: [-34.79220931218591, 149.99944698033696],
         type: 'canyon',
         image: 'images/canyoning/IMG_3067.jpeg',
         description:
-          'Jerrara Canyon outings stay on the NUCC program for beginners keen on a friendly creek run.'
+          'Jerrara Canyon outings remain a friendly beginner option with sunny creek sections and gentle abseils.'
       }
     ];
 
-    const featureGroup = L.featureGroup();
+    const SIDE_THRESHOLD = 149.6;
+    const locationData = rawLocations.map(location => ({
+      ...location,
+      side: location.coords[1] <= SIDE_THRESHOLD ? 'left' : 'right'
+    }));
+
+    const grouped = {
+      left: locationData.filter(entry => entry.side === 'left').sort((a, b) => b.coords[0] - a.coords[0]),
+      right: locationData.filter(entry => entry.side === 'right').sort((a, b) => b.coords[0] - a.coords[0])
+    };
+
+    const columns = {
+      left: document.querySelector('.card-column.left'),
+      right: document.querySelector('.card-column.right')
+    };
+
+    const connectorLayer = document.querySelector('.connector-layer');
+    const mapFrame = document.querySelector('.map-frame');
+
+    const connectors = [];
+    const featureGroup = L.featureGroup().addTo(map);
 
     const TYPE_COLORS = {
       canyon: {
         stroke: '#008cff',
-        fill: 'rgba(0, 140, 255, 0.35)'
+        fill: 'rgba(0, 140, 255, 0.32)'
       },
       cave: {
         stroke: '#f05a1e',
-        fill: 'rgba(240, 90, 30, 0.3)'
+        fill: 'rgba(240, 90, 30, 0.28)'
       }
     };
 
-    locations.forEach(location => {
-      const colors = TYPE_COLORS[location.type] || TYPE_COLORS.cave;
+    function buildCard(location, marker) {
+      const card = document.createElement('article');
+      card.className = 'location-card';
+      card.setAttribute('tabindex', '0');
+
+      const image = document.createElement('img');
+      image.src = location.image;
+      image.alt = `${location.name} trip photo`;
+
+      const typeLabel = document.createElement('span');
+      typeLabel.className = 'location-type';
+      typeLabel.textContent = location.type === 'canyon' ? 'Canyon' : 'Cave system';
+
+      const heading = document.createElement('h3');
+      heading.textContent = location.name;
+
+      const description = document.createElement('p');
+      description.textContent = location.description;
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.type = location.type;
+      button.textContent = 'Focus on map';
+
+      const focusLocation = () => {
+        const targetZoom = Math.max(map.getZoom(), 9);
+        map.flyTo(location.coords, targetZoom, { duration: 0.65 });
+        setTimeout(() => {
+          marker.openPopup();
+        }, 650);
+      };
+
+      card.addEventListener('click', focusLocation);
+      card.addEventListener('keypress', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          focusLocation();
+        }
+      });
+
+      button.addEventListener('click', event => {
+        event.stopPropagation();
+        focusLocation();
+      });
+
+      image.addEventListener('load', scheduleConnectorUpdate);
+
+      card.append(image, typeLabel, heading, description, button);
+      return card;
+    }
+
+    function addLocation(location) {
+      const palette = TYPE_COLORS[location.type] || TYPE_COLORS.cave;
 
       const circle = L.circle(location.coords, {
         radius: 6000,
-        color: colors.stroke,
-        fillColor: colors.fill,
+        color: palette.stroke,
+        fillColor: palette.fill,
         fillOpacity: 0.5,
         weight: 2
       }).addTo(map);
@@ -316,14 +584,189 @@
 
       featureGroup.addLayer(circle);
       featureGroup.addLayer(marker);
-    });
 
-    featureGroup.addTo(map);
-    map.fitBounds(featureGroup.getBounds().pad(0.2));
+      const card = buildCard(location, marker);
+      columns[location.side].appendChild(card);
 
-    L.control.scale({
-      position: 'bottomleft'
-    }).addTo(map);
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.dataset.type = location.type;
+      connectorLayer.appendChild(path);
+
+      connectors.push({ marker, card, path, side: location.side });
+    }
+
+    grouped.left.forEach(addLocation);
+    grouped.right.forEach(addLocation);
+
+    map.fitBounds(featureGroup.getBounds().pad(0.25));
+    scheduleConnectorUpdate();
+
+    function positionColumn(side, items) {
+      const column = columns[side];
+      if (!column || !items.length) {
+        return;
+      }
+
+      const columnRect = column.getBoundingClientRect();
+      const totalHeight = items.reduce((sum, item) => sum + item.entry.card.offsetHeight, 0);
+      const availableHeight = columnRect.height;
+      const minimumGap = 12;
+      let gap = 28;
+
+      if (items.length > 1) {
+        const needed = totalHeight + gap * (items.length - 1);
+        if (needed > availableHeight) {
+          gap = Math.max(minimumGap, (availableHeight - totalHeight) / (items.length - 1));
+        } else {
+          gap += (availableHeight - needed) / (items.length - 1);
+        }
+      }
+
+      const topBound = columnRect.top;
+      const bottomBound = columnRect.bottom;
+
+      items.sort((a, b) => a.markerPoint.y - b.markerPoint.y);
+
+      const centers = [];
+      const halfHeights = items.map(item => item.entry.card.offsetHeight / 2);
+
+      items.forEach((item, index) => {
+        const half = halfHeights[index];
+        let center = item.markerPoint.y;
+        center = Math.max(center, topBound + half);
+        center = Math.min(center, bottomBound - half);
+        if (index > 0) {
+          const minCenter = centers[index - 1] + halfHeights[index - 1] + half + gap;
+          if (center < minCenter) {
+            center = minCenter;
+          }
+        }
+        centers[index] = center;
+      });
+
+      for (let i = centers.length - 1; i >= 0; i--) {
+        const half = halfHeights[i];
+        const maxCenter = bottomBound - half;
+        if (centers[i] > maxCenter) {
+          centers[i] = maxCenter;
+        }
+
+        if (i < centers.length - 1) {
+          const upperLimit = centers[i + 1] - halfHeights[i + 1] - half - gap;
+          if (centers[i] > upperLimit) {
+            centers[i] = upperLimit;
+          }
+        }
+
+        const minCenter = topBound + half;
+        if (centers[i] < minCenter) {
+          centers[i] = minCenter;
+        }
+      }
+
+      for (let i = 1; i < centers.length; i++) {
+        const half = halfHeights[i];
+        const minCenter = centers[i - 1] + halfHeights[i - 1] + half + gap;
+        if (centers[i] < minCenter) {
+          centers[i] = minCenter;
+        }
+        const maxCenter = bottomBound - half;
+        if (centers[i] > maxCenter) {
+          centers[i] = maxCenter;
+        }
+      }
+
+      items.forEach((item, index) => {
+        const half = halfHeights[index];
+        const center = Math.min(Math.max(centers[index], topBound + half), bottomBound - half);
+        const localTop = center - half - columnRect.top;
+        item.entry.card.style.top = `${localTop}px`;
+      });
+    }
+
+    function updateConnectors() {
+      if (!mapFrame.isConnected) {
+        return;
+      }
+
+      const isStacked = window.matchMedia('(max-width: 900px)').matches;
+      if (isStacked) {
+        connectorLayer.setAttribute('width', 0);
+        connectorLayer.setAttribute('height', 0);
+        connectors.forEach(entry => {
+          entry.path.setAttribute('d', '');
+          entry.card.style.removeProperty('top');
+        });
+        return;
+      }
+
+      const frameRect = mapFrame.getBoundingClientRect();
+      const width = frameRect.width;
+      const height = frameRect.height;
+
+      connectorLayer.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      connectorLayer.setAttribute('width', width);
+      connectorLayer.setAttribute('height', height);
+
+      const markerPoints = new Map();
+      const columnItems = { left: [], right: [] };
+
+      connectors.forEach(entry => {
+        const markerPoint = map.latLngToContainerPoint(entry.marker.getLatLng());
+        if (!markerPoint) {
+          return;
+        }
+        markerPoints.set(entry, markerPoint);
+        columnItems[entry.side].push({ entry, markerPoint });
+      });
+
+      positionColumn('left', columnItems.left);
+      positionColumn('right', columnItems.right);
+
+      connectors.forEach(entry => {
+        const markerPoint = markerPoints.get(entry);
+        if (!markerPoint) {
+          return;
+        }
+
+        const cardRect = entry.card.getBoundingClientRect();
+        const cardX = entry.side === 'left'
+          ? cardRect.right - frameRect.left
+          : cardRect.left - frameRect.left;
+        const cardY = cardRect.top + cardRect.height / 2 - frameRect.top;
+
+        const elbowX = entry.side === 'left'
+          ? Math.min(cardX + 40, width)
+          : Math.max(cardX - 40, 0);
+
+        const approachX = entry.side === 'left'
+          ? Math.max(markerPoint.x - 24, elbowX)
+          : Math.min(markerPoint.x + 24, elbowX);
+
+        const control1X = (cardX + elbowX) / 2;
+        const control2X = (approachX + markerPoint.x) / 2;
+
+        const pathData = `M ${cardX} ${cardY} C ${control1X} ${cardY} ${control2X} ${markerPoint.y} ${markerPoint.x} ${markerPoint.y}`;
+
+        entry.path.setAttribute('d', pathData);
+      });
+    }
+
+    let scheduled = false;
+    function scheduleConnectorUpdate() {
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        updateConnectors();
+      });
+    }
+
+    map.on('move zoom resize', scheduleConnectorUpdate);
+    map.on('layeradd', scheduleConnectorUpdate);
+    map.whenReady(scheduleConnectorUpdate);
+    window.addEventListener('resize', scheduleConnectorUpdate);
+    window.addEventListener('load', scheduleConnectorUpdate);
   </script>
 </body>
 </html>
