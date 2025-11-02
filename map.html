@@ -1,853 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>NUCC Trip Locations Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin=""
-  />
-  <style>
-    :root {
-      color-scheme: light dark;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-      background: radial-gradient(circle at top, #070809 0%, #020203 55%, #020203 100%);
-      color: #f5f5f5;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    header {
-      padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 5vw, 4rem);
-      text-align: center;
-      background: linear-gradient(180deg, rgba(14, 18, 22, 0.85) 0%, rgba(7, 7, 7, 0.9) 100%);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(6px);
-      z-index: 5;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: clamp(1.75rem, 3vw, 2.8rem);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    header p {
-      margin: clamp(0.75rem, 2vw, 1.25rem) auto 0;
-      max-width: min(68ch, 90vw);
-      font-size: clamp(0.95rem, 2.4vw, 1.1rem);
-      line-height: 1.55;
-      color: rgba(245, 245, 245, 0.8);
-    }
-
-    main {
-      flex: 1;
-      position: relative;
-      display: flex;
-      min-height: 0;
-    }
-
-    .map-frame {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-    }
-
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-
-    .card-column {
-      position: absolute;
-      top: clamp(1.5rem, 6vh, 3.5rem);
-      bottom: clamp(1.5rem, 6vh, 3.5rem);
-      width: clamp(36rem, calc(3 * 18vw), 60rem);
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: repeat(3, minmax(0, 1fr));
-      grid-auto-rows: minmax(0, 1fr);
-      gap: clamp(1rem, 2.6vw, 1.6rem);
-      align-content: space-between;
-      pointer-events: none;
-      z-index: 410;
-      transition: width 260ms ease, left 260ms ease, right 260ms ease;
-    }
-
-    .card-column.left {
-      left: clamp(1rem, 4vw, 3rem);
-      align-items: flex-start;
-    }
-
-    .card-column.right {
-      right: clamp(1rem, 4vw, 3rem);
-      align-items: flex-end;
-    }
-
-    .location-card {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      pointer-events: auto;
-      background: rgba(10, 12, 14, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      padding: clamp(0.85rem, 2.2vw, 1.25rem);
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
-      display: grid;
-      gap: 0.7rem;
-      align-content: start;
-      cursor: pointer;
-      outline: none;
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-    }
-
-    .card-column.right .location-card {
-      text-align: right;
-    }
-
-    .location-card:hover,
-    .location-card:focus-visible {
-      transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.55);
-    }
-
-    .location-card img {
-      width: 100%;
-      height: clamp(120px, 22vh, 160px);
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-    }
-
-    .location-type {
-      font-size: 0.78rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    .card-column.right .location-type {
-      justify-self: end;
-    }
-
-    .location-card h3 {
-      margin: 0;
-      font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      overflow-wrap: anywhere;
-    }
-
-    .location-card p {
-      margin: 0;
-      color: rgba(255, 255, 255, 0.78);
-      font-size: clamp(0.92rem, 2.2vw, 1rem);
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    .location-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      pointer-events: none;
-    }
-
-    .location-card.is-active {
-      border-color: rgba(0, 191, 255, 0.7);
-      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
-    }
-
-    .location-card.is-hidden {
-      display: none;
-    }
-
-    .card-column.expanded {
-      width: 50%;
-      left: 0;
-      right: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-      pointer-events: auto;
-    }
-
-    .card-column.right.expanded {
-      left: auto;
-      right: 0;
-    }
-
-    .card-column.expanded .location-card {
-      display: none;
-    }
-
-    .card-column.expanded .location-card.is-active {
-      display: grid;
-      width: 100%;
-      height: 100%;
-      max-height: 100%;
-      padding: clamp(1.5rem, 3vw, 2.4rem);
-      gap: clamp(1rem, 2.6vw, 1.6rem);
-      cursor: zoom-out;
-      overflow-y: auto;
-    }
-
-    .card-column.expanded .location-card.is-active img {
-      height: clamp(220px, 42vh, 360px);
-    }
-
-    .connector-layer {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 405;
-    }
-
-    .connector-layer path {
-      fill: none;
-      stroke-width: 2.4px;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0.9;
-      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.65));
-    }
-
-    .connector-layer path.is-hidden {
-      opacity: 0;
-    }
-
-    .connector-layer path[data-type="canyon"] {
-      stroke: rgba(0, 140, 255, 0.85);
-    }
-
-    .connector-layer path[data-type="cave"] {
-      stroke: rgba(240, 90, 30, 0.85);
-    }
-
-    .popup-content {
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-      text-align: center;
-      width: min(220px, 60vw);
-    }
-
-    .popup-content img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-    }
-
-    .popup-type {
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    .popup-title {
-      margin: 0;
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-
-    .popup-desc {
-      margin: 0;
-      font-size: 0.9rem;
-      line-height: 1.4;
-      color: rgba(255, 255, 255, 0.82);
-    }
-
-    @media (max-width: 1100px) {
-      .card-column {
-        width: clamp(24rem, calc(3 * 16vw), 48rem);
-        gap: 1rem;
-      }
-
-      .location-card {
-        padding: clamp(0.9rem, 2.6vw, 1.1rem);
-      }
-    }
-
-    @media (max-width: 900px) {
-      body {
-        overflow: auto;
-      }
-
-      main {
-        flex-direction: column;
-      }
-
-      .map-frame {
-        min-height: 70vh;
-      }
-
-      .card-column {
-        position: static;
-        width: auto;
-        padding: clamp(1.25rem, 4vw, 2rem) clamp(1.5rem, 5vw, 2.5rem) 0;
-        display: flex;
-        flex-direction: column;
-        gap: clamp(1rem, 4vw, 1.5rem);
-        pointer-events: auto;
-      }
-
-      .card-column.right {
-        margin-top: -0.25rem;
-      }
-
-      .card-column.right .location-card,
-      .card-column.left .location-card {
-        text-align: left;
-      }
-
-      .card-column.right .location-type {
-        justify-self: start;
-      }
-
-      .card-column.expanded {
-        width: auto;
-        position: static;
-      }
-
-      .card-column.expanded .location-card.is-active {
-        max-height: none;
-      }
-
-      .connector-layer {
-        display: none;
-      }
-    }
-  </style>
+<meta charset="utf-8" />
+<title>NUCC Trip Locations Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<style>
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+html,body {
+  height:100%; margin:0;
+  font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:radial-gradient(circle at top,#070809 0%,#020203 55%,#020203 100%);
+  color:#f5f5f5;
+}
+body{display:flex;flex-direction:column;overflow:hidden;}
+header{padding:1rem 2rem;text-align:center;background:rgba(10,10,10,0.8);border-bottom:1px solid rgba(255,255,255,0.08);}
+main{flex:1;position:relative;display:flex;}
+#map{width:100%;height:100%;}
+.map-frame{position:relative;flex:1;}
+.card-column{
+  position:absolute;top:1rem;bottom:1rem;
+  width:18%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  pointer-events:none;z-index:410;
+}
+.card-column.left{left:1rem;}
+.card-column.right{right:1rem;align-items:flex-end;}
+.location-card{
+  width:100%;display:flex;align-items:center;
+  background:rgba(10,12,14,0.88);
+  border:1px solid rgba(255,255,255,0.12);border-radius:12px;
+  padding:0.4rem;pointer-events:auto;cursor:pointer;
+  transition:transform .2s ease,border-color .2s ease;
+  min-height:80px;
+}
+.location-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.3);}
+.location-card img{
+  width:90px;height:70px;object-fit:cover;border-radius:8px;flex-shrink:0;
+}
+.card-column.left .location-card img{margin-right:0.6rem;}
+.card-column.right .location-card img{order:2;margin-left:0.6rem;}
+.location-info{display:flex;flex-direction:column;flex:1;}
+.card-column.right .location-info{text-align:right;}
+.location-card h3{margin:0;font-size:0.9rem;}
+.location-card p{margin:0;font-size:0.8rem;line-height:1.3;color:rgba(255,255,255,0.75);}
+.location-card.is-active{border-color:rgba(0,191,255,0.7);}
+.connector-layer{position:absolute;inset:0;pointer-events:none;z-index:405;}
+.connector-layer path{fill:none;stroke-width:2px;opacity:.9;}
+.connector-layer path[data-type="canyon"]{stroke:rgba(0,140,255,.85);}
+.connector-layer path[data-type="cave"]{stroke:rgba(240,90,30,.85);}
+@media(max-width:900px){
+  .card-column{position:static;width:auto;flex-direction:column;align-items:stretch;}
+  .location-card{flex-direction:row;}
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>NUCC trip destinations</h1>
-    <p>
-      Explore the caves and canyons that NUCC has visited across recent trip reports. The cascading cards highlight each
-      location—select one to fly across the map and preview photos and notes from those adventures.
-    </p>
-  </header>
+<header><h1>NUCC Trip Destinations</h1></header>
+<main>
+  <div class="map-frame">
+    <div id="map"></div>
+    <svg class="connector-layer"></svg>
+    <section class="card-column left"></section>
+    <section class="card-column right"></section>
+  </div>
+</main>
 
-  <main>
-    <div class="map-frame">
-      <div id="map" role="region" aria-label="Interactive map of NUCC trip destinations"></div>
-      <svg class="connector-layer" aria-hidden="true"></svg>
-      <section class="card-column left" aria-label="Western trip destinations"></section>
-      <section class="card-column right" aria-label="Eastern trip destinations"></section>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const map=L.map("map",{center:[-35.3,149.1],zoom:6});
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+ {maxZoom:18,attribution:"© OpenStreetMap contributors"}).addTo(map);
+
+const TYPE_COLORS={canyon:{stroke:"#008cff",fill:"rgba(0,140,255,0.3)"},
+                   cave:{stroke:"#f05a1e",fill:"rgba(240,90,30,0.3)"}};
+
+const rawLocations=[
+ {name:"Jenolan Caves",coords:[-33.8204,150.0208],type:"cave",image:"images/caving/IMG_0325.jpg",description:"Mammoth and Aladdin trips."},
+ {name:"Tuglow Caves",coords:[-33.978,149.932],type:"cave",image:"images/caving/PXL_20241207_045338331.MP.jpg",description:"Stream passages classic."},
+ {name:"Macquarie Pass Canyon",coords:[-34.5634,150.6591],type:"canyon",image:"images/canyoning/IMG_3038.jpeg",description:"Waterfall canyon trips."},
+ {name:"Bungonia Caves",coords:[-34.776,150.006],type:"cave",image:"images/caving/PXL_20241013_012316349.jpg",description:"Beginner Bungonia squeezes."},
+ {name:"Jerrara Canyon",coords:[-34.7922,149.9994],type:"canyon",image:"images/canyoning/IMG_3067.jpeg",description:"Gentle abseil canyon."},
+ {name:"Buchan Caves",coords:[-37.495,148.168],type:"cave",image:"images/caving/PXL_20241206_223021079.jpg",description:"Longer VIC roadtrip caves."},
+ {name:"Mount Fairy Karst",coords:[-35.018,149.583],type:"cave",image:"images/caving/PXL_20241206_223338198.jpg",description:"Surveying system."},
+ {name:"Wee Jasper",coords:[-35.107,148.689],type:"cave",image:"images/caving/PXL_20241207_000415603.jpg",description:"Dip Cave crawls."},
+ {name:"Cooleman Plains",coords:[-35.56,148.52],type:"cave",image:"images/caving/PXL_20241206_221557516.MP.jpg",description:"Black Range & Main."},
+ {name:"Wyanbene Caves",coords:[-35.8798,149.986],type:"cave",image:"images/caving/PXL_20241013_032228590.jpg",description:"Gunbarrel Aven trip."},
+ {name:"Yagby Caves",coords:[-35.9,148.9],type:"cave",image:"images/caving/PXL_20241013_020527445.jpg",description:"Snowy Yagby weekend."},
+ {name:"Bendethera Caves",coords:[-36.032,149.619],type:"cave",image:"images/caving/IMG_1432.jpg",description:"Deua valley expedition."}
+];
+
+// Compute median longitude
+const sortedByLon=[...rawLocations].sort((a,b)=>a.coords[1]-b.coords[1]);
+const midIndex=Math.floor(sortedByLon.length/2);
+const medianLon=sortedByLon.length%2===0
+  ? (sortedByLon[midIndex-1].coords[1]+sortedByLon[midIndex].coords[1])/2
+  : sortedByLon[midIndex].coords[1];
+
+// Split into left/right arrays and sort vertically by latitude (north → top)
+const leftGroup=rawLocations.filter(l=>l.coords[1]<medianLon).sort((a,b)=>b.coords[0]-a.coords[0]);
+const rightGroup=rawLocations.filter(l=>l.coords[1]>=medianLon).sort((a,b)=>b.coords[0]-a.coords[0]);
+
+const mapCols={left:document.querySelector(".card-column.left"),
+               right:document.querySelector(".card-column.right")};
+const connectors=[],registry=new Map();
+const connectorLayer=document.querySelector(".connector-layer");
+let activeEntry=null;
+
+function buildCard(l,m,side){
+  const c=document.createElement("article");
+  c.className="location-card";
+  const img=document.createElement("img");img.src=l.image;img.alt=l.name;
+  const info=document.createElement("div");info.className="location-info";
+  info.innerHTML=`<h3>${l.name}</h3><p>${l.description}</p>`;
+  if(side==="left")c.append(img,info); else c.append(info,img);
+  c.onclick=()=>toggleCard(c,l,m);
+  return c;
+}
+
+function addLoc(l,side){
+  const col=TYPE_COLORS[l.type];
+  const circle=L.circle(l.coords,{radius:6000,color:col.stroke,fillColor:col.fill,fillOpacity:0.5}).addTo(map);
+  const marker=L.marker(l.coords).addTo(map);
+
+  // Popup uses same image as card
+  const popup=`
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.6rem;width:min(260px,70vw);text-align:center;background:#f9f9f9;padding:0.4rem;border-radius:10px;">
+      <img src="${l.image}" alt="${l.name}" style="width:100%;height:130px;object-fit:cover;border-radius:8px;">
+      <h3 style="margin:0.2rem 0;color:#000;">${l.name}</h3>
+      <p style="margin:0;font-size:0.9rem;line-height:1.4;color:#000;">More photos, trip reports, and statistics for this location will appear here in future updates.</p>
     </div>
-  </main>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  <script>
-    const map = L.map('map', {
-      center: [-35.3, 149.1],
-      zoom: 6,
-      scrollWheelZoom: true,
-      dragging: true,
-      zoomControl: true
-    });
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    const rawLocations = [
-      {
-        name: 'Jenolan Caves',
-        coords: [-33.8204, 150.0208],
-        type: 'cave',
-        image: 'images/caving/IMG_0325.jpg',
-        description:
-          "2019’s Jenolan Jaunt split teams between Mammoth, Aladdin and Hennings caves while sharing the beloved cavers’ cottage."
-      },
-      {
-        name: 'Tuglow Caves',
-        coords: [-33.978, 149.932],
-        type: 'cave',
-        image: 'images/caving/PXL_20241207_045338331.MP.jpg',
-        description:
-          'Trip listings keep inviting NUCC members on dedicated Tuglow caving weekends to tackle the classic stream passages.'
-      },
-      {
-        name: 'Macquarie Pass Canyon',
-        coords: [-34.56339850147471, 150.65913525198138],
-        type: 'canyon',
-        image: 'images/canyoning/IMG_3038.jpeg',
-        description:
-          'Regular Macquarie Pass canyoning listings stay on the NUCC calendar for keen members chasing waterfalls.'
-      },
-      {
-        name: 'Bungonia Caves',
-        coords: [-34.776, 150.006],
-        type: 'cave',
-        image: 'images/caving/PXL_20241013_012316349.jpg',
-        description:
-          'Beginner Bungonia trips funnel new cavers through B4-5, squeezes near Root 19 and the Shoalhaven lookouts.'
-      },
-      {
-        name: 'Jerrara Canyon',
-        coords: [-34.79220931218591, 149.99944698033696],
-        type: 'canyon',
-        image: 'images/canyoning/IMG_3067.jpeg',
-        description:
-          'Jerrara Canyon outings remain a friendly beginner option with sunny creek sections and gentle abseils.'
-      },
-      {
-        name: 'Buchan Caves',
-        coords: [-37.495, 148.168],
-        type: 'cave',
-        image: 'images/caving/PXL_20241206_223021079.jpg',
-        description:
-          'Club calendars continue to advertise Buchan caving weekends for NUCC members looking for longer road trips.'
-      },
-      {
-        name: 'Mount Fairy Karst',
-        coords: [-35.018, 149.583],
-        type: 'cave',
-        image: 'images/caving/PXL_20241206_223338198.jpg',
-        description:
-          'Mount Fairy missions revive NUCC’s surveying habit, squeezing past new finds while mapping the main cave system.'
-      },
-      {
-        name: 'Wee Jasper',
-        coords: [-35.107, 148.689],
-        type: 'cave',
-        image: 'images/caving/PXL_20241207_000415603.jpg',
-        description:
-          'Dip Cave days at Wee Jasper tackle Series 4 and 5, Dismal Chamber and the crawl out the Rubbish Tip entrance.'
-      },
-      {
-        name: 'Cooleman Plains',
-        coords: [-35.56, 148.52],
-        type: 'cave',
-        image: 'images/caving/PXL_20241206_221557516.MP.jpg',
-        description:
-          'Cooleman Plains Easter camps link up with SUSS and ROC while surveying Black Range Cave and revisiting Cooleman Main.'
-      },
-      {
-        name: 'Wyanbene Caves',
-        coords: [-35.8798, 149.986],
-        type: 'cave',
-        image: 'images/caving/PXL_20241013_032228590.jpg',
-        description:
-          'Streamway pushes at Wyanbene take teams through chill crawls to the Helictite Chamber and the towering Gunbarrel Aven.'
-      },
-      {
-        name: 'Yagby Caves',
-        coords: [-35.9, 148.9],
-        type: 'cave',
-        image: 'images/caving/PXL_20241013_020527445.jpg',
-        description:
-          'Snowy Yagby weekends mean trudging through drifts to reach East Deep Creek, Restoration Cave and other decorated chambers.'
-      },
-      {
-        name: 'Bendethera Caves',
-        coords: [-36.032, 149.619],
-        type: 'cave',
-        image: 'images/caving/IMG_1432.jpg',
-        description:
-          'Bendethera excursions combine remote 4WD access with camping in the Deua valley and lengthy river cave explorations.'
-      }
-    ];
-
-    const locationLookup = new Map(rawLocations.map(location => [location.name, location]));
-
-    const layoutPlan = {
-      left: [
-        'Mount Fairy Karst',
-        'Wee Jasper',
-        'Cooleman Plains',
-        'Wyanbene Caves',
-        'Yagby Caves',
-        'Bendethera Caves'
-      ],
-      right: [
-        'Jenolan Caves',
-        'Tuglow Caves',
-        'Macquarie Pass Canyon',
-        'Bungonia Caves',
-        'Jerrara Canyon',
-        'Buchan Caves'
-      ]
-    };
-
-    const locationData = [];
-
-    Object.entries(layoutPlan).forEach(([side, names]) => {
-      names.forEach((name, index) => {
-        const base = locationLookup.get(name);
-        if (!base) {
-          console.warn(`Missing location data for ${name}`);
-          return;
-        }
-
-        const row = Math.floor(index / 2) + 1;
-        const column = (index % 2) + 1;
-
-        locationData.push({
-          ...base,
-          side,
-          row,
-          column,
-          layoutIndex: index
-        });
-      });
-    });
-
-    const grouped = {
-      left: locationData.filter(entry => entry.side === 'left').sort((a, b) => a.layoutIndex - b.layoutIndex),
-      right: locationData.filter(entry => entry.side === 'right').sort((a, b) => a.layoutIndex - b.layoutIndex)
-    };
-
-    const columns = {
-      left: document.querySelector('.card-column.left'),
-      right: document.querySelector('.card-column.right')
-    };
-
-    const connectorLayer = document.querySelector('.connector-layer');
-    const mapFrame = document.querySelector('.map-frame');
-
-    const connectors = [];
-    const cardRegistry = new Map();
-    let activeCardEntry = null;
-    const featureGroup = L.featureGroup().addTo(map);
-
-    const TYPE_COLORS = {
-      canyon: {
-        stroke: '#008cff',
-        fill: 'rgba(0, 140, 255, 0.32)'
-      },
-      cave: {
-        stroke: '#f05a1e',
-        fill: 'rgba(240, 90, 30, 0.28)'
-      }
-    };
-
-    function clearActiveCard({ schedule = true } = {}) {
-      if (activeCardEntry && activeCardEntry.marker) {
-        activeCardEntry.marker.closePopup();
-      }
-      cardRegistry.forEach((_, cardNode) => {
-        cardNode.classList.remove('is-hidden', 'is-active');
-        cardNode.setAttribute('aria-expanded', 'false');
-      });
-      columns.left.classList.remove('expanded');
-      columns.right.classList.remove('expanded');
-      connectors.forEach(entry => {
-        entry.path.classList.remove('is-hidden');
-      });
-      activeCardEntry = null;
-      if (schedule) {
-        scheduleConnectorUpdate();
-      }
-    }
-
-    function toggleCardState(entry) {
-      if (!entry) {
-        return false;
-      }
-
-      if (activeCardEntry && activeCardEntry.card === entry.card) {
-        entry.marker.closePopup();
-        clearActiveCard();
-        return false;
-      }
-
-      clearActiveCard({ schedule: false });
-
-      activeCardEntry = entry;
-      entry.card.classList.add('is-active');
-      entry.card.setAttribute('aria-expanded', 'true');
-      columns[entry.side].classList.add('expanded');
-
-      cardRegistry.forEach((_, cardNode) => {
-        if (cardNode !== entry.card) {
-          cardNode.classList.add('is-hidden');
-          cardNode.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      connectors.forEach(conn => {
-        const shouldHide = conn.card !== entry.card;
-        conn.path.classList.toggle('is-hidden', shouldHide);
-        if (shouldHide) {
-          conn.path.setAttribute('d', '');
-        }
-      });
-
-      scheduleConnectorUpdate();
-      return true;
-    }
-
-    function selectCard(card) {
-      const entry = cardRegistry.get(card);
-      if (!entry) {
-        return;
-      }
-
-      const activated = toggleCardState(entry);
-      if (!activated) {
-        return;
-      }
-
-      const locationLatLng = entry.marker.getLatLng();
-      const isStacked = window.matchMedia('(max-width: 900px)').matches;
-
-      const flyToLocation = () => {
-        const targetZoom = Math.max(map.getZoom(), 9);
-        let targetCenter = locationLatLng;
-
-        if (!isStacked) {
-          const mapSize = map.getSize();
-          const horizontalOffset = mapSize.x * 0.32;
-          const offsetPoint = entry.side === 'left' ? L.point(horizontalOffset, 0) : L.point(-horizontalOffset, 0);
-          const projectedLocation = map.project(locationLatLng, targetZoom);
-          const adjustedCenterPoint = projectedLocation.subtract(offsetPoint);
-          targetCenter = map.unproject(adjustedCenterPoint, targetZoom);
-        }
-
-        map.stop();
-        map.flyTo(targetCenter, targetZoom, {
-          animate: true,
-          duration: 0.95,
-          easeLinearity: 0.25
-        });
-
-        map.once('moveend', () => {
-          entry.marker.openPopup();
-        });
-      };
-
-      map.invalidateSize({ debounceMoveend: true });
-      requestAnimationFrame(() => {
-        requestAnimationFrame(flyToLocation);
-      });
-    }
-
-    function buildCard(location, marker) {
-      const card = document.createElement('article');
-      card.className = 'location-card';
-      card.setAttribute('tabindex', '0');
-      card.setAttribute('role', 'button');
-      card.setAttribute('aria-label', `Focus map on ${location.name}`);
-      card.setAttribute('aria-expanded', 'false');
-      card.style.gridRow = String(location.row);
-      card.style.gridColumn = String(location.column);
-      card.dataset.type = location.type;
-      card.dataset.side = location.side;
-      card.dataset.row = String(location.row);
-      card.dataset.column = String(location.column);
-
-      const image = document.createElement('img');
-      image.src = location.image;
-      image.alt = `${location.name} trip photo`;
-
-      const typeLabel = document.createElement('span');
-      typeLabel.className = 'location-type';
-      typeLabel.textContent = location.type === 'canyon' ? 'Canyon' : 'Cave system';
-
-      const heading = document.createElement('h3');
-      heading.textContent = location.name;
-
-      const description = document.createElement('p');
-      description.textContent = location.description;
-
-      const handleSelection = () => {
-        selectCard(card);
-      };
-
-      card.addEventListener('click', handleSelection);
-      card.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          handleSelection();
-        }
-      });
-
-      image.addEventListener('load', scheduleConnectorUpdate);
-
-      card.append(image, typeLabel, heading, description);
-      return card;
-    }
-
-    function addLocation(location) {
-      const palette = TYPE_COLORS[location.type] || TYPE_COLORS.cave;
-
-      const circle = L.circle(location.coords, {
-        radius: 6000,
-        color: palette.stroke,
-        fillColor: palette.fill,
-        fillOpacity: 0.5,
-        weight: 2
-      }).addTo(map);
-
-      const marker = L.marker(location.coords).addTo(map);
-
-      const popupContent = `
-        <article class="popup-content">
-          <img src="${location.image}" alt="${location.name} trip photo">
-          <span class="popup-type">${location.type === 'canyon' ? 'Canyon' : 'Cave system'}</span>
-          <h3 class="popup-title">${location.name}</h3>
-          <p class="popup-desc">${location.description}</p>
-        </article>
-      `;
-
-      circle.bindPopup(popupContent);
-      marker.bindPopup(popupContent);
-
-      featureGroup.addLayer(circle);
-      featureGroup.addLayer(marker);
-
-      const card = buildCard(location, marker);
-      columns[location.side].appendChild(card);
-
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.dataset.type = location.type;
-      connectorLayer.appendChild(path);
-
-      const connectorEntry = {
-        marker,
-        card,
-        path,
-        side: location.side,
-        column: location.column,
-        row: location.row,
-        location
-      };
-
-      connectors.push(connectorEntry);
-      cardRegistry.set(card, connectorEntry);
-    }
-
-    grouped.left.forEach(addLocation);
-    grouped.right.forEach(addLocation);
-
-    if (featureGroup.getLayers().length > 0) {
-      map.fitBounds(featureGroup.getBounds().pad(0.25));
-    }
-    scheduleConnectorUpdate();
-
-    function updateConnectors() {
-      if (!mapFrame.isConnected) {
-        return;
-      }
-
-      const isStacked = window.matchMedia('(max-width: 900px)').matches;
-      if (isStacked) {
-        connectorLayer.setAttribute('width', 0);
-        connectorLayer.setAttribute('height', 0);
-        connectors.forEach(entry => {
-          entry.path.setAttribute('d', '');
-        });
-        return;
-      }
-
-      const frameRect = mapFrame.getBoundingClientRect();
-      const width = frameRect.width;
-      const height = frameRect.height;
-
-      connectorLayer.setAttribute('viewBox', `0 0 ${width} ${height}`);
-      connectorLayer.setAttribute('width', width);
-      connectorLayer.setAttribute('height', height);
-
-      connectors.forEach(entry => {
-        if (
-          !entry.card.isConnected ||
-          entry.card.classList.contains('is-hidden') ||
-          entry.path.classList.contains('is-hidden')
-        ) {
-          entry.path.setAttribute('d', '');
-          return;
-        }
-
-        const markerPoint = map.latLngToContainerPoint(entry.marker.getLatLng());
-        if (!markerPoint) {
-          entry.path.setAttribute('d', '');
-          return;
-        }
-
-        const cardRect = entry.card.getBoundingClientRect();
-        const cardX = entry.side === 'left'
-          ? cardRect.right - frameRect.left
-          : cardRect.left - frameRect.left;
-        const verticalShift = entry.column === 1 ? -12 : 12;
-        const cardY = cardRect.top + cardRect.height / 2 - frameRect.top + verticalShift;
-
-        const elbowOffset = entry.side === 'left'
-          ? 40 + (2 - entry.column) * 18
-          : 40 + (entry.column - 1) * 18;
-
-        const elbowX = entry.side === 'left'
-          ? Math.min(cardX + elbowOffset, width)
-          : Math.max(cardX - elbowOffset, 0);
-
-        const approachX = entry.side === 'left'
-          ? Math.max(markerPoint.x - 24, elbowX)
-          : Math.min(markerPoint.x + 24, elbowX);
-
-        const control1X = (cardX + elbowX) / 2;
-        const control2X = (approachX + markerPoint.x) / 2;
-
-        const pathData = `M ${cardX} ${cardY} C ${control1X} ${cardY} ${control2X} ${markerPoint.y} ${markerPoint.x} ${markerPoint.y}`;
-
-        entry.path.setAttribute('d', pathData);
-      });
-    }
-
-    let scheduled = false;
-    function scheduleConnectorUpdate() {
-      if (scheduled) return;
-      scheduled = true;
-      requestAnimationFrame(() => {
-        scheduled = false;
-        updateConnectors();
-      });
-    }
-
-    map.on('move zoom resize', scheduleConnectorUpdate);
-    map.on('layeradd', scheduleConnectorUpdate);
-    map.whenReady(scheduleConnectorUpdate);
-    window.addEventListener('resize', scheduleConnectorUpdate);
-    window.addEventListener('load', scheduleConnectorUpdate);
-
-    map.on('click', () => {
-      if (activeCardEntry) {
-        clearActiveCard();
-      }
-    });
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && activeCardEntry) {
-        clearActiveCard();
-      }
-    });
-  </script>
+  `;
+  marker.bindPopup(popup);
+
+  const card=buildCard(l,marker,side);
+  mapCols[side].append(card);
+
+  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+  path.dataset.type=l.type;
+  connectorLayer.append(path);
+  connectors.push({card,marker,path,side});
+  registry.set(card,{marker,path,side});
+}
+
+leftGroup.forEach(l=>addLoc(l,"left"));
+rightGroup.forEach(l=>addLoc(l,"right"));
+map.fitBounds(L.featureGroup(rawLocations.map(r=>L.marker(r.coords))).getBounds().pad(0.25));
+
+function toggleCard(card,loc,marker){
+  if(activeEntry&&activeEntry.card===card){reset();return;}
+  reset(false);
+  activeEntry={card,marker};
+  card.classList.add("is-active");
+  openPopupWithOffset(marker,loc.coords);
+  updateConnectors();
+}
+
+// Keep marker near bottom (popup ~80% height)
+function openPopupWithOffset(marker,latlng){
+  const zoomLevel=Math.max(map.getZoom(),9);
+  const mapSize=map.getSize();
+  const offsetY=mapSize.y*0.3;
+  const projected=map.project(latlng,zoomLevel);
+  const adjusted=projected.subtract([0,offsetY]);
+  const target=map.unproject(adjusted,zoomLevel);
+  map.flyTo(target,zoomLevel,{duration:1});
+  marker.openPopup();
+}
+
+function reset(schedule=true){
+  document.querySelectorAll(".location-card").forEach(c=>c.classList.remove("is-active"));
+  connectors.forEach(c=>c.path.setAttribute("d",""));
+  activeEntry=null;
+  if(schedule)updateConnectors();
+}
+
+function updateConnectors(){
+  const frame=document.querySelector(".map-frame").getBoundingClientRect();
+  connectorLayer.setAttribute("viewBox",`0 0 ${frame.width} ${frame.height}`);
+  connectors.forEach(e=>{
+    if(!e.card.isConnected)return;
+    const p=map.latLngToContainerPoint(e.marker.getLatLng());
+    const r=e.card.getBoundingClientRect();
+    const x=e.side==="left"?r.right-frame.left:r.left-frame.left;
+    const y=r.top+r.height/2-frame.top;
+    const ex=e.side==="left"?x+40:x-40;
+    e.path.setAttribute("d",`M ${x} ${y} L ${ex} ${y} L ${p.x} ${p.y}`);
+  });
+}
+
+map.on("move zoom",updateConnectors);
+window.addEventListener("resize",updateConnectors);
+</script>
 </body>
 </html>
