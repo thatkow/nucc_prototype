@@ -1,75 +1,329 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Leaflet Quick Start</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NUCC Trip Locations Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
 
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-sA+2lGgIJ2RFYz9t7VDaRaoTyIhiikPJ9ynCAt9eA+o="
-      crossorigin=""
-    />
+    * {
+      box-sizing: border-box;
+    }
 
-    <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: clamp(1rem, 3vw, 2rem);
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(255, 215, 0, 0.25), rgba(0, 0, 0, 0.85));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(6px);
+      position: relative;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    header p {
+      margin: 0.75rem auto 0;
+      max-width: min(60ch, 90vw);
+      font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    #map {
+      width: 100%;
+      flex: 1;
+    }
+
+    .leaflet-container {
+      font-size: 0.95rem;
+    }
+
+    .popup-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: min(220px, 60vw);
+    }
+
+    .popup-content img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .popup-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .popup-type {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .popup-desc {
+      margin: 0;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.4;
+    }
+
+    .legend {
+      position: absolute;
+      right: clamp(0.75rem, 2.5vw, 1.75rem);
+      bottom: clamp(0.75rem, 3vw, 2rem);
+      background: rgba(15, 15, 15, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      display: grid;
+      gap: 0.5rem;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.85rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      z-index: 400;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 1.25rem 1rem;
       }
 
-      #map {
-        height: 100%;
+      .popup-content {
+        width: min(200px, 70vw);
       }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
 
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-o9N1j7kGStGkWdEoxzsxmEt4iWP7IjL8JwNskmE7ykA="
-      crossorigin=""
-    ></script>
-    <script>
-      const map = L.map('map').setView([51.505, -0.09], 13);
+      .legend {
+        font-size: 0.75rem;
+        gap: 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>NUCC trip destinations</h1>
+    <p>
+      Explore the caves and canyons that NUCC has visited in recent trip reports. Zoom in to find each site, then tap a marker
+      to see a highlight photo and a short note from the corresponding trip story.
+    </p>
+  </header>
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+  <div id="map" role="region" aria-label="Interactive map of NUCC trip destinations"></div>
 
-      const marker = L.marker([51.5, -0.09]).addTo(map);
+  <div class="legend" aria-hidden="true">
+    <div class="legend-row">
+      <span class="legend-swatch" style="background: rgba(0, 140, 255, 0.7);"></span>
+      <span>Canyon destinations</span>
+    </div>
+    <div class="legend-row">
+      <span class="legend-swatch" style="background: rgba(240, 90, 30, 0.65);"></span>
+      <span>Cave systems</span>
+    </div>
+  </div>
 
-      const circle = L.circle([51.508, -0.11], {
-        color: 'red',
-        fillColor: '#f03',
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    const map = L.map('map', {
+      center: [-35.3, 149.1],
+      zoom: 6,
+      scrollWheelZoom: true,
+      dragging: true,
+      zoomControl: true
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const locations = [
+      {
+        name: 'Jenolan Caves',
+        coords: [-33.8204, 150.0208],
+        type: 'cave',
+        image: 'images/caving/IMG_0325.jpg',
+        description:
+          '2019’s Jenolan Jaunt split teams between Mammoth, Aladdin and Hennings caves while sharing the beloved cavers’ cottage.'
+      },
+      {
+        name: 'Tuglow Caves',
+        coords: [-33.978, 149.932],
+        type: 'cave',
+        image: 'images/caving/PXL_20241207_045338331.MP.jpg',
+        description:
+          'Trip listings keep inviting NUCC members on dedicated Tuglow Caving weekends.'
+      },
+      {
+        name: 'Yagby Caves',
+        coords: [-35.9, 148.9],
+        type: 'cave',
+        image: 'images/caving/PXL_20241013_020527445.jpg',
+        description:
+          'Snowy Yagby weekends mean trudging through drifts to reach East Deep Creek, Restoration Cave and other decorated chambers.'
+      },
+      {
+        name: 'Wyanbene Caves',
+        coords: [-35.8798, 149.986],
+        type: 'cave',
+        image: 'images/caving/PXL_20241013_032228590.jpg',
+        description:
+          'Streamway pushes at Wyanbene take teams through chill crawls to the Helictite Chamber and the towering Gunbarrel Aven.'
+      },
+      {
+        name: 'Cooleman Plains',
+        coords: [-35.56, 148.52],
+        type: 'cave',
+        image: 'images/caving/PXL_20241206_221557516.MP.jpg',
+        description:
+          'Cooleman Plains Easter camps link up with SUSS and ROC while surveying Black Range Cave and revisiting Cooleman Main.'
+      },
+      {
+        name: 'Wee Jasper',
+        coords: [-35.107, 148.689],
+        type: 'cave',
+        image: 'images/caving/PXL_20241207_000415603.jpg',
+        description:
+          'Dip Cave days at Wee Jasper tackle Series 4 and 5, Dismal Chamber and the classic crawl out the Rubbish Tip entrance.'
+      },
+      {
+        name: 'Buchan Caves',
+        coords: [-37.495, 148.168],
+        type: 'cave',
+        image: 'images/caving/PXL_20241206_223021079.jpg',
+        description:
+          'Club calendars continue to advertise Buchan Caving weekends for NUCC members.'
+      },
+      {
+        name: 'Bungonia Caves',
+        coords: [-34.776, 150.006],
+        type: 'cave',
+        image: 'images/caving/PXL_20241013_012316349.jpg',
+        description:
+          'Beginner Bungonia trips funnel new cavers through B4-5, squeezes near Root 19 and the Shoalhaven lookouts.'
+      },
+      {
+        name: 'Mount Fairy Karst',
+        coords: [-35.018, 149.583],
+        type: 'cave',
+        image: 'images/caving/PXL_20241206_223338198.jpg',
+        description:
+          'Mount Fairy missions revive NUCC’s surveying habit, squeezing past new finds while mapping the main cave system.'
+      },
+      {
+        name: 'Macquarie Pass Canyon',
+        coords: [-34.5634, 150.6591],
+        type: 'canyon',
+        image: 'images/canyoning/IMG_3038.jpeg',
+        description:
+          'Regular Macquarie Pass canyoning listings stay on the NUCC calendar for keen members.'
+      },
+      {
+        name: 'Jerrara Canyon',
+        coords: [-34.7922, 149.9994],
+        type: 'canyon',
+        image: 'images/canyoning/IMG_3067.jpeg',
+        description:
+          'Jerrara Canyon outings stay on the NUCC program for beginners keen on a friendly creek run.'
+      }
+    ];
+
+    const featureGroup = L.featureGroup();
+
+    const TYPE_COLORS = {
+      canyon: {
+        stroke: '#008cff',
+        fill: 'rgba(0, 140, 255, 0.35)'
+      },
+      cave: {
+        stroke: '#f05a1e',
+        fill: 'rgba(240, 90, 30, 0.3)'
+      }
+    };
+
+    locations.forEach(location => {
+      const colors = TYPE_COLORS[location.type] || TYPE_COLORS.cave;
+
+      const circle = L.circle(location.coords, {
+        radius: 6000,
+        color: colors.stroke,
+        fillColor: colors.fill,
         fillOpacity: 0.5,
-        radius: 500
+        weight: 2
       }).addTo(map);
 
-      const polygon = L.polygon([
-        [51.509, -0.08],
-        [51.503, -0.06],
-        [51.51, -0.047]
-      ]).addTo(map);
+      const marker = L.marker(location.coords).addTo(map);
 
-      marker.bindPopup('<b>Hello world!</b><br>I am a popup.').openPopup();
-      circle.bindPopup('I am a circle.');
-      polygon.bindPopup('I am a polygon.');
+      const popupContent = `
+        <article class="popup-content">
+          <img src="${location.image}" alt="${location.name} trip photo">
+          <span class="popup-type">${location.type === 'canyon' ? 'Canyon' : 'Cave system'}</span>
+          <h3 class="popup-title">${location.name}</h3>
+          <p class="popup-desc">${location.description}</p>
+        </article>
+      `;
 
-      const popup = L.popup();
+      circle.bindPopup(popupContent);
+      marker.bindPopup(popupContent);
 
-      function onMapClick(e) {
-        popup
-          .setLatLng(e.latlng)
-          .setContent(`You clicked the map at ${e.latlng.toString()}`)
-          .openOn(map);
-      }
+      featureGroup.addLayer(circle);
+      featureGroup.addLayer(marker);
+    });
 
-      map.on('click', onMapClick);
-    </script>
-  </body>
+    featureGroup.addTo(map);
+    map.fitBounds(featureGroup.getBounds().pad(0.2));
+
+    L.control.scale({
+      position: 'bottomleft'
+    }).addTo(map);
+  </script>
+</body>
 </html>
