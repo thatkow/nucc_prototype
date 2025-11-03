@@ -1,113 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tuglow Caving Adventure</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUCC Trip Location Highlights</title>
   <style>
+    :root {
+      color-scheme: dark;
+    }
+    * {
+      box-sizing: border-box;
+    }
     body {
-      font-family: "Segoe UI", system-ui, sans-serif;
       margin: 0;
-      background: #000;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #070809 0%, #010102 55%, #000 100%);
       color: #f5f5f5;
     }
     header {
       text-align: center;
-      padding: 2rem;
-      background: radial-gradient(circle at center, #111 0%, #000 100%);
-      color: #eee;
-      border-bottom: 1px solid #333;
+      padding: 2.5rem 1rem 2rem;
+      background: rgba(5, 8, 10, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .section {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 3rem;
-      gap: 2rem;
+    header h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(2rem, 3vw, 3rem);
     }
-    .section:nth-child(even) {
-      flex-direction: row-reverse;
-      background: #111;
-    }
-    .section img {
-      width: 45%;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    }
-    .section div {
-      width: 50%;
-    }
-    h2 {
-      color: #4db6ac;
-    }
-    p {
+    header p {
+      margin: 0 auto;
+      max-width: 640px;
       line-height: 1.6;
+      color: rgba(255, 255, 255, 0.75);
     }
-    @media (max-width: 800px) {
-      .section {
-        flex-direction: column;
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      padding: 3rem clamp(1rem, 5vw, 4rem) 4rem;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    nav a {
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      color: #0ff3f3;
+      border: 1px solid rgba(0, 191, 255, 0.4);
+      background: rgba(9, 28, 38, 0.6);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    nav a:hover,
+    nav a:focus {
+      transform: translateY(-2px);
+      border-color: rgba(0, 191, 255, 0.9);
+    }
+    .location-section {
+      display: grid;
+      grid-template-columns: minmax(240px, 420px) minmax(240px, 1fr);
+      gap: clamp(1.5rem, 4vw, 3rem);
+      align-items: center;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      background: rgba(6, 10, 14, 0.8);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .location-section:nth-of-type(even) {
+      grid-template-columns: minmax(240px, 1fr) minmax(240px, 420px);
+    }
+    .location-section:nth-of-type(even) .location-media {
+      order: 2;
+    }
+    .location-media img {
+      width: 100%;
+      height: clamp(220px, 28vw, 320px);
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+    .location-copy h2 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+      color: #4dd9c0;
+    }
+    .location-copy p {
+      margin: 0 0 1rem;
+      line-height: 1.65;
+      color: rgba(245, 245, 245, 0.78);
+    }
+    .location-copy .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(28, 84, 104, 0.85);
+      color: #f0fcff;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: 1px solid rgba(0, 191, 255, 0.5);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .location-copy .map-link:hover,
+    .location-copy .map-link:focus {
+      transform: translateY(-2px);
+      border-color: rgba(0, 191, 255, 0.9);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 900px) {
+      main {
+        padding: 2.5rem 1.25rem 3rem;
       }
-      .section img, .section div {
-        width: 100%;
+      .location-section,
+      .location-section:nth-of-type(even) {
+        grid-template-columns: 1fr;
+      }
+      .location-section:nth-of-type(even) .location-media {
+        order: initial;
       }
     }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>Tuglow Caving Adventure</h1>
-    <p>Exploring the underground world beneath the limestone plains of Tuglow</p>
+    <h1>NUCC Trip Location Highlights</h1>
+    <p>
+      This page collects a handful of our favourite NUCC destinations so that recently added
+      buttons on the <a href="../map.html" style="color:#7fe8ff;">interactive map</a> have a home to point to.
+      Treat it as a placeholder until each spot receives full trip reports, photo galleries, and rigging notes.
+    </p>
+    <nav aria-label="Highlighted locations">
+      <a href="#tuglow-caves">Tuglow Caves</a>
+      <a href="#jenolan-caves">Jenolan Caves</a>
+      <a href="#bungonia-caves">Bungonia Caves</a>
+      <a href="#wee-jasper">Wee Jasper</a>
+      <a href="#macquarie-pass">Macquarie Pass Canyon</a>
+      <a href="#bendethera">Bendethera Caves</a>
+    </nav>
   </header>
 
-  <section class="section">
-    <img src="https://images.unsplash.com/photo-1606220945770-3e5c3a4796aa" alt="Driving to Tuglow">
-    <div>
-      <h2>1. The Drive and Hike In</h2>
-      <p>Leaving the main road, we wound through ridgelines and valleys, the bush thickening as the track narrowed. The final stretch was on foot — packs heavy, the forest silent except for the crunch of gravel and the rustle of wind. Tuglow’s limestone cliffs appeared suddenly, marking the hidden entrance to the caves below.</p>
-    </div>
-  </section>
+  <main>
+    <section class="location-section" id="tuglow-caves">
+      <div class="location-media">
+        <img src="../images/caving/PXL_20241207_045338331.MP.jpg" alt="Descending ropes inside Tuglow Caves" />
+      </div>
+      <div class="location-copy">
+        <h2>Tuglow Caves</h2>
+        <p>
+          Tuglow’s pitches drop straight into broad stream passages that keep you moving between ropework, crawls,
+          and echoing chambers. The recent map tooltip links here while we gather SRT topo sketches, so expect more
+          detailed rigging beta and water level notes soon.
+        </p>
+        <a class="map-link" href="../map.html#tuglow" rel="noopener">View Tuglow on the Map ↗</a>
+      </div>
+    </section>
 
-  <section class="section">
-    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b" alt="Rigging rope at cave entrance">
-    <div>
-      <h2>2. Rigging the Entrance for SRT</h2>
-      <p>At the mouth of the cave, the air turned cool and damp. We rigged ropes from sturdy limestone ledges, double-checking anchors before the first descent. The distant echo of water hinted at the vast network below as we clipped in and descended into darkness.</p>
-    </div>
-  </section>
+    <section class="location-section" id="jenolan-caves">
+      <div class="location-media">
+        <img src="../images/caving/IMG_0325.jpg" alt="Cavers exploring Jenolan passage" />
+      </div>
+      <div class="location-copy">
+        <h2>Jenolan Caves</h2>
+        <p>
+          From Mammoth’s boulder chokes to Aladdin’s sculpted chambers, Jenolan is where many NUCC members first taste
+          proper vertical caving. This placeholder will soon expand with trip leader notes, navigation tips, and a
+          gallery drawn from decades of visits.
+        </p>
+        <a class="map-link" href="../map.html#jenolan" rel="noopener">View Jenolan on the Map ↗</a>
+      </div>
+    </section>
 
-  <section class="section">
-    <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b" alt="Following underground creek">
-    <div>
-      <h2>3. The Underground Creek</h2>
-      <p>Deep below, a trickle turned into a stream that guided our path. We followed the underground creek through twisting chambers, climbing over slick boulders and crawling beneath low ceilings. Each passage led us further into Tuglow’s hidden heart.</p>
-    </div>
-  </section>
+    <section class="location-section" id="bungonia-caves">
+      <div class="location-media">
+        <img src="../images/caving/PXL_20241013_012316349.jpg" alt="Group gearing up at Bungonia" />
+      </div>
+      <div class="location-copy">
+        <h2>Bungonia Caves</h2>
+        <p>
+          Bungonia offers a choose-your-own-adventure mix of squeezes, ladders, and skylit river crossings. The map tooltip
+          now lands here so we can later attach printable PDFs for J5 and J6, plus packing lists for beginner weekends.
+        </p>
+        <a class="map-link" href="../map.html#bungonia" rel="noopener">View Bungonia on the Map ↗</a>
+      </div>
+    </section>
 
-  <section class="section">
-    <img src="https://images.unsplash.com/photo-1563261528-1e0d2c937d9f" alt="Underground lake">
-    <div>
-      <h2>4. The Underground Lake</h2>
-      <p>The passage opened into a vast chamber where an underground lake shimmered under our lights. The surface was mirror-still, reflecting the jagged ceiling like glass. We paused here, switching off our lamps — total darkness, total silence — a world untouched.</p>
-    </div>
-  </section>
+    <section class="location-section" id="wee-jasper">
+      <div class="location-media">
+        <img src="../images/caving/PXL_20241207_000415603.jpg" alt="Formation inside Dip Cave at Wee Jasper" />
+      </div>
+      <div class="location-copy">
+        <h2>Wee Jasper</h2>
+        <p>
+          The Dip Cave system keeps delivering with crystal pools, tight crawls, and endless side leads. Expect this space to
+          receive survey overlays and camping logistics so newcomers can plan a relaxed weekend around the Goodradigbee River.
+        </p>
+        <a class="map-link" href="../map.html#wee-jasper" rel="noopener">View Wee Jasper on the Map ↗</a>
+      </div>
+    </section>
 
-  <section class="section">
-    <img src="https://images.unsplash.com/photo-1612366178855-50f07e317e21" alt="Tall aven in Tuglow cave">
-    <div>
-      <h2>5. The Tall Aven</h2>
-      <p>Further along, a tall aven stretched upward into the unseen. Its walls were carved by centuries of dripping water, streaked with minerals and glistening under our headlamps. A reminder that even in the depths, the world above still leaves its mark.</p>
-    </div>
-  </section>
+    <section class="location-section" id="macquarie-pass">
+      <div class="location-media">
+        <img src="../images/canyoning/IMG_3038.jpeg" alt="Abseiling through Macquarie Pass Canyon waterfall" />
+      </div>
+      <div class="location-copy">
+        <h2>Macquarie Pass Canyon</h2>
+        <p>
+          When the weather heats up, NUCC heads to Mac Pass for refreshing swims and photogenic waterfall abseils. We will be
+          adding canyon topo sketches, approach notes, and hydrology pointers once the canyoning crew finishes compiling them.
+        </p>
+        <a class="map-link" href="../map.html#macquarie-pass" rel="noopener">View Mac Pass on the Map ↗</a>
+      </div>
+    </section>
 
-  <section class="section">
-    <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429" alt="Resurfacing from cave">
-    <div>
-      <h2>6. Resurfacing and Heading Home</h2>
-      <p>Climbing back up the entrance pitch, the first glimmer of daylight felt unreal. Emerging into the crisp air, we packed our gear and shared quiet smiles — tired, muddy, and exhilarated. Tuglow had revealed just a glimpse of its underground wonder.</p>
-    </div>
-  </section>
+    <section class="location-section" id="bendethera">
+      <div class="location-media">
+        <img src="../images/caving/IMG_1432.jpg" alt="Caver shining light upward inside Bendethera" />
+      </div>
+      <div class="location-copy">
+        <h2>Bendethera Caves</h2>
+        <p>
+          Bendethera is a multi-day Deua River expedition featuring remote camping, long stream crawls, and hidden dry sections.
+          This placeholder lets the new map buttons resolve somewhere useful until we publish the full expedition logistics pack.
+        </p>
+        <a class="map-link" href="../map.html#bendethera" rel="noopener">View Bendethera on the Map ↗</a>
+      </div>
+    </section>
+  </main>
 
+  <footer>
+    Looking for something else? Use the map to explore all current destinations—tooltips will keep linking back here
+    until each trip gains its own dedicated page.
+  </footer>
 </body>
 </html>
-
