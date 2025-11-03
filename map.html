@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>NUCC Trip Locations Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<style>
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+html,body {
+  height:100%; margin:0;
+  font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:radial-gradient(circle at top,#070809 0%,#020203 55%,#020203 100%);
+  color:#f5f5f5;
+}
+body{display:flex;flex-direction:column;overflow:hidden;}
+header{padding:1rem 2rem;text-align:center;background:rgba(10,10,10,0.8);border-bottom:1px solid rgba(255,255,255,0.08);}
+main{flex:1;position:relative;display:flex;}
+#map{width:100%;height:100%;}
+.map-frame{position:relative;flex:1;}
+.card-column{
+  position:absolute;top:1rem;bottom:1rem;
+  width:18%;
+  display:flex;flex-direction:column;justify-content:space-between;
+  pointer-events:none;z-index:410;
+}
+.card-column.left{left:1rem;}
+.card-column.right{right:1rem;align-items:flex-end;}
+.location-card{
+  width:100%;display:flex;align-items:center;
+  background:rgba(10,12,14,0.88);
+  border:1px solid rgba(255,255,255,0.12);border-radius:12px;
+  padding:0.4rem;pointer-events:auto;cursor:pointer;
+  transition:transform .2s ease,border-color .2s ease;
+  min-height:80px;
+}
+.location-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.3);}
+.location-card img{
+  width:90px;height:70px;object-fit:cover;border-radius:8px;flex-shrink:0;
+}
+.card-column.left .location-card img{margin-right:0.6rem;}
+.card-column.right .location-card img{order:2;margin-left:0.6rem;}
+.location-info{display:flex;flex-direction:column;flex:1;}
+.card-column.right .location-info{text-align:right;}
+.location-card h3{margin:0;font-size:0.9rem;}
+.location-card p{margin:0;font-size:0.8rem;line-height:1.3;color:rgba(255,255,255,0.75);}
+.location-card.is-active{border-color:rgba(0,191,255,0.7);}
+.connector-layer{position:absolute;inset:0;pointer-events:none;z-index:405;}
+.connector-layer path{fill:none;stroke-width:2px;opacity:.9;}
+.connector-layer path[data-type="canyon"]{stroke:rgba(0,140,255,.85);}
+.connector-layer path[data-type="cave"]{stroke:rgba(240,90,30,.85);}
+@media(max-width:900px){
+  .card-column{position:static;width:auto;flex-direction:column;align-items:stretch;}
+  .location-card{flex-direction:row;}
+}
+</style>
+</head>
+<body>
+<header><h1>NUCC Trip Destinations</h1></header>
+<main>
+  <div class="map-frame">
+    <div id="map"></div>
+    <svg class="connector-layer"></svg>
+    <section class="card-column left"></section>
+    <section class="card-column right"></section>
+  </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const map=L.map("map",{center:[-35.3,149.1],zoom:6});
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+ {maxZoom:18,attribution:"© OpenStreetMap contributors"}).addTo(map);
+
+const TYPE_COLORS={canyon:{stroke:"#008cff",fill:"rgba(0,140,255,0.3)"},
+                   cave:{stroke:"#f05a1e",fill:"rgba(240,90,30,0.3)"}};
+
+const rawLocations=[
+ {name:"Jenolan Caves",coords:[-33.8204,150.0208],type:"cave",image:"images/caving/IMG_0325.jpg",description:"Mammoth and Aladdin trips."},
+ {name:"Tuglow Caves",coords:[-33.978,149.932],type:"cave",image:"images/caving/PXL_20241207_045338331.MP.jpg",description:"Stream passages classic."},
+ {name:"Macquarie Pass Canyon",coords:[-34.5634,150.6591],type:"canyon",image:"images/canyoning/IMG_3038.jpeg",description:"Waterfall canyon trips."},
+ {name:"Bungonia Caves",coords:[-34.776,150.006],type:"cave",image:"images/caving/PXL_20241013_012316349.jpg",description:"Beginner Bungonia squeezes."},
+ {name:"Jerrara Canyon",coords:[-34.7922,149.9994],type:"canyon",image:"images/canyoning/IMG_3067.jpeg",description:"Gentle abseil canyon."},
+ {name:"Buchan Caves",coords:[-37.495,148.168],type:"cave",image:"images/caving/PXL_20241206_223021079.jpg",description:"Longer VIC roadtrip caves."},
+ {name:"Mount Fairy Karst",coords:[-35.018,149.583],type:"cave",image:"images/caving/PXL_20241206_223338198.jpg",description:"Surveying system."},
+ {name:"Wee Jasper",coords:[-35.107,148.689],type:"cave",image:"images/caving/PXL_20241207_000415603.jpg",description:"Dip Cave crawls."},
+ {name:"Cooleman Plains",coords:[-35.56,148.52],type:"cave",image:"images/caving/PXL_20241206_221557516.MP.jpg",description:"Black Range & Main."},
+ {name:"Wyanbene Caves",coords:[-35.8798,149.986],type:"cave",image:"images/caving/PXL_20241013_032228590.jpg",description:"Gunbarrel Aven trip."},
+ {name:"Yagby Caves",coords:[-35.9,148.9],type:"cave",image:"images/caving/PXL_20241013_020527445.jpg",description:"Snowy Yagby weekend."},
+ {name:"Bendethera Caves",coords:[-36.032,149.619],type:"cave",image:"images/caving/IMG_1432.jpg",description:"Deua valley expedition."}
+];
+
+// Compute median longitude
+const sortedByLon=[...rawLocations].sort((a,b)=>a.coords[1]-b.coords[1]);
+const midIndex=Math.floor(sortedByLon.length/2);
+const medianLon=sortedByLon.length%2===0
+  ? (sortedByLon[midIndex-1].coords[1]+sortedByLon[midIndex].coords[1])/2
+  : sortedByLon[midIndex].coords[1];
+
+// Split into left/right arrays and sort vertically by latitude (north → top)
+const leftGroup=rawLocations.filter(l=>l.coords[1]<medianLon).sort((a,b)=>b.coords[0]-a.coords[0]);
+const rightGroup=rawLocations.filter(l=>l.coords[1]>=medianLon).sort((a,b)=>b.coords[0]-a.coords[0]);
+
+const mapCols={left:document.querySelector(".card-column.left"),
+               right:document.querySelector(".card-column.right")};
+const connectors=[],registry=new Map();
+const connectorLayer=document.querySelector(".connector-layer");
+let activeEntry=null;
+
+function buildCard(l,m,side){
+  const c=document.createElement("article");
+  c.className="location-card";
+  const img=document.createElement("img");img.src=l.image;img.alt=l.name;
+  const info=document.createElement("div");info.className="location-info";
+  info.innerHTML=`<h3>${l.name}</h3><p>${l.description}</p>`;
+  if(side==="left")c.append(img,info); else c.append(info,img);
+  c.onclick=()=>toggleCard(c,l,m);
+  return c;
+}
+
+function addLoc(l, side) {
+  const col = TYPE_COLORS[l.type];
+  // Removed the region circle
+  const marker = L.marker(l.coords).addTo(map);
+
+  // Popup uses same image as card
+  const popup = `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.6rem;width:min(260px,70vw);text-align:center;background:#f9f9f9;padding:0.4rem;border-radius:10px;">
+      <img src="${l.image}" alt="${l.name}" style="width:100%;height:130px;object-fit:cover;border-radius:8px;">
+      <h3 style="margin:0.2rem 0;color:#000;">${l.name}</h3>
+      <p style="margin:0;font-size:0.9rem;line-height:1.4;color:#000;">More photos, trip reports, and statistics for this location will appear here in future updates.</p>
+    </div>
+  `;
+  marker.bindPopup(popup);
+
+  const card = buildCard(l, marker, side);
+  mapCols[side].append(card);
+
+  // Connector setup
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.dataset.type = l.type;
+  connectorLayer.append(path);
+  connectors.push({ card, marker, path, side });
+  registry.set(card, { marker, path, side });
+
+  // 🔹 Make marker click behave like card click
+  marker.on("click", () => toggleCard(card, l, marker));
+}
+
+
+
+leftGroup.forEach(l=>addLoc(l,"left"));
+rightGroup.forEach(l=>addLoc(l,"right"));
+map.fitBounds(L.featureGroup(rawLocations.map(r=>L.marker(r.coords))).getBounds().pad(0.25));
+
+function toggleCard(card,loc,marker){
+  if(activeEntry&&activeEntry.card===card){reset();return;}
+  reset(false);
+  activeEntry={card,marker};
+  card.classList.add("is-active");
+  openPopupWithOffset(marker,loc.coords);
+  updateConnectors();
+}
+
+// Keep marker near bottom (popup ~80% height)
+function openPopupWithOffset(marker,latlng){
+  const zoomLevel=Math.max(map.getZoom(),9);
+  const mapSize=map.getSize();
+  const offsetY=mapSize.y*0.3;
+  const projected=map.project(latlng,zoomLevel);
+  const adjusted=projected.subtract([0,offsetY]);
+  const target=map.unproject(adjusted,zoomLevel);
+  map.flyTo(target,zoomLevel,{duration:1});
+  marker.openPopup();
+}
+
+function reset(schedule=true){
+  document.querySelectorAll(".location-card").forEach(c=>c.classList.remove("is-active"));
+  connectors.forEach(c=>c.path.setAttribute("d",""));
+  activeEntry=null;
+  if(schedule)updateConnectors();
+}
+
+function updateConnectors() {
+  const popupOpen = map._popup && map._popup.isOpen();
+
+  // Toggle visibility of each connector path
+  connectors.forEach(e => {
+    e.path.style.visibility = popupOpen ? "hidden" : "visible";
+  });
+
+  if (popupOpen) return; // skip drawing when popup open
+
+  const frame = document.querySelector(".map-frame").getBoundingClientRect();
+  connectorLayer.setAttribute("viewBox", `0 0 ${frame.width} ${frame.height}`);
+
+  connectors.forEach(e => {
+    if (!e.card.isConnected) return;
+    const p = map.latLngToContainerPoint(e.marker.getLatLng());
+    const r = e.card.getBoundingClientRect();
+    const x = e.side === "left" ? r.right - frame.left : r.left - frame.left;
+    const y = r.top + r.height / 2 - frame.top;
+    const ex = e.side === "left" ? x + 40 : x - 40;
+    e.path.setAttribute("d", `M ${x} ${y} L ${ex} ${y} L ${p.x} ${p.y}`);
+  });
+}
+
+// --- Ensure connectors reappear instantly after popup closes ---
+map.on("popupclose", () => {
+  // small timeout ensures popup DOM is gone before redrawing
+  setTimeout(() => {
+    connectors.forEach(e => (e.path.style.visibility = "visible"));
+    updateConnectors();
+  }, 100);
+});
+
+
+
+
+// --- Connector update handling ---
+map.on("move zoom", updateConnectors);
+window.addEventListener("resize", updateConnectors);
+
+// 🔹 Hide lines immediately when map starts moving (panning or zooming)
+map.on("movestart zoomstart", () => {
+  connectors.forEach(e => (e.path.style.visibility = "hidden"));
+});
+
+// 🔹 Redraw and show lines once movement/zooming finishes
+map.on("moveend zoomend", () => {
+  connectors.forEach(e => (e.path.style.visibility = "visible"));
+  updateConnectors();
+});
+
+window.addEventListener("resize",updateConnectors);
+</script>
+</body>
+</html>
