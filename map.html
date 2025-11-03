@@ -77,18 +77,18 @@ const TYPE_COLORS={canyon:{stroke:"#008cff",fill:"rgba(0,140,255,0.3)"},
                    cave:{stroke:"#f05a1e",fill:"rgba(240,90,30,0.3)"}};
 
 const rawLocations=[
- {name:"Jenolan Caves",coords:[-33.8204,150.0208],type:"cave",image:"images/caving/IMG_0325.jpg",description:"Mammoth and Aladdin trips."},
- {name:"Tuglow Caves",coords:[-33.978,149.932],type:"cave",image:"images/caving/PXL_20241207_045338331.MP.jpg",description:"Stream passages classic."},
- {name:"Macquarie Pass Canyon",coords:[-34.5634,150.6591],type:"canyon",image:"images/canyoning/IMG_3038.jpeg",description:"Waterfall canyon trips."},
- {name:"Bungonia Caves",coords:[-34.776,150.006],type:"cave",image:"images/caving/PXL_20241013_012316349.jpg",description:"Beginner Bungonia squeezes."},
+ {name:"Jenolan Caves",coords:[-33.8204,150.0208],type:"cave",image:"images/caving/IMG_0325.jpg",description:"Mammoth and Aladdin trips.",placeholderId:"jenolan-caves"},
+ {name:"Tuglow Caves",coords:[-33.978,149.932],type:"cave",image:"images/caving/PXL_20241207_045338331.MP.jpg",description:"Stream passages classic.",placeholderId:"tuglow-caves"},
+ {name:"Macquarie Pass Canyon",coords:[-34.5634,150.6591],type:"canyon",image:"images/canyoning/IMG_3038.jpeg",description:"Waterfall canyon trips.",placeholderId:"macquarie-pass"},
+ {name:"Bungonia Caves",coords:[-34.776,150.006],type:"cave",image:"images/caving/PXL_20241013_012316349.jpg",description:"Beginner Bungonia squeezes.",placeholderId:"bungonia-caves"},
  {name:"Jerrara Canyon",coords:[-34.7922,149.9994],type:"canyon",image:"images/canyoning/IMG_3067.jpeg",description:"Gentle abseil canyon."},
  {name:"Buchan Caves",coords:[-37.495,148.168],type:"cave",image:"images/caving/PXL_20241206_223021079.jpg",description:"Longer VIC roadtrip caves."},
  {name:"Mount Fairy Karst",coords:[-35.018,149.583],type:"cave",image:"images/caving/PXL_20241206_223338198.jpg",description:"Surveying system."},
- {name:"Wee Jasper",coords:[-35.107,148.689],type:"cave",image:"images/caving/PXL_20241207_000415603.jpg",description:"Dip Cave crawls."},
+ {name:"Wee Jasper",coords:[-35.107,148.689],type:"cave",image:"images/caving/PXL_20241207_000415603.jpg",description:"Dip Cave crawls.",placeholderId:"wee-jasper"},
  {name:"Cooleman Plains",coords:[-35.56,148.52],type:"cave",image:"images/caving/PXL_20241206_221557516.MP.jpg",description:"Black Range & Main."},
  {name:"Wyanbene Caves",coords:[-35.8798,149.986],type:"cave",image:"images/caving/PXL_20241013_032228590.jpg",description:"Gunbarrel Aven trip."},
  {name:"Yagby Caves",coords:[-35.9,148.9],type:"cave",image:"images/caving/PXL_20241013_020527445.jpg",description:"Snowy Yagby weekend."},
- {name:"Bendethera Caves",coords:[-36.032,149.619],type:"cave",image:"images/caving/IMG_1432.jpg",description:"Deua valley expedition."}
+ {name:"Bendethera Caves",coords:[-36.032,149.619],type:"cave",image:"images/caving/IMG_1432.jpg",description:"Deua valley expedition.",placeholderId:"bendethera"}
 ];
 
 // Compute median longitude
@@ -125,11 +125,13 @@ function addLoc(l, side) {
   const marker = L.marker(l.coords).addTo(map);
 
   // Popup uses same image as card
+  const placeholderHref = `locations/placeholder.html${l.placeholderId ? `#${l.placeholderId}` : ""}`;
   const popup = `
     <div style="display:flex;flex-direction:column;align-items:center;gap:0.6rem;width:min(260px,70vw);text-align:center;background:#f9f9f9;padding:0.4rem;border-radius:10px;">
       <img src="${l.image}" alt="${l.name}" style="width:100%;height:130px;object-fit:cover;border-radius:8px;">
       <h3 style="margin:0.2rem 0;color:#000;">${l.name}</h3>
       <p style="margin:0;font-size:0.9rem;line-height:1.4;color:#000;">More photos, trip reports, and statistics for this location will appear here in future updates.</p>
+      <a href="${placeholderHref}" style="display:inline-flex;align-items:center;justify-content:center;gap:0.35rem;padding:0.4rem 0.8rem;border-radius:999px;background:#0b5c7a;color:#fff;font-weight:600;text-decoration:none;border:1px solid rgba(0,0,0,0.1);box-shadow:0 4px 12px rgba(0,0,0,0.15);">View placeholder page</a>
     </div>
   `;
   marker.bindPopup(popup);
